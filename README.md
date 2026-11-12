@@ -129,7 +129,7 @@ mypy src                               # type-check (clean)
 
 ## Roadmap (from the spec)
 
-* **Phase 1 (done):** CircuitIR, QASM parser (100-qubit circuits verified), Qiskit round-trip export (`to_qiskit`, semantics-preserving — acceptance criterion met), gate database with 101 standard gates, structural analyzer, unitary verifier, randomized equivalence (~20 qubits), CLI, SARIF/JSON/HTML/PDF, benchmark suite (50 clean + 50 malicious, TPR 100% / FPR 0%), paper 1 (threat taxonomy).
+* **Phase 1 (done):** CircuitIR, QASM parser (100-qubit circuits verified), Qiskit round-trip export (`to_qiskit`, semantics-preserving — acceptance criterion met), gate database with 101 standard gates, structural analyzer, unitary verifier, randomized equivalence (~20 qubits), CLI, SARIF/JSON/HTML/PDF, benchmark suite (50 clean + 50 malicious, TPR 100% / FPR 0%), paper 1 — threat taxonomy ([docs/research/threat_taxonomy_paper.md](docs/research/threat_taxonomy_paper.md)).
 * Exact/dynamic equivalence has hardware limits: random testing catches large deviations but not angles of ≲1e-3 rad; use `--formal` or dense verification when feasible.
 * **Phase 2:** dynamic analysis depth (fuzzer, tomography prober), Cirq/PennyLane/QASM3 parity, differential threshold calibration, paper 2.
 * **Phase 3:** full ZX property verification, ML anomaly detection (GNN), evasion-resistance suite, community signature ecosystem.
