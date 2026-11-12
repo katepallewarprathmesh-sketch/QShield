@@ -189,6 +189,10 @@ class CircuitIR:
         }
 
 
+_ENTANGLING_CACHE: dict[bytes, bool] = {}
+_ENTANGLING_CACHE_MAX = 4096
+
+
 def _matrix_is_entangling(matrix: np.ndarray) -> bool:
     """True when a 2-qubit unitary is not a product of local operators.
 
@@ -196,19 +200,28 @@ def _matrix_is_entangling(matrix: np.ndarray) -> bool:
     reshape ``O[(a,b),(c,d)]`` to ``O'[(a,c),(b,d)]`` and take the SVD.
     A single nonzero Schmidt coefficient means the operator factorises as
     ``A \\otimes B``.  Non-2-qubit matrices are conservatively treated as
-    entangling.
+    entangling.  Results are cached by matrix bytes — the parser hands every
+    gate a fresh array, but identical gates are byte-identical, and SVD
+    dominates scans of large circuits.
     """
-    m = np.asarray(matrix)
+    m = np.ascontiguousarray(np.asarray(matrix, dtype=complex))
     if m.ndim != 2 or m.shape[0] != m.shape[1]:
         return False
     if m.shape == (2, 2):
         return False
     if m.shape != (4, 4):
         return True
+    key = m.tobytes()
+    cached = _ENTANGLING_CACHE.get(key)
+    if cached is not None:
+        return cached
     reshaped = m.reshape(2, 2, 2, 2).transpose(0, 2, 1, 3).reshape(4, 4)
     s = np.linalg.svd(reshaped, compute_uv=False)
-    nonzero = int(np.sum(s > 1e-9 * s.max(initial=1.0) + 1e-12))
-    return nonzero > 1
+    result = int(np.sum(s > 1e-9 * s.max(initial=1.0) + 1e-12)) > 1
+    if len(_ENTANGLING_CACHE) >= _ENTANGLING_CACHE_MAX:
+        _ENTANGLING_CACHE.clear()
+    _ENTANGLING_CACHE[key] = result
+    return result
 
 
 def embed_gate_matrix(gate_matrix: np.ndarray, target_qubits: Iterable[int], num_qubits: int) -> np.ndarray:

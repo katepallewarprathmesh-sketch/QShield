@@ -1,0 +1,37 @@
+{
+ "date": "2026-11-12",
+ "acceptance": "1000-qubit static analysis in < 300 s",
+ "gate_seconds": 300,
+ "wall_seconds": 5.05,
+ "pass": true,
+ "cases": [
+  {
+   "name": "chain1000",
+   "gates": 1504,
+   "parse_seconds": 0.02,
+   "static_seconds": 0.11,
+   "peak_rss_mb": 42.5,
+   "findings": []
+  },
+  {
+   "name": "dense1000",
+   "gates": 24992,
+   "parse_seconds": 3.36,
+   "static_seconds": 1.45,
+   "peak_rss_mb": 74.9,
+   "findings": [
+    {
+     "severity": "medium",
+     "threat_type": "T1.1",
+     "title": "Repeated micro-rotation pattern (distributed backdoor)"
+    },
+    {
+     "severity": "medium",
+     "threat_type": "T1.1",
+     "title": "Distributed Micro-Rotation Backdoor"
+    }
+   ]
+  }
+ ],
+ "honesty": "static analyzer only; dense1000 reports T1.1 heuristics at 0.60 confidence on a rotation-heavy synthetic \u2014 not tampering proof"
+}

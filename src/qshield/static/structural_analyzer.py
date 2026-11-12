@@ -80,15 +80,37 @@ def _same_qubit_set(a: GateNode, b: GateNode) -> bool:
     return a.qubits == b.qubits
 
 
+_CANCEL_CACHE: dict[bytes, float | None] = {}
+_CANCEL_CACHE_MAX = 8192
+
+
 def _mats_cancel(a: GateNode, b: GateNode, tol: float) -> float | None:
-    """Return ||U_b @ U_a - I||_F if both unitaries known, else None."""
+    """Return ||U_b @ U_a - I||_F if both unitaries known, else None.
+
+    Cached by (U_b, U_a, tol) bytes — the parser hands out fresh arrays but
+    identical gates are byte-identical, and cancellation is the analyzer's
+    hot path on gate-heavy circuits. ``tol`` is part of the key, so cached
+    entries never cross tolerance configurations.
+    """
     if a.unitary is None or b.unitary is None:
         return None
     if a.unitary.shape != b.unitary.shape:
         return None
-    ident = np.eye(a.unitary.shape[0], dtype=complex)
-    product = b.unitary @ a.unitary
-    return float(np.linalg.norm(product - ident))
+    import struct
+
+    ua = np.ascontiguousarray(a.unitary, dtype=complex)
+    ub = np.ascontiguousarray(b.unitary, dtype=complex)
+    key = ub.tobytes() + ua.tobytes() + struct.pack("<d", float(tol))
+    cached = _CANCEL_CACHE.get(key)
+    if key in _CANCEL_CACHE:
+        return cached
+    ident = np.eye(ua.shape[0], dtype=complex)
+    product = ub @ ua
+    result = float(np.linalg.norm(product - ident))
+    if len(_CANCEL_CACHE) >= _CANCEL_CACHE_MAX:
+        _CANCEL_CACHE.clear()
+    _CANCEL_CACHE[key] = result
+    return result
 
 
 class StructuralAnalyzer:
