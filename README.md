@@ -1,22 +1,20 @@
 # 🛡 QSHIELD — Quantum Software Supply Chain Security Framework
 
+> New here? Read [docs/WHAT_IS_QSHIELD.md](docs/WHAT_IS_QSHIELD.md) — a one-page
+> plain-English explainer (what it does, what it honestly doesn't, verified commands).
+
 > Detect, analyze and prevent security vulnerabilities in **quantum software supply chains**:
 > backdoor gates, trojan unitaries, covert channels and malicious circuit modifications in
 > quantum programs, libraries and cloud services.
 
-**Status: Phase 1 (Foundation) — working vertical slice.** QSHIELD parses OpenQASM 2.0
-and Qiskit/Cirq/PennyLane circuits into a framework-agnostic IR, runs structural static
-analysis, exact unitary/density-matrix verification, ZX-calculus equivalence checking,
-differential simulation testing, quantum supply-chain audits, and emits CI-ready reports
-(SARIF / JSON / HTML). See [docs/spec/QSHIELD.md](docs/spec/QSHIELD.md) for the full
-specification-driven roadmap (4 phases, 2024–2029 research plan).
+**Status: v1.0.0 (tagged locally) — all four roadmap phases implemented and measured; one acceptance criterion unmet (M4.2 real-hardware validation — no device credentials).** QSHIELD parses OpenQASM 2.0/3.0 and Qiskit/Cirq/PennyLane circuits into a framework-agnostic IR, runs structural static analysis, exact unitary/density-matrix verification, ZX-calculus equivalence checking, sandboxed differential testing, quantum supply-chain audits, an intercepting runtime cloud monitor, and emits CI-ready reports (SARIF / JSON / HTML). Measured: 447 tests (95% coverage), 1000-qubit static scan ≈ 2 s, runtime overhead p95 ≈ 1.5 ms. See [docs/spec/QSHIELD.md](docs/spec/QSHIELD.md) for the full specification-driven roadmap with per-milestone annotations, and [docs/limitations.md](docs/limitations.md) before quoting any number.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │ LAYER 1 · STATIC          │ LAYER 2 · DYNAMIC      │ LAYER 3    │
 │ structural analyzer        │ sandbox simulator      │ runtime    │
 │ unitary verifier           │ differential testing   │ monitor    │
-│ dependency scanner         │ statistical tests      │ (roadmap)  │
+│ dependency scanner         │ statistical tests      │ (shipped)  │
 │ formal ZX check (pyzx)     │                        │            │
 └──────────────┬─────────────┴───────────┬────────────┴────────────┘
                │     LAYER 4 · REPORTING & POLICY                  │
