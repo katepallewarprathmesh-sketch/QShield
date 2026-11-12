@@ -26,7 +26,6 @@ EXPECTED = {
     "measurement_manipulation": "T2.3",
     "distributed_backdoor": "T1.1",
     "parameter_encoded": "T2.2",
-    # expanded corpus (spec section 8.2 benchmark attacks)
     "z_cancellation_hidden": "T1.3",
     "s_sdg_separated": "T1.3",
     "tdg_before_measure": "T2.3",
@@ -34,6 +33,15 @@ EXPECTED = {
     "stego_ascii_qshield": "T2.2",
     "leaf_ancilla_measure": "T2.1",
     "fanout_shadow_channel": "T2.1",
+    # second expansion round
+    "h_cancellation_adjacent": "T1.3",
+    "cx_cx_separated": "T1.3",
+    "micro_rotation_dense": "T1.1",
+    "stego_ascii_backdoor": "T2.2",
+    "y_before_measure": "T2.3",
+    "x_before_measure": "T2.3",
+    "y_y_pair_separated": "T1.3",
+    "leaf_ancilla_swap": "T2.1",
 }
 
 
