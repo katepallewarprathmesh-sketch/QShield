@@ -53,6 +53,7 @@ Requires Python ≥ 3.10.
 * [CI/CD integration](docs/user_guide/ci_cd_integration.md)
 * [Custom signatures](docs/user_guide/custom_signatures.md)
 * [Threat taxonomy paper](docs/research/threat_taxonomy_paper.md)
+* [Detection methods paper](docs/research/detection_methods_paper.md)
 * [Full specification](docs/spec/QSHIELD.md)
 
 ### CLI
@@ -141,7 +142,7 @@ mypy src                               # type-check (clean)
 
 * **Phase 1 (done):** CircuitIR, QASM parser (100-qubit circuits verified), Qiskit round-trip export (`to_qiskit`, semantics-preserving — acceptance criterion met), gate database with 101 standard gates, structural analyzer, unitary verifier, randomized equivalence (~20 qubits), CLI, SARIF/JSON/HTML/PDF, benchmark suite (202 clean + 215 malicious, TPR 100% / FPR 0%), paper 1 — threat taxonomy ([docs/research/threat_taxonomy_paper.md](docs/research/threat_taxonomy_paper.md)).
 * Exact/dynamic equivalence has hardware limits: random testing catches large deviations but not angles of ≲1e-3 rad; use `--formal` or dense verification when feasible.
-* **Phase 2:** dynamic analysis depth (fuzzer, tomography prober), Cirq/PennyLane/QASM3 parity, differential threshold calibration, paper 2.
+* **Phase 2 (done):** sandboxed execution with measurement interception (Born-rule collapse logging, ancilla density snapshots with purity, wall-clock limits), noise-aware differential tester (homogeneity chi²; measured TPR 0.958 @ δ≥0.1 rigging, FPR 0.025 ideal, 0.008 across depolarizing+amplitude-damping Aer twins), mutation fuzzer with coverage-guided corpus minimization (camouflage evasion 0.736 → 0.000 after effective-usage analyzer hardening), OpenQASM 3.0 subset parser, paper 2 — detection methods ([docs/research/detection_methods_paper.md](docs/research/detection_methods_paper.md)).
 * **Phase 3:** full ZX property verification, ML anomaly detection (GNN), evasion-resistance suite, community signature ecosystem.
 * **Phase 4:** cloud runtime monitor (API proxy, result validation), hardware validation, CI/CD marketplace integration, v1.0.
 
