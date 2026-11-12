@@ -28,7 +28,8 @@ class EquivalenceResult:
         return bool(self.equivalent)
 
 
-def zx_equivalence_check(circuit_a: CircuitIR, circuit_b: CircuitIR) -> EquivalenceResult:
+def zx_equivalence_check(circuit_a: CircuitIR, circuit_b: CircuitIR,
+                         tensor_max_qubits: int = 10) -> EquivalenceResult:
     if not pyzx_available():
         return EquivalenceResult(
             None, "unavailable",
@@ -56,7 +57,19 @@ def zx_equivalence_check(circuit_a: CircuitIR, circuit_b: CircuitIR) -> Equivale
         return EquivalenceResult(True, "zx_calculus",
                                  "circuits reduce to the same ZX diagram (proven equivalent)")
 
-    # ZX simplification is incomplete: fall back to exact tensor comparison
+    # ZX simplification is incomplete. The exact tensor fallback is
+    # exponential (pyzx.compare_tensors materialises ~2^n x 2^n tensors):
+    # at 16+ qubits that is >10^9 complex entries and will OOM the process,
+    # so it only runs within a small qubit budget — above that we report
+    # "undecidable" instead of dying.
+    n = circuit_a.num_qubits
+    if n > tensor_max_qubits:
+        return EquivalenceResult(
+            None, "undecidable",
+            f"ZX simplification inconclusive and exact tensor comparison is limited to "
+            f"{tensor_max_qubits} qubits (got {n}); cannot decide — do not read this as "
+            "equivalence",
+        )
     try:
         import pyzx
         same = pyzx.compare_tensors(ca, cb)

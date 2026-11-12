@@ -1,0 +1,171 @@
+{
+  "gate_set": [
+    "h",
+    "s",
+    "x",
+    "z",
+    "cx"
+  ],
+  "results": [
+    {
+      "qubits": 20,
+      "depth": 80,
+      "seed": 42,
+      "identical": {
+        "equivalent": true,
+        "method": "zx_calculus",
+        "seconds": 0.01
+      },
+      "camouflaged": {
+        "equivalent": true,
+        "method": "zx_calculus",
+        "seconds": 0.011
+      },
+      "tampered": {
+        "equivalent": null,
+        "method": "undecidable",
+        "seconds": 0.009
+      }
+    },
+    {
+      "qubits": 20,
+      "depth": 80,
+      "seed": 7,
+      "identical": {
+        "equivalent": true,
+        "method": "zx_calculus",
+        "seconds": 0.01
+      },
+      "camouflaged": {
+        "equivalent": true,
+        "method": "zx_calculus",
+        "seconds": 0.012
+      },
+      "tampered": {
+        "equivalent": null,
+        "method": "undecidable",
+        "seconds": 0.011
+      }
+    },
+    {
+      "qubits": 50,
+      "depth": 200,
+      "seed": 42,
+      "identical": {
+        "equivalent": true,
+        "method": "zx_calculus",
+        "seconds": 0.033
+      },
+      "camouflaged": {
+        "equivalent": true,
+        "method": "zx_calculus",
+        "seconds": 0.038
+      },
+      "tampered": {
+        "equivalent": null,
+        "method": "undecidable",
+        "seconds": 0.035
+      }
+    },
+    {
+      "qubits": 50,
+      "depth": 200,
+      "seed": 7,
+      "identical": {
+        "equivalent": true,
+        "method": "zx_calculus",
+        "seconds": 0.036
+      },
+      "camouflaged": {
+        "equivalent": true,
+        "method": "zx_calculus",
+        "seconds": 0.045
+      },
+      "tampered": {
+        "equivalent": null,
+        "method": "undecidable",
+        "seconds": 0.053
+      }
+    },
+    {
+      "qubits": 100,
+      "depth": 400,
+      "seed": 42,
+      "identical": {
+        "equivalent": true,
+        "method": "zx_calculus",
+        "seconds": 0.118
+      },
+      "camouflaged": {
+        "equivalent": true,
+        "method": "zx_calculus",
+        "seconds": 0.141
+      },
+      "tampered": {
+        "equivalent": null,
+        "method": "undecidable",
+        "seconds": 0.124
+      }
+    },
+    {
+      "qubits": 100,
+      "depth": 400,
+      "seed": 7,
+      "identical": {
+        "equivalent": true,
+        "method": "zx_calculus",
+        "seconds": 0.122
+      },
+      "camouflaged": {
+        "equivalent": true,
+        "method": "zx_calculus",
+        "seconds": 0.139
+      },
+      "tampered": {
+        "equivalent": null,
+        "method": "undecidable",
+        "seconds": 0.117
+      }
+    },
+    {
+      "qubits": 150,
+      "depth": 600,
+      "seed": 42,
+      "identical": {
+        "equivalent": true,
+        "method": "zx_calculus",
+        "seconds": 0.225
+      },
+      "camouflaged": {
+        "equivalent": true,
+        "method": "zx_calculus",
+        "seconds": 0.273
+      },
+      "tampered": {
+        "equivalent": null,
+        "method": "undecidable",
+        "seconds": 0.222
+      }
+    },
+    {
+      "qubits": 150,
+      "depth": 600,
+      "seed": 7,
+      "identical": {
+        "equivalent": true,
+        "method": "zx_calculus",
+        "seconds": 0.232
+      },
+      "camouflaged": {
+        "equivalent": true,
+        "method": "zx_calculus",
+        "seconds": 0.284
+      },
+      "tampered": {
+        "equivalent": null,
+        "method": "undecidable",
+        "seconds": 0.225
+      }
+    }
+  ]
+}

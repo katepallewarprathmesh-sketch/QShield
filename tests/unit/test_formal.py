@@ -130,3 +130,29 @@ def test_equivalence_unmappable_gate_returns_error():
     r = zx_equivalence_check(a, b)
     assert r.equivalent is None
     assert r.method == "error"
+
+
+def test_tensor_budget_exceeded_returns_undecidable():
+    pytest.importorskip("pyzx")
+    from qshield.formal import zx_equivalence_check
+
+    a = parse_qasm(_qasm := "OPENQASM 2.0;\nqreg q[8];\n" + "".join(f"h q[{i}];\n" for i in range(8)) + "cx q[0], q[7];\n")
+    tampered = "OPENQASM 2.0;\nqreg q[8];\n" + "".join(f"h q[{i}];\n" for i in range(8)) + "x q[3];\ncx q[0], q[7];\n"
+    b = parse_qasm(tampered)
+    # default budget is 10 qubits so this would still run tensors; use an
+    # explicit tighter budget to exercise the guard deterministically
+    r = zx_equivalence_check(a, b, tensor_max_qubits=5)
+    assert r.equivalent is None
+    assert r.method == "undecidable"
+    assert "do not read this as" in r.message
+
+
+def test_default_budget_still_decides_small_circuits():
+    pytest.importorskip("pyzx")
+    from qshield.formal import zx_equivalence_check
+
+    a = parse_qasm("OPENQASM 2.0;\nqreg q[6];\n" + "".join(f"h q[{i}];\n" for i in range(6)) + "cx q[0], q[5];\n")
+    b = parse_qasm("OPENQASM 2.0;\nqreg q[6];\n" + "".join(f"h q[{i}];\n" for i in range(6)) + "x q[2];\ncx q[0], q[5];\n")
+    r = zx_equivalence_check(a, b)
+    assert r.equivalent is False  # exact tensor comparison, 6 <= 10 budget
+    assert r.method == "tensor_exact"
