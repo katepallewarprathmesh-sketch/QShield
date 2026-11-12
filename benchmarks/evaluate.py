@@ -9,6 +9,7 @@ Usage:  python benchmarks/evaluate.py
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -17,10 +18,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 from qshield import Scanner
 
 ROOT = Path(__file__).resolve().parent.parent
+_GEN_INDEX = ROOT / "benchmarks" / "corpus_index.json"
+GENERATED_MALICIOUS = json.loads(_GEN_INDEX.read_text())["generated_malicious"] if _GEN_INDEX.exists() else {}
+
 CLEAN = sorted((ROOT / "tests/fixtures/clean_circuits").glob("*.qasm"))
 MALICIOUS = sorted((ROOT / "tests/fixtures/malicious_circuits").glob("*.qasm"))
 
-EXPECTED = {
+_MANUAL_EXPECTED = {
     "ancilla_leakage": "T2.1",
     "identity_pair_hidden": "T1.3",
     "measurement_manipulation": "T2.3",
@@ -43,6 +47,8 @@ EXPECTED = {
     "y_y_pair_separated": "T1.3",
     "leaf_ancilla_swap": "T2.1",
 }
+
+EXPECTED = {**_MANUAL_EXPECTED, **GENERATED_MALICIOUS}
 
 
 def main() -> int:

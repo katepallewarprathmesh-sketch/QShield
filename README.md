@@ -88,8 +88,9 @@ print(results.to_json(), results.to_sarif(), results.to_html())
 | T3.2/T3.3 Compromised compiler/backend | pre/post-compile or cross-backend divergence | ZX-calculus equivalence (`compare --formal`), randomized equivalence to ~20 qubits (`compare`, polynomial identity testing), differential Aer-vs-numpy distribution test | statistical/exact |
 
 Confidence scores and false-positive probabilities are attached to every finding; the built-in
-corpus evaluates to **20/20 attacks detected, 0/20 clean-circuit false positives** (synthetic
-Phase-1 corpus of 40 circuits — see `benchmarks/evaluate.py`; real-world calibration is Phase 2+ work).
+corpus evaluates to **50/50 attacks detected, 0/50 clean-circuit false positives** (synthetic
+Phase-1 corpus of 100 circuits — see `benchmarks/evaluate.py` and `benchmarks/generate_corpus.py`;
+real-world calibration is Phase 2+ work).
 
 ## Project layout
 

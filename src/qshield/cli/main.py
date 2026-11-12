@@ -78,7 +78,7 @@ def scan(
     full: bool = typer.Option(False, "--full", help="Include dynamic analysis"),
     config: str = typer.Option("default", "--config", "-c", help="Profile: default|strict|permissive|path to .qshield.yaml"),
     framework: str | None = typer.Option(None, "--framework", help="Hint: qiskit|cirq|pennylane (default: auto from extension)"),
-    output_format: str = typer.Option("text", "--format", "-f", help="text|json|sarif|html"),
+    output_format: str = typer.Option("text", "--format", "-f", help="text|json|sarif|html|pdf"),
     output: Path | None = typer.Option(None, "--output", "-o", help="Write report to file instead of stdout"),
     fail_on: str = typer.Option("high", "--fail-on", help="critical|high|medium|low|never — exit 1 at/above this severity"),
     shots: int = typer.Option(10_000, "--shots", help="Shots for dynamic analysis"),
@@ -135,6 +135,17 @@ def scan(
         text_out = results.to_sarif()
     elif output_format == "html":
         text_out = results.to_html()
+    elif output_format == "pdf":
+        if not output:
+            console.print("[red]--format pdf requires -o/--output[/red]")
+            raise typer.Exit(code=2)
+        try:
+            results.to_pdf(str(output))
+        except RuntimeError as exc:
+            console.print(f"[red]{exc}[/red]")
+            raise typer.Exit(code=2) from exc
+        console.print(f"[green]Wrote {output}[/green]")
+        raise typer.Exit(code=_fail_exit_code(results, fail_on))
     else:
         console.print(f"[red]Unknown format {output_format!r}[/red]")
         raise typer.Exit(code=2)

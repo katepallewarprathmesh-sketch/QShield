@@ -67,7 +67,7 @@ Documentation = "https://qshield.readthedocs.io"
 where = ["src"]
 
 [tool.setuptools.package-data]
-"qshield" = ["signatures/builtin/*.yaml", "reporting/templates/*.jinja2"]
+"qshield" = ["signatures/builtin/*.yaml", "reporting/templates/*.jinja2", "py.typed"]
 
 [tool.pytest.ini_options]
 markers = [

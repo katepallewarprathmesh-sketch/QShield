@@ -1,7 +1,14 @@
 """Security benchmark: clean corpus must stay quiet; attacks must be caught."""
 
 
+import json
+from pathlib import Path
+
 from qshield import Scanner, scan
+
+ROOT = Path(__file__).resolve().parents[2]
+_GEN = json.loads((ROOT / "benchmarks" / "corpus_index.json").read_text())
+GENERATED_MALICIOUS = _GEN.get("generated_malicious", {})
 
 
 def test_all_clean_circuits_quiet(clean_circuits):
@@ -35,6 +42,12 @@ def test_all_malicious_circuits_detected(malicious_circuits):
         "y_y_pair_separated": "T1.3",
         "leaf_ancilla_swap": "T2.1",
     }
+    expectations = {**expectations, **GENERATED_MALICIOUS}
+    # corpus hygiene: every malicious fixture must have an expectation
+    assert set(expectations) == set(malicious_circuits), (
+        f"fixture/expectation drift: missing {set(malicious_circuits) - set(expectations)}, "
+        f"extra {set(expectations) - set(malicious_circuits)}"
+    )
     for stem, path in malicious_circuits.items():
         scanner = Scanner(config="strict")
         scanner.add_circuit(str(path))
