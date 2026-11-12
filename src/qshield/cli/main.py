@@ -365,6 +365,9 @@ reporting:
 ci:
   fail_on: high
 
+license_policy:
+  allowed_licenses: [Apache-2.0, MIT, BSD-2-Clause, BSD-3-Clause, ISC, Zlib, Python-2.0, Unlicense, MPL-2.0]
+
 signatures:
   use_builtin: true
   custom_paths: []

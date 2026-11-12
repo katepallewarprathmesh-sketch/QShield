@@ -21,6 +21,55 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
+# Embedded license table for the quantum ecosystem (offline check only).
+# Licenses are asserted as published by the projects; unknown packages are
+# reported as *unverifiable* is NOT implemented — instead they produce no
+# license finding (honest offline behavior).
+KNOWN_PACKAGE_LICENSES = {
+    "qiskit": "Apache-2.0",
+    "qiskit-aer": "Apache-2.0",
+    "qiskit-ibm-runtime": "Apache-2.0",
+    "qiskit-nature": "Apache-2.0",
+    "qiskit-machine-learning": "Apache-2.0",
+    "qiskit-optimization": "Apache-2.0",
+    "qiskit-algorithms": "Apache-2.0",
+    "cirq": "Apache-2.0",
+    "cirq-core": "Apache-2.0",
+    "cirq-google": "Apache-2.0",
+    "pennylane": "Apache-2.0",
+    "pennylane-lightning": "Apache-2.0",
+    "pyquil": "Apache-2.0",
+    "staq": "Apache-2.0",
+    "pytket": "Apache-2.0",
+    "projectq": "Apache-2.0",
+    "amazon-braket-sdk": "Apache-2.0",
+    "qutip": "BSD-3-Clause",
+    "pyzx": "BSD-3-Clause",
+    "numpy": "BSD-3-Clause",
+    "scipy": "BSD-3-Clause",
+    "sympy": "BSD-3-Clause",
+}
+
+DEFAULT_ALLOWED_LICENSES = [
+    "Apache-2.0", "MIT", "BSD-2-Clause", "BSD-3-Clause",
+    "ISC", "Zlib", "Python-2.0", "Unlicense", "MPL-2.0",
+]
+
+
+def check_license(name: str, allowed_licenses: list[str] | None = None) -> str | None:
+    """Return the disallowed license identifier, or None.
+
+    Offline check: packages absent from KNOWN_PACKAGE_LICENSES return None
+    (no finding) rather than guess.
+    """
+    key = name.lower().replace("_", "-")
+    lic = KNOWN_PACKAGE_LICENSES.get(key)
+    if lic is None:
+        return None
+    allowed = allowed_licenses if allowed_licenses is not None else DEFAULT_ALLOWED_LICENSES
+    return None if lic in allowed else lic
+
+
 # Well-known quantum computing packages (lowercased).
 KNOWN_QUANTUM_PACKAGES = [
     "qiskit", "qiskit-aer", "qiskit-ibm-runtime", "qiskit-ibm-provider",
@@ -164,7 +213,7 @@ class DependencyScanner:
         return None
 
     # ------------------------------------------------------------------
-    def scan_requirements(self, text: str) -> DependencyReport:
+    def scan_requirements(self, text: str, allowed_licenses: list[str] | None = None) -> DependencyReport:
         report = DependencyReport()
         for entry in parse_requirements(text):
             name = entry["name"]
@@ -186,6 +235,15 @@ class DependencyScanner:
                     issue="typosquatting_suspect",
                     severity="high",
                     detail=f"Package name is {difflib.SequenceMatcher(None, pkg, close).ratio():.0%} similar to well-known package {close!r}",
+                ))
+
+            bad_license = check_license(pkg, allowed_licenses)
+            if bad_license is not None:
+                report.findings.append(DependencyFinding(
+                    package=name, version=_pinned_version(entry["specifier"]),
+                    issue="license_not_allowed",
+                    severity="medium",
+                    detail=f"Package is licensed {bad_license}; not in the allowed license policy",
                 ))
 
             version = _pinned_version(entry["specifier"])

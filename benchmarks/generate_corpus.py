@@ -76,7 +76,7 @@ def gen_clean() -> dict[str, str]:
 
     # seeded random Clifford circuits (no parameters -> cannot trigger param rules)
     for k in range(25):
-        rng = random.Random(20_000 + k)
+        rng = random.Random(20_000 + k)  # noqa: S311 - reproducible corpus generation
         n = 4 + (k % 5)
         lines = [f"qreg q[{n}];", f"creg c[{n}];"]
         for _ in range(3 * n):
@@ -91,7 +91,7 @@ def gen_clean() -> dict[str, str]:
 
     # QAOA MaxCut-style ansätze with benign angles
     for k in range(16):
-        rng = random.Random(30_000 + k)
+        rng = random.Random(30_000 + k)  # noqa: S311 - reproducible corpus generation
         n = 4 + (k % 4)
         p = 1 + (k % 2)
         lines = [f"qreg q[{n}];", f"creg c[{n}];"] + [f"h q[{i}];" for i in range(n)]
@@ -116,7 +116,7 @@ def gen_clean() -> dict[str, str]:
 
     # dense Clifford ansätze (deep, high connectivity)
     for k in range(25):
-        rng = random.Random(40_000 + k)
+        rng = random.Random(40_000 + k)  # noqa: S311 - reproducible corpus generation
         n = 4 + (k % 4)
         lines = [f"qreg q[{n}];", f"creg c[{n}];"]
         for layer in range(4):
@@ -146,7 +146,7 @@ def gen_clean() -> dict[str, str]:
 
     # QAOA at higher depth with benign angles
     for k in range(15):
-        rng = random.Random(60_000 + k)
+        rng = random.Random(60_000 + k)  # noqa: S311 - reproducible corpus generation
         n = 4 + (k % 3)
         lines = [f"qreg q[{n}];", f"creg c[{n}];"] + [f"h q[{i}];" for i in range(n)]
         for _ in range(3):
@@ -272,7 +272,7 @@ def gen_malicious() -> dict[str, str]:
     # steganographic payloads, longer messages (T2.2)
     import random
 
-    rng = random.Random(50_000)
+    rng = random.Random(50_000)  # noqa: S311 - reproducible corpus generation  # noqa: S311 - reproducible corpus generation
     for k in range(20):
         payload = "".join(rng.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789") for _ in range(12))
         body = "h q[0];\n"
@@ -285,7 +285,7 @@ def gen_malicious() -> dict[str, str]:
 
     # separated cancelling pairs on qubit 1/2 (T1.3)
     for k in range(10):
-        body = f"h q[1];\ncx q[0], q[2];\nh q[2];\ns q[2];\nh q[1];\n"
+        body = "h q[1];\ncx q[0], q[2];\nh q[2];\ns q[2];\nh q[1];\n"
         name = f"gen_cancel3_{k}.qasm"
         out[name] = qasm(f"qreg q[3];\ncreg c[3];\n{body}measure q -> c;\n")
         EXPECTED[name.removesuffix(".qasm")] = "T1.3"

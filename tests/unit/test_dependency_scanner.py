@@ -1,6 +1,7 @@
 from qshield.static.dependency_scanner import (
     DependencyScanner,
     audit_package,
+    check_license,
     parse_requirements,
 )
 
@@ -42,3 +43,35 @@ def test_direct_install_flagged():
 def test_audit_package():
     report = audit_package("qiskit-nature", "0.7.0")
     assert isinstance(report.packages, list)
+
+
+def test_license_check_allowed_and_default(monkeypatch):
+    from qshield.static import dependency_scanner as ds
+
+    monkeypatch.setitem(ds.KNOWN_PACKAGE_LICENSES, "gpl-thing", "GPL-3.0")
+    assert check_license("qiskit") is None                      # Apache-2.0 allowed by default
+    assert check_license("gpl-thing") == "GPL-3.0"               # blocked by default policy
+    assert check_license("gpl-thing", allowed_licenses=["GPL-3.0"]) is None
+    assert check_license("unknown-package-xyz") is None         # unknown offline -> no finding
+
+
+def test_scan_requirements_license_finding(monkeypatch):
+    from qshield.static import dependency_scanner as ds
+
+    monkeypatch.setitem(ds.KNOWN_PACKAGE_LICENSES, "gpl-thing", "GPL-3.0")
+    report = ds.DependencyScanner().scan_requirements("gpl-thing==1.0\n")
+    assert any(f.issue == "license_not_allowed" and f.severity == "medium" for f in report.findings)
+    # policy override clears the finding
+    report = ds.DependencyScanner().scan_requirements("gpl-thing==1.0\n", allowed_licenses=["GPL-3.0"])
+    assert not any(f.issue == "license_not_allowed" for f in report.findings)
+
+
+def test_scanner_config_license_policy_plumbing(tmp_path):
+    import qshield
+
+    policy = tmp_path / "policy.yaml"
+    policy.write_text("license_policy:\n  allowed_licenses: [MIT]\n  extra_keys_ignored: true\n")
+    scanner = qshield.Scanner(config=str(policy))
+    scanner.add_requirements("qiskit==1.2.0\n")  # Apache-2.0, not in MIT-only policy
+    results = scanner.run()
+    assert any("license" in f.title for f in results.findings)

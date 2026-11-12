@@ -83,6 +83,12 @@ class QShieldConfig:
     signature_paths: list[str] = field(default_factory=list)
     unitary_max_qubits: int = 12
     unitary_tolerance: float = 1e-6
+    license_policy: dict[str, Any] = field(
+        default_factory=lambda: {"allowed_licenses": [
+            "Apache-2.0", "MIT", "BSD-2-Clause", "BSD-3-Clause",
+            "ISC", "Zlib", "Python-2.0", "Unlicense", "MPL-2.0",
+        ]}
+    )
 
     # -- convenience accessors -------------------------------------------
     def threshold(self, key: str) -> float:
@@ -106,6 +112,7 @@ class QShieldConfig:
             "fail_on": self.fail_on,
             "signatures_builtin": self.signatures_builtin,
             "signature_paths": list(self.signature_paths),
+            "license_policy": dict(self.license_policy),
         }
 
 
@@ -158,6 +165,12 @@ def load_config(source: str | None = None) -> QShieldConfig:
     signatures = base.get("signatures", {}) or {}
     reporting = base.get("reporting", {}) or {}
     ci = base.get("ci", {}) or {}
+    license_policy = {"allowed_licenses": [
+        "Apache-2.0", "MIT", "BSD-2-Clause", "BSD-3-Clause",
+        "ISC", "Zlib", "Python-2.0", "Unlicense", "MPL-2.0",
+    ]}
+    if isinstance(base.get("license_policy"), dict):
+        license_policy = _merge(license_policy, base["license_policy"])
 
     unitary_max = int(static.get("unitary_max_qubits", _DEFAULT_STATIC["unitary_max_qubits"]))
     unitary_tol = float(static.get("unitary_tolerance", _DEFAULT_STATIC["unitary_tolerance"]))
@@ -178,4 +191,5 @@ def load_config(source: str | None = None) -> QShieldConfig:
         signature_paths=list(signatures.get("custom_paths", [])),
         unitary_max_qubits=unitary_max,
         unitary_tolerance=unitary_tol,
+        license_policy=license_policy,
     )

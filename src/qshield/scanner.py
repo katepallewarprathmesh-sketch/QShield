@@ -441,6 +441,7 @@ class Scanner:
         from qshield.static.dependency_scanner import DependencyScanner
 
         scanner = DependencyScanner()
+        allowed = (self.config.license_policy or {}).get("allowed_licenses")
         findings: list[Finding] = []
         texts = list(self._requirements)
         for pkg in self._packages:
@@ -449,7 +450,7 @@ class Scanner:
             else:
                 texts.append(pkg.package_name)
         for text in texts:
-            report = scanner.scan_requirements(text)
+            report = scanner.scan_requirements(text, allowed_licenses=allowed)
             for dep in report.findings:
                 severity = dep.severity if dep.severity in SEVERITY_ORDER else "medium"
                 findings.append(Finding(
