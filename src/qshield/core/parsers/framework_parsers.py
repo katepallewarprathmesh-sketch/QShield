@@ -225,7 +225,7 @@ def _cirq_gate_to_name(gate: Any) -> tuple[str | None, list[float]]:
     exp = getattr(gate, "exponent", None)
     gshift = getattr(gate, "global_shift", None)
     if cls in ("XPowGate", "YPowGate", "ZPowGate", "Rx", "Ry", "Rz"):
-        axis = cls[-1].lower()
+        axis = cls[0].lower() if cls in ("XPowGate", "YPowGate", "ZPowGate") else cls[-1].lower()
         exp_f = float(sympy.N(exp)) if exp is not None else 1.0
         shift_f = float(sympy.N(gshift)) if gshift is not None else 0.0
         if shift_f == -0.5:
@@ -242,6 +242,10 @@ def _cirq_gate_to_name(gate: Any) -> tuple[str | None, list[float]]:
         return f"r{axis}", [exp_f * 3.141592653589793]
     if cls == "HPowGate":
         return (("h", []) if float(sympy.N(exp)) == 1.0 else (None, []))
+    if cls in ("_PauliX", "_PauliY", "_PauliZ"):
+        return cls[-1].lower(), []
+    if cls == "_PauliI":
+        return "id", []
     if cls == "SGate":
         return "s", []
     if cls == "TGate":
