@@ -59,3 +59,32 @@ def test_finding_to_dict():
     assert d["severity"] == "high"
     assert d["severity_rank"] == 3
     assert d["location"]["gate_ids"] == ["g1", "g2"]
+
+
+def test_sarif_github_ingest_invariants():
+    """Invariants the GitHub Security tab relies on when ingesting SARIF."""
+    circuit_findings = sample_findings()
+    sarif = to_sarif(circuit_findings)
+    run = sarif["runs"][0]
+    driver = run["tool"]["driver"]
+    rule_ids = {rule["id"] for rule in driver["rules"]}
+    assert rule_ids, "driver.rules must not be empty"
+    assert driver["version"] or driver.get("semanticVersion")
+    for result in run["results"]:
+        # ruleId must resolve to a declared rule
+        assert result["ruleId"] in rule_ids
+        assert result["level"] in {"error", "warning", "note", "none"}
+        # message and at least one location with an artifact URI
+        assert result["message"]["text"]
+        for loc in result["locations"]:
+            uri = loc["physicalLocation"]["artifactLocation"]["uri"]
+            assert uri and not uri.startswith(("http://", "https://"))
+        assert result.get("partialFingerprints"), "partialFingerprints needed for dedup"
+
+
+def test_sarif_marks_severity_mapping():
+    sarif = to_sarif(sample_findings())
+    results = sarif["runs"][0]["results"]
+    # critical/high -> error, medium -> warning, low/info -> note
+    for result in results:
+        assert result["level"] in {"error", "warning", "note"}

@@ -19,10 +19,13 @@ __all__ = [
     "ScanSummary",
     "Scanner",
     "ThreatLevel",
+    "UnsupportedGateError",
     "__version__",
     "scan",
+    "to_qiskit",
 ]
 
 from qshield.core.circuit_ir import CircuitIR, GateNode, GateType, ThreatLevel
+from qshield.core.exporters import UnsupportedGateError, to_qiskit
 from qshield.reporting.finding import CircuitLocation, Evidence, Finding
 from qshield.scanner import Scanner, ScanResults, ScanSummary, scan

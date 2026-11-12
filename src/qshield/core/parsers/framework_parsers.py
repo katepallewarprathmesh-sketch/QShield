@@ -27,6 +27,16 @@ _QISKIT_NAME_MAP = {
     "cu3": "cu3", "cu": "cu3",
     "rxx": "rxx", "ryy": "ryy", "rzz": "rzz",
     "ccx": "ccx", "ccz": "ccz",
+    # extended standard gates (identical canonical names)
+    "r": "r", "rzx": "rzx",
+    "cs": "cs", "csdg": "csdg", "csx": "csx", "csxdg": "csxdg",
+    "iswap": "iswap", "iswapdg": "iswapdg", "sqrt_iswap": "sqrt_iswap",
+    "sycamore": "sycamore", "fsim": "fsim",
+    "c3x": "c3x", "c3z": "c3z", "c4x": "c4x", "c4z": "c4z",
+    "cu2": "cu2", "cu2dg": "cu2dg", "cu3dg": "cu3dg", "u2dg": "u2dg",
+    "u1dg": "u1dg", "u3dg": "u3dg", "rxdg": "rxdg", "rydg": "rydg",
+    "rzdg": "rzdg", "pdg": "pdg", "cpdg": "cpdg", "crxdg": "crxdg",
+    "crydg": "crydg", "crzdg": "crzdg",
 }
 
 _CIRQ_CLASS_MAP = {

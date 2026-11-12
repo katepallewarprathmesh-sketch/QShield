@@ -122,8 +122,8 @@ def _cry(theta: float) -> np.ndarray:
 
 
 def _ch(_: float | None = None) -> np.ndarray:
-    zero = np.array([[1, 0], [0, 0]], dtype=complex)
-    return np.block([[zero, np.zeros((2, 2))], [np.zeros((2, 2)), H]])
+    zero = np.zeros((2, 2), dtype=complex)
+    return np.block([[np.eye(2, dtype=complex), zero], [zero, H]])
 
 
 def _cu3(theta: float, phi: float, lam: float) -> np.ndarray:
@@ -154,6 +154,159 @@ def _toffoli(_: float | None = None) -> np.ndarray:
     m[6, 7] = 1
     m[7, 6] = 1
     return m
+
+
+def _r_gate(theta: float, phi: float) -> np.ndarray:
+    c, s = np.cos(theta / 2), np.sin(theta / 2)
+    return np.array(
+        [[c, -np.exp(-1j * phi) * s], [np.exp(1j * phi) * s, c]],
+        dtype=complex,
+    )
+
+
+def _rxdg(theta: float) -> np.ndarray:
+    return _rx(-theta)
+
+
+def _rydg(theta: float) -> np.ndarray:
+    return _ry(-theta)
+
+
+def _rzdg(theta: float) -> np.ndarray:
+    return _rz(-theta)
+
+
+def _pdg(theta: float) -> np.ndarray:
+    return _p(-theta)
+
+
+def _u1dg(lam: float) -> np.ndarray:
+    return _u1(-lam)
+
+
+def _u2dg(phi: float, lam: float) -> np.ndarray:
+    # exact: U2(phi, lam)^dagger == U3(-pi/2, -lam, -phi)
+    return _u3(-np.pi / 2, -lam, -phi)
+
+
+def _u3dg(theta: float, phi: float, lam: float) -> np.ndarray:
+    # exact: U3(theta, phi, lam)^dagger == U3(-theta, -lam, -phi)
+    return _u3(-theta, -lam, -phi)
+
+
+def _cu2(phi: float, lam: float) -> np.ndarray:
+    return _cu3(np.pi / 2, phi, lam)
+
+
+def _cu2dg(phi: float, lam: float) -> np.ndarray:
+    return np.conj(_cu3(np.pi / 2, phi, lam).T)
+
+
+def _cu3dg(theta: float, phi: float, lam: float) -> np.ndarray:
+    return np.conj(_cu3(theta, phi, lam).T)
+
+
+def _rzx(theta: float) -> np.ndarray:
+    c, s = np.cos(theta / 2), np.sin(theta / 2)
+    return np.eye(4, dtype=complex) * c + (-1j * s) * np.kron(Z, X)
+
+
+def _cpdg(theta: float) -> np.ndarray:
+    return np.diag([1.0, 1.0, 1.0, np.exp(-1j * theta)]).astype(complex)
+
+
+def _crxdg(theta: float) -> np.ndarray:
+    return np.conj(_crx(theta).T)
+
+
+def _crydg(theta: float) -> np.ndarray:
+    return np.conj(_cry(theta).T)
+
+
+def _crzdg(theta: float) -> np.ndarray:
+    return np.conj(_crz(theta).T)
+
+
+def _fsim(theta: float, phi: float) -> np.ndarray:
+    c, s = np.cos(theta), np.sin(theta)
+    m = np.eye(4, dtype=complex)
+    m[1, 1], m[1, 2], m[2, 1], m[2, 2] = c, -1j * s, -1j * s, c
+    m[3, 3] = np.exp(-1j * phi)
+    return m
+
+
+def _iswap() -> np.ndarray:
+    m = np.eye(4, dtype=complex)
+    m[1, 1] = m[2, 2] = 0
+    m[1, 2] = m[2, 1] = 1j
+    return m
+
+
+def _iswapdg() -> np.ndarray:
+    m = np.eye(4, dtype=complex)
+    m[1, 1] = m[2, 2] = 0
+    m[1, 2] = m[2, 1] = -1j
+    return m
+
+
+def _sqrt_iswap() -> np.ndarray:
+    s2 = 1.0 / np.sqrt(2.0)
+    m = np.eye(4, dtype=complex)
+    m[1, 1] = m[2, 2] = s2
+    m[1, 2] = m[2, 1] = 1j * s2
+    return m
+
+
+def _sycamore() -> np.ndarray:
+    m = np.eye(4, dtype=complex)
+    m[1, 1] = m[2, 2] = 0
+    m[1, 2] = m[2, 1] = -1j
+    m[3, 3] = np.exp(-1j * np.pi / 6)
+    return m
+
+
+def _cs() -> np.ndarray:
+    return np.diag([1, 1, 1, 1j]).astype(complex)
+
+
+def _csdg() -> np.ndarray:
+    return np.diag([1, 1, 1, -1j]).astype(complex)
+
+
+def _csx() -> np.ndarray:
+    sqrt_x = 0.5 * np.array([[1 + 1j, 1 - 1j], [1 - 1j, 1 + 1j]], dtype=complex)
+    m = np.eye(4, dtype=complex)
+    m[2:, 2:] = sqrt_x
+    return m
+
+
+def _csxdg() -> np.ndarray:
+    sqrt_x_dg = 0.5 * np.array([[1 - 1j, 1 + 1j], [1 + 1j, 1 - 1j]], dtype=complex)
+    m = np.eye(4, dtype=complex)
+    m[2:, 2:] = sqrt_x_dg
+    return m
+
+
+def _c3x() -> np.ndarray:
+    m = np.eye(16, dtype=complex)
+    m[14, 14] = m[15, 15] = 0
+    m[14, 15] = m[15, 14] = 1
+    return m
+
+
+def _c3z() -> np.ndarray:
+    return np.diag([1.0] * 15 + [-1.0]).astype(complex)
+
+
+def _c4x() -> np.ndarray:
+    m = np.eye(32, dtype=complex)
+    m[30, 30] = m[31, 31] = 0
+    m[30, 31] = m[31, 30] = 1
+    return m
+
+
+def _c4z() -> np.ndarray:
+    return np.diag([1.0] * 31 + [-1.0]).astype(complex)
 
 
 @dataclass(frozen=True)
@@ -212,6 +365,37 @@ _GATE_SPECS: list[GateSpec] = [
     _spec("rxx", 2, 1, _rxx),
     _spec("ryy", 2, 1, _ryy),
     _spec("rzz", 2, 1, _rzz),
+    _spec("r", 1, 2, _r_gate),
+    _spec("rxdg", 1, 1, _rxdg),
+    _spec("rydg", 1, 1, _rydg),
+    _spec("rzdg", 1, 1, _rzdg),
+    _spec("pdg", 1, 1, _pdg),
+    _spec("u1dg", 1, 1, _u1dg),
+    _spec("u2dg", 1, 2, _u2dg),
+    _spec("u3dg", 1, 3, _u3dg),
+    # 2-qubit (additional)
+    _spec("cs", 2, 0, _cs),
+    _spec("csdg", 2, 0, _csdg),
+    _spec("csx", 2, 0, _csx),
+    _spec("csxdg", 2, 0, _csxdg),
+    _spec("iswap", 2, 0, _iswap),
+    _spec("iswapdg", 2, 0, _iswapdg),
+    _spec("sqrt_iswap", 2, 0, _sqrt_iswap),
+    _spec("sycamore", 2, 0, _sycamore),
+    _spec("rzx", 2, 1, _rzx),
+    _spec("cpdg", 2, 1, _cpdg),
+    _spec("crxdg", 2, 1, _crxdg),
+    _spec("crydg", 2, 1, _crydg),
+    _spec("crzdg", 2, 1, _crzdg),
+    _spec("cu2", 2, 2, _cu2),
+    _spec("cu2dg", 2, 2, _cu2dg),
+    _spec("cu3dg", 2, 3, _cu3dg),
+    _spec("fsim", 2, 2, _fsim),
+    # 4/5-qubit multi-controlled
+    _spec("c3x", 4, 0, _c3x),
+    _spec("c3z", 4, 0, _c3z),
+    _spec("c4x", 5, 0, _c4x),
+    _spec("c4z", 5, 0, _c4z),
     # 3-qubit
     _spec("ccx", 3, 0, _toffoli),
     _spec("ccz", 3, 0, lambda: np.diag([1] * 7 + [-1]).astype(complex)),
@@ -233,6 +417,26 @@ ALIASES: dict[str, str] = {
     "u_1": "u1",
     "u_2": "u2",
     "u_3": "u3",
+    "crh": "ch",
+    "hadamard": "h",
+    "sqrt_x": "sx",
+    "sqrt_x_dag": "sxdg",
+    "x90": "sx",
+    "z90": "s",
+    "s2": "t",
+    "cu1dg": "cpdg",
+    "cudg": "cu3dg",
+    "cxdg": "cx",   # cx is self-adjoint
+    "cydg": "cy",   # cy is self-adjoint
+    "czdg": "cz",   # cz is self-adjoint
+    "chdg": "ch",   # ch is self-adjoint
+    "ccxdg": "ccx",  # toffoli is self-adjoint
+    "swapdg": "swap",  # swap is self-adjoint
+    "h_dg": "h",       # h is self-adjoint
+    "s_dg": "sdg",
+    "t_dg": "tdg",
+    "sx_dg": "sxdg",
+    "iswap_dg": "iswapdg",
 }
 
 

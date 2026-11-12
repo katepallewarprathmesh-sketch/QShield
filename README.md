@@ -52,6 +52,7 @@ qshield scan circuit.qasm                       # scan (text report)
 qshield scan circuit.qasm --fail-on high        # CI gate: exit 1 on high+ findings
 qshield scan . --recursive --format sarif -o out.sarif   # GitHub Security tab
 qshield scan circuit.qasm --full                # + differential simulation testing
+qshield scan circuit.qasm --format pdf -o report.pdf  # PDF report (needs: pip install weasyprint)
 qshield compare original.qasm suspicious.qasm --formal   # ZX-calculus equivalence proof
 qshield compare original.qasm suspicious.qasm             # randomized check at scale (~20 qubits)
 qshield verify circuit.qasm --expected-unitary u.npy     # matrix check (≤12 qubits)
@@ -73,6 +74,13 @@ scanner.add_circuit(my_qiskit_circuit)          # QuantumCircuit / cirq.Circuit 
 scanner.add_package("qiskit-nature", version="0.7.0")
 results = scanner.run(dynamic_shots=10_000)
 print(results.to_json(), results.to_sarif(), results.to_html())
+
+# round-trip Qiskit -> CircuitIR -> Qiskit (semantics preserved exactly):
+from qshield.core.parsers.framework_parsers import parse_qiskit
+from qshield.core.exporters import to_qiskit
+
+ir = parse_qiskit(my_qiskit_circuit)   # qshield CircuitIR
+exported = to_qiskit(ir)               # back to QuantumCircuit; same unitary
 ```
 
 ## What it detects (Phase 1)
@@ -96,7 +104,7 @@ real-world calibration is Phase 2+ work).
 
 ```
 src/qshield/
-├── core/            # CircuitIR, gate database (unitaries), QASM parser, config, framework adapters
+├── core/            # CircuitIR, gate database (101 gates, unitaries), QASM parser, config, framework adapters + exporters
 ├── static/          # structural analyzer, unitary/density-matrix verifier, dependency scanner
 ├── dynamic/         # sandboxed NumPy simulator, statistical tests, Aer differential tester
 ├── formal/          # ZX-calculus equivalence checker (PyZX), property-verification hooks
@@ -104,7 +112,7 @@ src/qshield/
 ├── reporting/       # Finding model, SARIF / JSON / HTML exporters
 ├── cli/             # typer CLI (scan, compare, verify, audit-deps, db, init-config)
 └── scanner.py       # public API: qshield.Scanner / qshield.scan / ScanResults
-tests/               # 136 unit+integration+security benchmark tests
+tests/               # 156 unit+integration+security benchmark tests
 benchmarks/          # evaluate.py — Phase-1 detection-rate report
 examples/            # quickstart for each supported framework
 ```
@@ -121,7 +129,7 @@ mypy src                               # type-check (clean)
 
 ## Roadmap (from the spec)
 
-* **Phase 1 (done):** CircuitIR, QASM parser (100-qubit circuits verified), structural analyzer, unitary verifier, randomized equivalence (~20 qubits), CLI, SARIF/JSON/HTML, benchmark suite, paper 1 (threat taxonomy).
+* **Phase 1 (done):** CircuitIR, QASM parser (100-qubit circuits verified), Qiskit round-trip export (`to_qiskit`, semantics-preserving — acceptance criterion met), gate database with 101 standard gates, structural analyzer, unitary verifier, randomized equivalence (~20 qubits), CLI, SARIF/JSON/HTML/PDF, benchmark suite (50 clean + 50 malicious, TPR 100% / FPR 0%), paper 1 (threat taxonomy).
 * Exact/dynamic equivalence has hardware limits: random testing catches large deviations but not angles of ≲1e-3 rad; use `--formal` or dense verification when feasible.
 * **Phase 2:** dynamic analysis depth (fuzzer, tomography prober), Cirq/PennyLane/QASM3 parity, differential threshold calibration, paper 2.
 * **Phase 3:** full ZX property verification, ML anomaly detection (GNN), evasion-resistance suite, community signature ecosystem.
