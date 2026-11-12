@@ -60,6 +60,16 @@ spec for per-milestone acceptance evidence and honest limits.
   and gate-cancellation caching; comprehensive docs (user guide,
   runtime monitor, CI/CD, limitations, security self-audit);
   `pip-audit --local` clean.
+- **M4.5 thesis & fourth paper**: paper 4 — *Securing Quantum Cloud
+  Services: Runtime Monitoring and Result Verification*
+  (`docs/research/runtime_cloud_security_paper.md`): architecture,
+  commitment semantics, deferred-measurement Born verification, measured
+  <100 ms/call overhead and noise-twin false-alarm economics (ideal-Born
+  FPR→≈1.0 on honest noisy twins; noise-model-referenced χ² calibrated,
+  TPR=1.000 @ δ≥0.05). Thesis-by-publication compilation
+  (`docs/thesis/qshield_thesis.md`, ~13.9k words, rebuilt by
+  `docs/thesis/compile_thesis.py`) — a compilation draft, not
+  examination-ready.
 
 ### Known limits (v1.0.0)
 - No real quantum hardware validation (M4.2); hardware runs are documented
