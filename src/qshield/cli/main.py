@@ -447,6 +447,9 @@ def db_list() -> None:
 sig_app = typer.Typer(help="Community signature pack: author, test, update")
 app.add_typer(sig_app, name="sig")
 
+runtime_app = typer.Typer(help="Runtime cloud-API monitor (interceptor proxy, M4.1)")
+app.add_typer(runtime_app, name="runtime")
+
 _ID_RE = __import__("re").compile(r"^QSig-(\d{4})-(\d{4})$")
 _ROOT = Path(__file__).resolve().parents[3]
 
@@ -703,6 +706,87 @@ def sig_manifest_build(
         raise typer.Exit(code=1) from exc
     console.print(f"[green]Wrote {pack_dir / 'manifest.json'} "
                   f"({len(manifest['files'])} files, pack {version})[/green]")
+
+
+@runtime_app.command("proxy")
+def runtime_proxy(
+    upstream: str = typer.Option(..., "--upstream", help="Upstream cloud endpoint, e.g. https://api.quantum.ibm.com"),
+    host: str = typer.Option("127.0.0.1", "--host", help="Bind address (0.0.0.0 exposes the proxy to the network)"),
+    port: int = typer.Option(8080, "--port"),
+    policy: str = typer.Option("observe", "--policy", help="observe (forward+alert) | enforce (403 on violation)"),
+    min_severity: str = typer.Option("high", "--min-severity", help="enforce: block threshold for static findings"),
+    alert_min_severity: str = typer.Option("medium", "--alert-min-severity", help="minimum severity routed to sinks"),
+    alert_file: Path | None = typer.Option(None, "--alert-file", help="JSON-lines alert log (default: stderr)"),
+    webhook: str | None = typer.Option(None, "--webhook", help="also POST alerts to this URL"),
+    no_validate: bool = typer.Option(False, "--no-validate", help="disable counts-vs-ideal result validation"),
+    no_static: bool = typer.Option(False, "--no-static", help="disable static scan in-flight (hash+commitment still run)"),
+) -> None:
+    """Run the QSHIELD interceptor proxy in front of a quantum cloud endpoint."""
+    from qshield.runtime.proxy import ProxyConfig, QShieldProxy, build_alert_router
+
+    if policy not in ("observe", "enforce"):
+        console.print("[red]--policy must be 'observe' or 'enforce'[/red]")
+        raise typer.Exit(code=2)
+    config = ProxyConfig(upstream=upstream, policy=policy, min_severity=min_severity,
+                         alert_min_severity=alert_min_severity,
+                         validate_results=not no_validate, run_static=not no_static)
+    router = build_alert_router(alert_file, webhook, alert_min_severity)
+    proxy = QShieldProxy(config, router, host=host, port=port)
+    console.print(f"[green]qshield runtime proxy listening on {host}:{proxy.port}[/green]")
+    console.print(f"  upstream: {upstream}")
+    console.print(f"  policy:   {policy}   (block ≥ {min_severity}, alert ≥ {alert_min_severity})")
+    console.print(f"  alerts:   {alert_file or 'stderr'}" + (f" + {webhook}" if webhook else ""))
+    console.print("  press Ctrl-C to stop")
+    try:
+        proxy.serve_forever()
+    except KeyboardInterrupt:
+        console.print("\n[yellow]stopping…[/yellow]")
+    finally:
+        proxy.stop()
+    console.print(f"stats: {proxy.stats_snapshot()}")
+
+
+@runtime_app.command("check")
+def runtime_check(
+    circuit: Path = typer.Argument(..., help="QASM circuit file to inspect"),
+    expected_hash: str | None = typer.Option(None, "--expected-hash", help="declared sha256 commitment"),
+    min_severity: str = typer.Option("high", "--min-severity"),
+    json_out: bool = typer.Option(False, "--json"),
+) -> None:
+    """One-shot in-transit integrity check for a circuit file."""
+    import json as _json
+
+    from qshield.core.parsers.qasm_parser import parse_qasm
+    from qshield.runtime.integrity import inspect_circuit
+
+    try:
+        ir = parse_qasm(circuit.read_text(encoding="utf-8"), name=circuit.name)
+    except Exception as exc:
+        console.print(f"[red]could not parse {circuit}: {exc}[/red]")
+        raise typer.Exit(code=2) from exc
+    report = inspect_circuit(ir, expected_hash=expected_hash)
+    blocking = report.findings_at_least(min_severity)
+    commitment_bad = report.commitment.ok is False
+    if json_out:
+        console.print(_json.dumps({
+            "circuit_hash": report.circuit_hash,
+            "commitment": report.commitment.status,
+            "max_severity": report.max_severity,
+            "findings": [{"threat_type": f.threat_type, "severity": f.severity,
+                          "title": f.title, "confidence": f.confidence} for f in report.findings],
+            "verdict": "fail" if (blocking or commitment_bad) else "pass",
+        }, indent=2))
+    else:
+        console.print(f"circuit hash: {report.circuit_hash}")
+        console.print(f"commitment:   {report.commitment.status}")
+        if report.findings:
+            for finding in report.findings:
+                console.print(f"  [{finding.severity}] {finding.threat_type} {finding.title}")
+        else:
+            console.print("  no static findings")
+        console.print("verdict:      [red]FAIL[/red]" if (blocking or commitment_bad) else "verdict:      [green]PASS[/green]")
+    if blocking or commitment_bad:
+        raise typer.Exit(code=1)
 
 
 @app.command()

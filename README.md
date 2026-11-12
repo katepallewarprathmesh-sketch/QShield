@@ -124,9 +124,10 @@ src/qshield/
 ├── formal/          # ZX-calculus equivalence checker (PyZX), property-verification hooks
 ├── signatures/      # YAML threat signatures ("YARA for quantum"), builtin QSig-2024-0001..0005, community pack (manifest+sha256, opt-in), `qshield sig` toolchain
 ├── reporting/       # Finding model, SARIF / JSON / HTML exporters
-├── cli/             # typer CLI (scan, compare, verify, audit-deps, db, init-config)
+├── runtime/         # API interceptor proxy, circuit-in-transit integrity, result validation, real-time alerting
+├── cli/             # typer CLI (scan, compare, verify, audit-deps, db, init-config, runtime)
 └── scanner.py       # public API: qshield.Scanner / qshield.scan / ScanResults
-tests/               # 389 unit+integration+security benchmark tests (95% coverage)
+tests/               # 447 unit+integration+security benchmark tests (95% coverage)
 benchmarks/          # evaluate.py — Phase-1 detection-rate report
 examples/            # quickstart for each supported framework
 ```
@@ -152,7 +153,8 @@ mypy src                               # type-check (clean)
 * **Phase 3 (M3.3 done):** evasion-resistance suite — 5 semantics-preserving attack classes (camouflage, synonym rewrites, rotation splitting, identity dead-code, qubit relabeling), adversarial-training hardening lifts the GNN's overall resistance from 0.732 to 0.828 (acceptance ≥ 0.80 met), with attacked-clean FPR ≤ 0.059 ([analysis](docs/research/evasion_analysis.md), [benchmark](benchmarks/evasion_results.json)).
 * **Phase 3 (M3.4 done):** community signature ecosystem — signed-by-sha256 community pack (empty by design: two candidate signatures measured on the fixture corpus both scored TPR≈FPR and were rejected; see `src/qshield/signatures/community/CONTRIBUTING.md`), `qshield sig` toolchain (id-suggest / new / validate / test with TPR/FPR gates / update / rollback / status / manifest-build), sha256-verified update with `.bak` rollback and offline install (`sig update --offline`), opt-in via `use_community: true` (spec default config: false).
 * **Phase 3 (M3.5 done):** third paper — *Formal Verification of Quantum Circuit Integrity via ZX-Calculus* ([docs/research/formal_verification_paper.md](docs/research/formal_verification_paper.md)): soundness theorems for the verdict contract (no unsound verdicts), a coQMA-completeness limit for general circuit integrity with a Rice-style corollary for extensional trojan properties, fragment-by-fragment decidability, measured 20–150-qubit Clifford proofs (≤ 0.284 s) with adversarial camouflage invariance and honest undecidability elsewhere.
-* **Phase 4:** cloud runtime monitor (API proxy, result validation), hardware validation, CI/CD marketplace integration, v1.0.
+* **Phase 4 (M4.1 done):** runtime monitor — `qshield runtime proxy` intercepts quantum-cloud API traffic (QASM extraction, commitment check via `X-QShield-Expected-Hash`, static scan, ideal-Born result validation with `X-QShield-Result` match/mismatch/unavailable, real-time alerts to stderr/JSONL/webhook); `qshield runtime check` verifies a circuit offline. Acceptance met: <100 ms/call overhead — measured p95 ≈ 1.6 ms (POST) / ≈ 1.1 ms (GET) against a synthetic upstream; 447 tests, 95% coverage. Honest limits: commitment is byte-exact identity (equivalence needs `compare --formal`); ideal-Born validation is goodness-of-fit, not attack detection vs rigged-ideal backends.
+* **Phase 4 (remaining):** hardware validation (M4.2), CI/CD marketplace integration (M4.3), v1.0 (M4.4).
 
 ## License
 
