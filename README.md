@@ -128,7 +128,7 @@ src/qshield/
 ├── cli/             # typer CLI (scan, compare, verify, audit-deps, db, init-config, runtime)
 └── scanner.py       # public API: qshield.Scanner / qshield.scan / ScanResults
 tests/               # 447 unit+integration+security benchmark tests (95% coverage)
-benchmarks/          # evaluate.py — Phase-1 detection-rate report
+benchmarks/          # evaluate.py — Phase-1 detection-rate report; hardware_validation.py — M4.2 device noise-twin calibration
 examples/            # quickstart for each supported framework
 ```
 
@@ -154,7 +154,8 @@ mypy src                               # type-check (clean)
 * **Phase 3 (M3.4 done):** community signature ecosystem — signed-by-sha256 community pack (empty by design: two candidate signatures measured on the fixture corpus both scored TPR≈FPR and were rejected; see `src/qshield/signatures/community/CONTRIBUTING.md`), `qshield sig` toolchain (id-suggest / new / validate / test with TPR/FPR gates / update / rollback / status / manifest-build), sha256-verified update with `.bak` rollback and offline install (`sig update --offline`), opt-in via `use_community: true` (spec default config: false).
 * **Phase 3 (M3.5 done):** third paper — *Formal Verification of Quantum Circuit Integrity via ZX-Calculus* ([docs/research/formal_verification_paper.md](docs/research/formal_verification_paper.md)): soundness theorems for the verdict contract (no unsound verdicts), a coQMA-completeness limit for general circuit integrity with a Rice-style corollary for extensional trojan properties, fragment-by-fragment decidability, measured 20–150-qubit Clifford proofs (≤ 0.284 s) with adversarial camouflage invariance and honest undecidability elsewhere.
 * **Phase 4 (M4.1 done):** runtime monitor — `qshield runtime proxy` intercepts quantum-cloud API traffic (QASM extraction, commitment check via `X-QShield-Expected-Hash`, static scan, ideal-Born result validation with `X-QShield-Result` match/mismatch/unavailable, real-time alerts to stderr/JSONL/webhook); `qshield runtime check` verifies a circuit offline. Acceptance met: <100 ms/call overhead — measured p95 ≈ 1.6 ms (POST) / ≈ 1.1 ms (GET) against a synthetic upstream; 447 tests, 95% coverage. Honest limits: commitment is byte-exact identity (equivalence needs `compare --formal`); ideal-Born validation is goodness-of-fit, not attack detection vs rigged-ideal backends.
-* **Phase 4 (remaining):** hardware validation (M4.2), CI/CD marketplace integration (M4.3), v1.0 (M4.4).
+* **Phase 4 (M4.2 partial — twins only):** noise-aware calibration measured on **synthetic device twins** (ibm/ionq/rigetti-like depolarizing+readout models via Aer; density-matrix exact reference): ideal-Born result validation false-alarms on honest noisy hardware (FPR→1.0 at ≥4k shots — drift, not attack); twin-Born validation is calibrated (FPR ≈ α; ≤5% at α=0.01–0.05 on all three twins) and detects δ≥0.05 rigging at TPR=1.0 ([benchmark](benchmarks/hardware_validation.py), [results](benchmarks/hardware_validation_results.json), [case study](docs/case_studies/quantum_cloud_audit.md)). **NOT validated on real IBM/IonQ/Rigetti hardware** — no credentials exist; acceptance criterion remains unmet. Also fixed a latent big-endian counts-key reversal in the Aer benchmark adapters (sample-vs-sample B2 FPR and committed metrics unchanged).
+* **Phase 4 (remaining):** real-hardware M4.2 runs (needs device access), CI/CD marketplace integration (M4.3), v1.0 (M4.4).
 
 ## License
 

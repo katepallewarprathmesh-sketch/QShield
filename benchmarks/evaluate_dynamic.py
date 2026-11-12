@@ -103,8 +103,11 @@ def aer_counts(ir, shots, noise_rate=0.0, noise_type="depolarizing", seed=0):
         sim = AerSimulator()
     job = sim.run(qc, shots=shots, seed_simulator=seed)
     raw = job.result().get_counts()
-    # little-endian -> our MSB bitstrings
-    return {k[::-1]: int(v) for k, v in raw.items()}
+    # Aer counts keys are big-endian clbit strings (leftmost = highest clbit);
+    # with the i -> n-1-i qubit remap the leftmost char is already our qubit-0
+    # MSB key — do NOT reverse. (Reversing silently permutes asymmetric
+    # circuits and inflates ideal-vs-noisy drift false positives.)
+    return {k: int(v) for k, v in raw.items()}
 
 
 def trojan_counts(probs, shots, delta, seed, rig=None):
