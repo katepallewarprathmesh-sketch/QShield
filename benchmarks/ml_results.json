@@ -1,0 +1,188 @@
+{
+  "dataset": {
+    "total": 417,
+    "clean": 202,
+    "malicious": 215,
+    "skipped": []
+  },
+  "config": {
+    "epochs": 40,
+    "clf_epochs": 60,
+    "hidden": 64,
+    "folds": 5,
+    "seed": 0,
+    "threshold_quantile": 0.95,
+    "supervised_target_fpr": 0.05
+  },
+  "folds": [
+    {
+      "fold": 0,
+      "autoencoder": {
+        "threshold": 0.0735,
+        "tpr": 0.6279,
+        "fpr": 0.0732,
+        "auroc": 0.8525,
+        "auprc": 0.8726,
+        "camouflage_detection": {
+          "camouflage_1": 0.8605,
+          "camouflage_2": 0.9535,
+          "camouflage_3": 1.0
+        }
+      },
+      "supervised_gnn": {
+        "threshold": 0.1999,
+        "tpr": 1.0,
+        "fpr": 0.0976,
+        "auroc": 0.983,
+        "auprc": 0.9816,
+        "camouflage_detection": {
+          "camouflage_1": 1.0,
+          "camouflage_2": 0.9535,
+          "camouflage_3": 0.9535
+        }
+      },
+      "train_loss_first": 1.2077,
+      "train_loss_last": 0.0651
+    },
+    {
+      "fold": 1,
+      "autoencoder": {
+        "threshold": 0.0308,
+        "tpr": 0.5349,
+        "fpr": 0.0244,
+        "auroc": 0.8434,
+        "auprc": 0.8868,
+        "camouflage_detection": {
+          "camouflage_1": 0.8837,
+          "camouflage_2": 0.907,
+          "camouflage_3": 1.0
+        }
+      },
+      "supervised_gnn": {
+        "threshold": 0.6234,
+        "tpr": 0.9767,
+        "fpr": 0.0244,
+        "auroc": 0.9892,
+        "auprc": 0.9929,
+        "camouflage_detection": {
+          "camouflage_1": 0.8837,
+          "camouflage_2": 0.814,
+          "camouflage_3": 0.7907
+        }
+      },
+      "train_loss_first": 0.9569,
+      "train_loss_last": 0.0129
+    },
+    {
+      "fold": 2,
+      "autoencoder": {
+        "threshold": 0.0189,
+        "tpr": 0.6744,
+        "fpr": 0.075,
+        "auroc": 0.8238,
+        "auprc": 0.8222,
+        "camouflage_detection": {
+          "camouflage_1": 0.8372,
+          "camouflage_2": 0.8372,
+          "camouflage_3": 0.9767
+        }
+      },
+      "supervised_gnn": {
+        "threshold": 0.151,
+        "tpr": 0.9767,
+        "fpr": 0.05,
+        "auroc": 0.9919,
+        "auprc": 0.9927,
+        "camouflage_detection": {
+          "camouflage_1": 0.9767,
+          "camouflage_2": 0.907,
+          "camouflage_3": 0.8837
+        }
+      },
+      "train_loss_first": 1.179,
+      "train_loss_last": 0.0084
+    },
+    {
+      "fold": 3,
+      "autoencoder": {
+        "threshold": 0.0212,
+        "tpr": 0.6047,
+        "fpr": 0.1,
+        "auroc": 0.7087,
+        "auprc": 0.8285,
+        "camouflage_detection": {
+          "camouflage_1": 0.814,
+          "camouflage_2": 0.9302,
+          "camouflage_3": 0.9767
+        }
+      },
+      "supervised_gnn": {
+        "threshold": 0.0076,
+        "tpr": 1.0,
+        "fpr": 0.025,
+        "auroc": 1.0,
+        "auprc": 1.0,
+        "camouflage_detection": {
+          "camouflage_1": 0.8372,
+          "camouflage_2": 0.8372,
+          "camouflage_3": 0.7907
+        }
+      },
+      "train_loss_first": 1.3501,
+      "train_loss_last": 0.0113
+    },
+    {
+      "fold": 4,
+      "autoencoder": {
+        "threshold": 0.2914,
+        "tpr": 0.4651,
+        "fpr": 0.075,
+        "auroc": 0.7919,
+        "auprc": 0.8535,
+        "camouflage_detection": {
+          "camouflage_1": 0.7907,
+          "camouflage_2": 0.8372,
+          "camouflage_3": 0.9535
+        }
+      },
+      "supervised_gnn": {
+        "threshold": 0.0001,
+        "tpr": 1.0,
+        "fpr": 0.2,
+        "auroc": 0.9276,
+        "auprc": 0.8777,
+        "camouflage_detection": {
+          "camouflage_1": 0.9767,
+          "camouflage_2": 0.9767,
+          "camouflage_3": 0.9535
+        }
+      },
+      "train_loss_first": 0.916,
+      "train_loss_last": 0.0546
+    }
+  ],
+  "mean": {
+    "autoencoder": {
+      "tpr": 0.5814,
+      "fpr": 0.0695,
+      "auroc": 0.8041,
+      "auprc": 0.8527,
+      "camouflage_detection": {
+        "camouflage_1": 0.8372,
+        "camouflage_2": 0.893,
+        "camouflage_3": 0.9814
+      }
+    },
+    "supervised_gnn": {
+      "tpr": 0.9907,
+      "fpr": 0.0794,
+      "auroc": 0.9783,
+      "auprc": 0.969,
+      "camouflage_detection": {
+        "camouflage_1": 0.9349,
+        "camouflage_2": 0.8977,
+        "camouflage_3": 0.8744
+      }
+    }
+  }
+}
