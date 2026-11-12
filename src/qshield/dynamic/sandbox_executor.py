@@ -106,6 +106,7 @@ class SandboxExecutor:
                 raise SandboxViolation(f"Wall-clock time limit ({time_limit}s) exceeded during execution")
 
         dim = 1 << n
+        state: np.ndarray
         if initial_state is None:
             state = np.zeros(dim, dtype=complex)
             state[0] = 1.0  # |00...0>
