@@ -370,6 +370,7 @@ license_policy:
 
 signatures:
   use_builtin: true
+  use_community: false  # opt-in: qshield sig update --offline installs the bundled pack first
   custom_paths: []
 
 profiles:
@@ -438,6 +439,270 @@ def db_list() -> None:
     for s in builtin_signatures():
         table.add_row(s.id, s.severity, s.threat_type, s.name)
     console.print(table)
+
+
+# ==================================================================
+# community signature pack (spec M3.4: authoring, testing, auto-update)
+# ==================================================================
+sig_app = typer.Typer(help="Community signature pack: author, test, update")
+app.add_typer(sig_app, name="sig")
+
+_ID_RE = __import__("re").compile(r"^QSig-(\d{4})-(\d{4})$")
+_ROOT = Path(__file__).resolve().parents[3]
+
+
+def _next_community_id() -> str:
+    """Next free QSig id across builtin pack, bundled community pack and user pack."""
+    import contextlib
+    import datetime as _dt
+
+    from qshield.signatures import builtin_signatures
+
+    used: set[str] = set()
+    with contextlib.suppress(Exception):
+        used.update(s.id for s in builtin_signatures())
+    used.update(f.stem for f in pack_dir_globs())
+    current_year = _dt.date.today().year
+    max_used_year = max((int(m.group(1)) for s in used if (m := _ID_RE.match(s))), default=0)
+    year = max(current_year, max_used_year)
+    seqs = sorted(int(m.group(2)) for s in used
+                  if (m := _ID_RE.match(s)) and int(m.group(1)) == year)
+    return f"QSig-{year}-{(seqs[-1] if seqs else 0) + 1:04d}"
+
+
+def pack_dir_globs():
+    from qshield.signatures.updater import bundled_community_dir, user_community_dir
+
+    for pack in (bundled_community_dir(), user_community_dir()):
+        if pack.exists():
+            yield from pack.glob("*.yaml")
+            yield from pack.glob("*.yml")
+
+
+@sig_app.command("id-suggest")
+def sig_id_suggest() -> None:
+    """Print the next free community signature id."""
+    console.print(_next_community_id())
+
+
+@sig_app.command("new")
+def sig_new(
+    threat_type: str = typer.Argument(..., help="Threat type T<1-4>.<1-4>"),
+    severity: str = typer.Option("medium", "--severity", help="critical|high|medium|low|info"),
+    name: str = typer.Option("", "--name", help="Short human name"),
+    out: Path | None = typer.Option(None, "--out", help="Output path (default ./<id>.yaml)"),
+    force: bool = typer.Option(False, "--force", help="Overwrite existing file"),
+) -> None:
+    """Scaffold a new community signature template with a free id."""
+    import re as _re
+
+    from qshield.signatures.loader import VALID_SEVERITIES
+
+    if severity.lower() not in VALID_SEVERITIES:
+        console.print(f"[red]Invalid severity {severity!r}; expected one of {sorted(VALID_SEVERITIES)}[/red]")
+        raise typer.Exit(code=2)
+    if not _re.match(r"^T[1-4]\.[1-4]$", threat_type):
+        console.print(f"[red]Invalid threat_type {threat_type!r}; expected T<1-4>.<1-4>[/red]")
+        raise typer.Exit(code=2)
+
+    sig_id = _next_community_id()
+    template = f'''id: "{sig_id}"
+name: "{name or 'Describe the pattern'}"
+version: "1.0"
+author: "Your Name <you@example.org>"
+date: "{__import__('datetime').date.today().isoformat()}"
+severity: "{severity.lower()}"
+threat_type: "{threat_type}"
+description: |
+  One paragraph: what this detects, why, and why it is NOT a false positive
+  generator. State the corpus TPR/FPR you measured with 'qshield sig test'.
+detection:
+  method: "structural"
+  structural_pattern:
+    type: "gate_sequence_inverse"   # gate_sequence_inverse | leaf_ancilla | parameter_grid_encoding | measurement_basis | micro_rotation_spread
+    window: 8
+    tolerance: 1.0e-6
+references:
+  - "spec://QSHIELD/2.1#{threat_type}"
+false_positive_probability: 0.5
+remediation: "What the operator should do when this fires."
+'''
+    out = out or Path(f"./{sig_id}.yaml")
+    if out.exists() and not force:
+        console.print(f"[red]Refusing to overwrite {out} (use --force)[/red]")
+        raise typer.Exit(code=2)
+    out.write_text(template, encoding="utf-8")
+    console.print(f"[green]Wrote {out}[/green] — fill it in, then:")
+    console.print(f"  qshield sig validate {out}")
+    console.print(f"  qshield sig test {out} --min-tpr 0.5 --max-fpr 0.1")
+
+
+@sig_app.command("validate")
+def sig_validate(target: Path = typer.Argument(..., help="Signature YAML file or directory")) -> None:
+    """Validate one signature or a whole directory against the schema."""
+    from qshield.signatures.loader import load_directory, load_signature
+
+    try:
+        sigs = load_directory(target) if target.is_dir() else [load_signature(target)]
+    except Exception as exc:
+        console.print(f"[red]INVALID: {exc}[/red]")
+        raise typer.Exit(code=1) from exc
+    table = Table(title=f"Validated {len(sigs)} signature(s) in {target}")
+    for col in ("ID", "Severity", "Threat", "Method", "Name"):
+        table.add_column(col)
+    for s in sigs:
+        table.add_row(s.id, s.severity, s.threat_type, s.method, s.name)
+    console.print(table)
+
+
+@sig_app.command("test")
+def sig_test(
+    signature: Path = typer.Argument(..., help="Signature YAML to evaluate"),
+    malicious_dir: Path | None = typer.Option(None, "--malicious-dir", help="Defaults to the repo malicious corpus"),
+    clean_dir: Path | None = typer.Option(None, "--clean-dir", help="Defaults to the repo clean corpus"),
+    min_tpr: float = typer.Option(0.5, "--min-tpr", help="Fail if malicious detection rate is below this"),
+    max_fpr: float = typer.Option(0.1, "--max-fpr", help="Fail if clean fire rate exceeds this"),
+    json_out: bool = typer.Option(False, "--json", help="Emit JSON instead of a table"),
+) -> None:
+    """Measure a signature's TPR (malicious) and FPR (clean). The community quality gate."""
+    import json as _json
+
+    from qshield.core.parsers import parse_any
+    from qshield.signatures.loader import load_signature
+    from qshield.signatures.matcher import SignatureMatcher
+
+    sig = load_signature(signature)
+    matcher = SignatureMatcher([sig])
+
+    mal_dir = malicious_dir or (_ROOT / "tests/fixtures/malicious_circuits")
+    cl_dir = clean_dir or (_ROOT / "tests/fixtures/clean_circuits")
+
+    def run(d: Path):
+        n = hit = 0
+        errors = 0
+        for path in sorted(d.glob("*.qasm")):
+            try:
+                ir = parse_any(str(path))
+            except Exception:
+                errors += 1
+                continue
+            n += 1
+            if any(f.signature_id == sig.id for f in matcher.match(ir)):
+                hit += 1
+        return hit, n, errors
+
+    mal_hit, mal_n, mal_err = run(mal_dir)
+    cl_hit, cl_n, cl_err = run(cl_dir)
+    tpr = mal_hit / mal_n if mal_n else 0.0
+    fpr = cl_hit / cl_n if cl_n else 0.0
+
+    passed = not (tpr < min_tpr or fpr > max_fpr)
+    if json_out:
+        console.print(_json.dumps({
+            "signature": sig.id, "tpr": round(tpr, 4), "fpr": round(fpr, 4),
+            "malicious": {"detected": mal_hit, "total": mal_n, "skipped": mal_err},
+            "clean": {"flagged": cl_hit, "total": cl_n, "skipped": cl_err},
+            "min_tpr": min_tpr, "max_fpr": max_fpr, "result": "PASS" if passed else "FAIL",
+        }, indent=2))
+    else:
+        table = Table(title=f"Signature {sig.id} vs corpus")
+        table.add_column("Set")
+        table.add_column("Flagged")
+        table.add_column("Total")
+        table.add_column("Rate")
+        table.add_row("malicious", str(mal_hit), str(mal_n), f"{tpr:.3f} (min {min_tpr})")
+        table.add_row("clean", str(cl_hit), str(cl_n), f"{fpr:.3f} (max {max_fpr})")
+        console.print(table)
+        if mal_err or cl_err:
+            console.print(f"[yellow]skipped {mal_err} malformed malicious + {cl_err} clean fixtures[/yellow]")
+
+    if not passed:
+        if not json_out:
+            console.print(f"[red]FAIL: TPR {tpr:.3f} < {min_tpr} or FPR {fpr:.3f} > {max_fpr}[/red]")
+        raise typer.Exit(code=1)
+    if not json_out:
+        console.print("[green]PASS[/green]")
+
+
+@sig_app.command("update")
+def sig_update(
+    url: str | None = typer.Option(None, "--url", help="Manifest URL (or QSHIELD_SIGNATURE_REPO; default: canonical pack)"),
+    offline: bool = typer.Option(False, "--offline", help="Install the pack bundled with this release (no network)"),
+    install_dir: Path | None = typer.Option(None, "--install-dir", help="Defaults to ~/.qshield/signatures/community"),
+) -> None:
+    """Fetch, verify (sha256 + schema) and install the community pack. Rollback-safe."""
+    from qshield.signatures import updater
+
+    try:
+        report = updater.update(url=url, install_dir=install_dir, offline=offline)
+    except updater.UpdateError as exc:
+        console.print(f"[red]Update failed: {exc}[/red]")
+        raise typer.Exit(code=1) from exc
+    if not report.ok:
+        for err in report.errors:
+            console.print(f"[red]  - {err}[/red]")
+        console.print("[red]Pack rejected; existing installation untouched.[/red]")
+        raise typer.Exit(code=1)
+    console.print(f"[green]Installed community pack {report.pack_version} "
+                  f"({report.installed_files} files) from {report.source}[/green]")
+    console.print(f"  into {report.install_dir}")
+    console.print("  enable it with [bold]signatures:\n  use_community: true[/bold] in .qshield.yaml (spec default is false)")
+    if report.backup_dir:
+        console.print(f"  previous pack kept at {report.backup_dir} (rollback: qshield sig rollback)")
+
+
+@sig_app.command("rollback")
+def sig_rollback(
+    install_dir: Path | None = typer.Option(None, "--install-dir"),
+) -> None:
+    """Restore the previous community pack (kept as <dir>.bak)."""
+    from qshield.signatures import updater
+
+    if updater.rollback(install_dir):
+        console.print("[green]Rolled back to the previous community pack[/green]")
+    else:
+        console.print("[yellow]No backup to roll back to[/yellow]")
+        raise typer.Exit(code=1)
+
+
+@sig_app.command("status")
+def sig_status(
+    install_dir: Path | None = typer.Option(None, "--install-dir"),
+) -> None:
+    """Show which community pack is installed and what it contains."""
+    from qshield.signatures import community as _community
+    from qshield.signatures import updater
+
+    status = updater.installed_status(install_dir)
+    if not status["installed"]:
+        console.print(f"[yellow]No community pack installed at {status['install_dir']}[/yellow]")
+        console.print("  run: qshield sig update --offline")
+        raise typer.Exit(code=0)
+    console.print(f"installed pack {status['pack_version']} at {status['install_dir']}")
+    console.print(f"  {status['files']} signature(s): {', '.join(status['signatures']) or '(empty pack)'}")
+    errors = _community.verify_pack(Path(status["install_dir"]))
+    if errors:
+        for err in errors:
+            console.print(f"[red]  drift: {err}[/red]")
+        raise typer.Exit(code=1)
+    console.print("[green]  sha256 manifest OK[/green]")
+
+
+@sig_app.command("manifest-build")
+def sig_manifest_build(
+    pack_dir: Path = typer.Argument(..., help="Community pack directory"),
+    version: str = typer.Option(..., "--version", help="pack_version tag, e.g. 2026.2"),
+) -> None:
+    """Maintainers: regenerate manifest.json (sha256 of every YAML file)."""
+    from qshield.signatures import updater
+
+    try:
+        manifest = updater.build_manifest(pack_dir, version)
+    except updater.UpdateError as exc:
+        console.print(f"[red]{exc}[/red]")
+        raise typer.Exit(code=1) from exc
+    console.print(f"[green]Wrote {pack_dir / 'manifest.json'} "
+                  f"({len(manifest['files'])} files, pack {version})[/green]")
 
 
 @app.command()

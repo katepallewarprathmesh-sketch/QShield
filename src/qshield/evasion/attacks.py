@@ -28,6 +28,8 @@ from __future__ import annotations
 import copy
 import math
 import random
+from collections.abc import Callable
+from typing import Any
 
 from qshield.core.circuit_ir import CircuitIR, GateNode, GateType
 
@@ -36,7 +38,7 @@ ATTACK_NAMES = ("camouflage", "synonyms", "rotation_split", "dead_code", "qubit_
 # ---------------------------------------------------------------------------
 # synonym table: replacement gates are applied as exact identities
 # ---------------------------------------------------------------------------
-_SINGLE_REWRITES = {
+_SINGLE_REWRITES: dict[str, list[list[tuple[str, tuple[float, ...]]]]] = {
     # name: list of (sequence of (gate, params)) — global phase only
     "s": [[("rz", (math.pi / 2,))]],
     "sdg": [[("rz", (-math.pi / 2,))]],
@@ -202,7 +204,7 @@ def attack_qubit_relabel(ir: CircuitIR, *, seed: int = 0) -> CircuitIR:
     return out
 
 
-ATTACKS = {
+ATTACKS: dict[str, tuple[Callable[..., CircuitIR], dict[str, Any]]] = {
     "camouflage": (attack_camouflage, {"k": 2, "seed": 0}),
     "synonyms": (attack_synonyms, {"rate": 0.5, "seed": 0}),
     "rotation_split": (attack_rotation_split, {"rate": 0.5, "seed": 0}),

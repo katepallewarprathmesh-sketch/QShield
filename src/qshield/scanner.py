@@ -304,6 +304,14 @@ class Scanner:
                 sigs = builtin_signatures()
             except Exception as exc:
                 warnings.append(f"Failed to load builtin signatures: {exc}")
+            if getattr(self.config, "signatures_community", False):
+                try:
+                    from qshield.signatures.community import preferred_community_signatures
+                    community, community_errors = preferred_community_signatures()
+                    sigs.extend(community)
+                    warnings.extend(community_errors)
+                except Exception as exc:
+                    warnings.append(f"Failed to load community signatures: {exc}")
         for path in self._extra_signature_paths:
             try:
                 sigs.extend(load_directory(path))

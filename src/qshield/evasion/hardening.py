@@ -20,7 +20,7 @@ from qshield.ml.classifier import ClassifierConfig, GraphGNNClassifier
 from qshield.ml.graph import build_vocab
 
 # per-attack overrides for augmentation (kept small so training stays fast)
-_ATTACK_KW = {
+_ATTACK_KW: dict[str, dict[str, int | float]] = {
     "camouflage": {"k": 2},
     "synonyms": {"rate": 0.5},
     "rotation_split": {"rate": 0.5},

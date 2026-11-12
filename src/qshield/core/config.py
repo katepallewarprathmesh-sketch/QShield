@@ -80,6 +80,7 @@ class QShieldConfig:
     reporting_format: str = "json"
     fail_on: str = "high"
     signatures_builtin: bool = True
+    signatures_community: bool = False  # spec default config (.qshield.yaml): use_community: false
     signature_paths: list[str] = field(default_factory=list)
     unitary_max_qubits: int = 12
     unitary_tolerance: float = 1e-6
@@ -111,6 +112,7 @@ class QShieldConfig:
             "reporting_format": self.reporting_format,
             "fail_on": self.fail_on,
             "signatures_builtin": self.signatures_builtin,
+            "signatures_community": self.signatures_community,
             "signature_paths": list(self.signature_paths),
             "license_policy": dict(self.license_policy),
         }
@@ -188,6 +190,7 @@ def load_config(source: str | None = None) -> QShieldConfig:
         reporting_format=str(reporting.get("format", "json")),
         fail_on=str(ci.get("fail_on", "high")),
         signatures_builtin=bool(signatures.get("use_builtin", True)),
+        signatures_community=bool(signatures.get("use_community", False)),
         signature_paths=list(signatures.get("custom_paths", [])),
         unitary_max_qubits=unitary_max,
         unitary_tolerance=unitary_tol,

@@ -32,6 +32,15 @@ jobs:
         run: python benchmarks/evaluate_dynamic.py
       - name: Fuzz the analyzer (M2.3; crashes must be 0)
         run: python benchmarks/fuzz_coverage.py
+      - name: Community signature pack (schema + manifest integrity + offline install)
+        run: |
+          qshield sig validate src/qshield/signatures/community
+          python -c "from qshield.signatures.community import verify_pack; errs = verify_pack(); assert not errs, errs; print('pack integrity OK')"
+          qshield sig update --offline --install-dir /tmp/qshield_community_ci
+          for sig in src/qshield/signatures/community/*.yaml; do
+            [ -e "$sig" ] || { echo "(empty pack — nothing to gate)"; break; }
+            qshield sig test "$sig" --min-tpr 0.5 --max-fpr 0.1
+          done
       - name: Dogfood (self-scan example circuits)
         run: |
           qshield scan tests/fixtures/clean_circuits/bell_state.qasm --fail-on high

@@ -1,22 +1,19 @@
 """Unit tests for the M3.3 evasion-resistance tooling."""
 
-import math
-
 import numpy as np
 import pytest
 
-from qshield.core.circuit_ir import GateType
 from qshield.core.parsers import parse_qasm
 from qshield.evasion import (
     ATTACK_NAMES,
     ATTACKS,
     apply_attack,
-    augment_items,
     attack_camouflage,
     attack_dead_code,
     attack_qubit_relabel,
     attack_rotation_split,
     attack_synonyms,
+    augment_items,
 )
 from qshield.ml import torch_available
 from qshield.static.randomized_equivalence import randomized_equivalence
@@ -62,9 +59,9 @@ def test_relabel_is_graph_isomorphism_via_unitary_conjugation():
     attacked = attack_qubit_relabel(base, seed=5)
     # derive the permutation by matching gates (same order, gate names)
     pi = {}
-    for gb, ga in zip(base.gates, attacked.gates):
+    for gb, ga in zip(base.gates, attacked.gates, strict=True):
         assert gb.gate_name == ga.gate_name
-        for qb, qa in zip(gb.qubits, ga.qubits):
+        for qb, qa in zip(gb.qubits, ga.qubits, strict=True):
             if qb in pi:
                 assert pi[qb] == qa
             pi[qb] = qa
@@ -131,7 +128,7 @@ def test_dead_code_appends_identity_block():
     block, inverse = out.gates[len(ir.gates):len(ir.gates) + 6], out.gates[-6:]
     inv = {"h": "h", "s": "sdg", "sdg": "s", "t": "tdg", "tdg": "t",
            "x": "x", "y": "y", "z": "z", "cx": "cx"}
-    for g_fwd, g_inv in zip(block, reversed(inverse)):
+    for g_fwd, g_inv in zip(block, reversed(inverse), strict=True):
         assert inv[g_fwd.gate_name] == g_inv.gate_name
         assert g_fwd.qubits == g_inv.qubits
 

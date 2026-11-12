@@ -70,6 +70,9 @@ qshield verify circuit.qasm --expected-unitary u.npy     # matrix check (≤12 q
 qshield audit-deps --requirements requirements.txt       # quantum supply-chain audit
 qshield db search ancilla                       # query builtin signatures
 qshield init-config                             # write .qshield.yaml template
+qshield sig status                              # show installed community signature pack
+qshield sig update --offline                    # install bundled signature pack (no network)
+qshield sig test my_sig.yaml --min-tpr 0.8      # gate a signature against the fixture corpus
 ```
 
 ### Python API
@@ -119,11 +122,11 @@ src/qshield/
 ├── static/          # structural analyzer, unitary/density-matrix verifier, dependency scanner
 ├── dynamic/         # sandboxed NumPy simulator, statistical tests, Aer differential tester
 ├── formal/          # ZX-calculus equivalence checker (PyZX), property-verification hooks
-├── signatures/      # YAML threat signatures ("YARA for quantum") + builtin QSig-2024-0001..0005
+├── signatures/      # YAML threat signatures ("YARA for quantum"), builtin QSig-2024-0001..0005, community pack (manifest+sha256, opt-in), `qshield sig` toolchain
 ├── reporting/       # Finding model, SARIF / JSON / HTML exporters
 ├── cli/             # typer CLI (scan, compare, verify, audit-deps, db, init-config)
 └── scanner.py       # public API: qshield.Scanner / qshield.scan / ScanResults
-tests/               # 349 unit+integration+security benchmark tests (95% coverage)
+tests/               # 389 unit+integration+security benchmark tests (95% coverage)
 benchmarks/          # evaluate.py — Phase-1 detection-rate report
 examples/            # quickstart for each supported framework
 ```
@@ -147,7 +150,7 @@ mypy src                               # type-check (clean)
 * **Phase 2 (done):** sandboxed execution with measurement interception (Born-rule collapse logging, ancilla density snapshots with purity, wall-clock limits), noise-aware differential tester (homogeneity chi²; measured TPR 0.958 @ δ≥0.1 rigging, FPR 0.025 ideal, 0.008 across depolarizing+amplitude-damping Aer twins), mutation fuzzer with coverage-guided corpus minimization (camouflage evasion 0.736 → 0.000 after effective-usage analyzer hardening), OpenQASM 3.0 subset parser, paper 2 — detection methods ([docs/research/detection_methods_paper.md](docs/research/detection_methods_paper.md)).
 * **Phase 3 (in progress):** ZX-calculus equivalence engine (proven-equivalence reductions for Clifford fragments; 100/150-qubit identical and camouflaged pairs verified in <0.31s; exact tensor fallback capped at 10 qubits, 'undecidable' beyond that — never a false verdict, never an OOM; `qshield compare --formal`), ML anomaly detection ([benchmarks/evaluate_ml.py](benchmarks/evaluate_ml.py); GNN autoencoder trained on clean only — TPR 0.58 / FPR 0.07, plus a supervised GNN classifier — TPR 0.991 / FPR 0.079 / AUROC 0.978, nested-calibration 5-fold CV; LOO saliency explainability; `pip install 'qshield[ml]'`).
 * **Phase 3 (M3.3 done):** evasion-resistance suite — 5 semantics-preserving attack classes (camouflage, synonym rewrites, rotation splitting, identity dead-code, qubit relabeling), adversarial-training hardening lifts the GNN's overall resistance from 0.732 to 0.828 (acceptance ≥ 0.80 met), with attacked-clean FPR ≤ 0.059 ([analysis](docs/research/evasion_analysis.md), [benchmark](benchmarks/evasion_results.json)).
-* **Phase 3 (planned):** ML anomaly detection for large circuits, community signature ecosystem.
+* **Phase 3 (M3.4 done):** community signature ecosystem — signed-by-sha256 community pack (empty by design: two candidate signatures measured on the fixture corpus both scored TPR≈FPR and were rejected; see `src/qshield/signatures/community/CONTRIBUTING.md`), `qshield sig` toolchain (id-suggest / new / validate / test with TPR/FPR gates / update / rollback / status / manifest-build), sha256-verified update with `.bak` rollback and offline install (`sig update --offline`), opt-in via `use_community: true` (spec default config: false).
 * **Phase 4:** cloud runtime monitor (API proxy, result validation), hardware validation, CI/CD marketplace integration, v1.0.
 
 ## License
