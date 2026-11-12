@@ -178,6 +178,15 @@ def to_qiskit(ir: CircuitIR):
     return qc
 
 
+def _bit_reversal_perm(n: int) -> np.ndarray:
+    """Permutation between QSHIELD MSB-first and Qiskit little-endian ordering."""
+    P = np.zeros((1 << n, 1 << n), dtype=complex)
+    for i in range(1 << n):
+        j = int(format(i, f"0{n}b")[::-1], 2)
+        P[i, j] = 1.0
+    return P
+
+
 def _unitary_fallback(qc: Any, gate: Any) -> None:
     mat = gate.unitary if gate.unitary is not None else GATE_DB.matrix(gate.gate_name, gate.parameters)
     if mat is None:
@@ -185,4 +194,11 @@ def _unitary_fallback(qc: Any, gate: Any) -> None:
             f"Gate {gate.gate_name!r} has no native Qiskit emission and no known unitary; "
             "cannot export this circuit."
         )
-    qc.unitary(np.asarray(mat, dtype=complex), list(gate.qubits))
+    mat = np.asarray(mat, dtype=complex)
+    # QSHIELD stores matrices MSB-first; qiskit's unitary() interprets them
+    # little-endian. Emit the bit-reversed matrix so the exported circuit
+    # acts on qubit labels exactly as the source circuit does.
+    if mat.shape == (2 ** len(gate.qubits), 2 ** len(gate.qubits)):
+        P = _bit_reversal_perm(len(gate.qubits))
+        mat = P @ mat @ P
+    qc.unitary(mat, list(gate.qubits))

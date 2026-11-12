@@ -157,11 +157,10 @@ def _toffoli(_: float | None = None) -> np.ndarray:
 
 
 def _r_gate(theta: float, phi: float) -> np.ndarray:
+    # matches qiskit RGate: exp(-i theta/2 (cos phi X + sin phi Y))
     c, s = np.cos(theta / 2), np.sin(theta / 2)
-    return np.array(
-        [[c, -np.exp(-1j * phi) * s], [np.exp(1j * phi) * s, c]],
-        dtype=complex,
-    )
+    axis = np.cos(phi) * X + np.sin(phi) * Y
+    return c * np.eye(2, dtype=complex) - 1j * s * axis
 
 
 def _rxdg(theta: float) -> np.ndarray:

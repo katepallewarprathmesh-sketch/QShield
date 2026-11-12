@@ -128,3 +128,38 @@ def test_unsupported_gate_raises():
 def test_api_surface():
     assert callable(qshield.to_qiskit)
     assert issubclass(qshield.UnsupportedGateError, ValueError)
+
+
+def _bit_reversal_perm(n: int) -> np.ndarray:
+    """Permutation between QSHIELD MSB-first and Qiskit little-endian conventions."""
+    P = np.zeros((1 << n, 1 << n), dtype=complex)
+    for i in range(1 << n):
+        j = int(format(i, f"0{n}b")[::-1], 2)
+        P[i, j] = 1.0
+    return P
+
+
+def test_every_db_gate_exports_with_preserved_semantics():
+    """Strongest check: every one of the 101 gate-DB names round-trips exactly."""
+    from qiskit.quantum_info import Operator
+
+    from qshield.core.circuit_ir import CircuitIR, GateNode, GateType
+    from qshield.core.gate_database import GATE_DB
+
+    for name in GATE_DB.known_names():
+        spec = GATE_DB.get_spec(name)
+        params = [0.3 + 0.4 * i for i in range(max(spec.num_params, 0))]
+        mat = GATE_DB.matrix(name, params)
+        assert mat is not None, name
+        ir = CircuitIR(
+            circuit_id="t", name="t", num_qubits=spec.arity, num_classical_bits=0,
+            gates=[GateNode(gate_id="g0", gate_name=name, gate_type=GateType.STANDARD,
+                            qubits=list(range(spec.arity)), parameters=params,
+                            unitary=mat, source_location="t")],
+            dag={}, measurements=[], source_framework="test", source_hash="x", metadata={},
+        )
+        expected = ir.to_unitary()
+        exported = to_qiskit(ir)
+        actual = Operator(exported).data
+        P = _bit_reversal_perm(spec.arity)
+        assert np.allclose(P @ expected @ P, actual, atol=1e-12), f"gate {name} changed semantics in export"
