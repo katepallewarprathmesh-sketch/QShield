@@ -202,7 +202,8 @@ def parse_cirq(circuit: Any, name: str | None = None) -> CircuitIR:
                 continue
             gname, params = _cirq_gate_to_name(gate)
             if gname is None:
-                gname = cls.replace("PowGate", "").lower() if cls else "unknown"
+                # mark unmapped powers as opaque: never impersonate a known gate
+                gname = f"{cls.replace('PowGate', '').lower()}_pow" if cls else "unknown"
             ops.append((gname, params, op_qubits))
 
     return _build_ir(

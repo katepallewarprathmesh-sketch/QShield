@@ -1,5 +1,7 @@
 import json
 
+import numpy as np
+
 from typer.testing import CliRunner
 
 from qshield import Scanner, scan
@@ -95,3 +97,35 @@ def test_cli_audit_deps(tmp_path):
     reqs.write_text("urllib3==1.26.4\nqiskit==1.2.0\n")
     result = runner.invoke(app, ["audit-deps", "--requirements", str(reqs)])
     assert result.exit_code == 1  # urllib3 1.26.4 is flagged; high severity
+
+
+def test_sandbox_limits_and_execute(tmp_path):
+    import pytest
+
+    from qshield.core.parsers import parse_qasm
+    from qshield.dynamic.sandbox_executor import SandboxExecutor, SandboxViolation
+
+    ir = parse_qasm("OPENQASM 2.0;\nqreg q[2];\nh q[0];\ncx q[0], q[1];\n")
+    executor = SandboxExecutor(max_qubits=10, max_gates=10)
+    executor.check_limits(ir)  # no raise
+    with pytest.raises(SandboxViolation):
+        SandboxExecutor(max_qubits=1).check_limits(ir)
+    with pytest.raises(SandboxViolation):
+        SandboxExecutor(max_gates=1).check_limits(ir)
+    result = executor.run(ir)
+    assert result.num_qubits == 2
+    assert pytest.approx(float(np.sum(np.abs(result.final_state) ** 2)), rel=1e-9) == 1.0
+
+
+def test_sandbox_refuses_unknown_gate(tmp_path):
+    import pytest
+
+    from qshield.core.circuit_ir import CircuitIR, GateNode, GateType
+    from qshield.dynamic.sandbox_executor import SandboxExecutor, SandboxViolation
+
+    ir = CircuitIR(circuit_id="t", name="t", num_qubits=1, num_classical_bits=0,
+                   gates=[GateNode(gate_id="g", gate_name="not_a_gate", gate_type=GateType.CUSTOM,
+                                   qubits=[0], parameters=[], unitary=None)],
+                   dag={}, measurements=[], source_framework="test", source_hash="x", metadata={})
+    with pytest.raises(SandboxViolation, match="not_a_gate"):
+        SandboxExecutor().run(ir)

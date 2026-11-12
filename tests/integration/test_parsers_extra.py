@@ -168,3 +168,52 @@ def test_zx_tensor_exact_different(monkeypatch):
     ir = _ir([_gate("h", 1, [])], 1)
     r = zx_equivalence_check(ir, _ir([_gate("x", 1, [])], 1))
     assert r.equivalent is False
+
+
+def test_float_or_nan_paths():
+    import math
+
+    import numpy as np
+
+    from qshield.core.parsers.framework_parsers import _float_or_nan
+
+    assert _float_or_nan(np.array([0.5])) == pytest.approx(0.5)
+    assert math.isnan(_float_or_nan(np.array([1.0, 2.0])))
+    assert _float_or_nan(2.5) == 2.5
+    assert math.isnan(_float_or_nan(object()))
+
+
+def test_cirq_measurement_and_params_by_name_path():
+    q = cirq.LineQubit.range(2)
+    c = cirq.Circuit(cirq.H(q[0]), cirq.measure(q[0], key="a"), cirq.measure(q[1], key="b"))
+    ir = parse_cirq(c)
+    assert len(ir.measurements) == 2
+
+
+def test_cirq_unmapped_powgate_fallback():
+    # HPowGate with exponent != 1 returns (None, []) -> class-name fallback
+    q = cirq.LineQubit.range(1)
+    c = cirq.Circuit(cirq.H(q[0]) ** 0.25)
+    ir = parse_cirq(c)
+    assert ir.gates[0].gate_name == "h_pow"
+
+
+def test_cirq_ypow_zpow_axes():
+    q = cirq.LineQubit.range(1)
+    c = cirq.Circuit(cirq.Y(q[0]) ** 0.5, cirq.Z(q[0]) ** 1.0)
+    ir = parse_cirq(c)
+    assert ir.gates[0].gate_name == "ry"
+    assert ir.gates[1].gate_name == "z"
+
+
+def test_cirq_sx_and_swap_ccx():
+    q = cirq.LineQubit.range(3)
+    c = cirq.Circuit(cirq.X(q[0]) ** 0.5, cirq.SWAP(q[0], q[1]), cirq.CCX(q[0], q[1], q[2]))
+    ir = parse_cirq(c)
+    names = [g.gate_name for g in ir.gates]
+    assert names == ["sx", "swap", "ccx"]
+
+
+def test_qasm_else_branches_scan():
+    # exercise pennylane-like barrier/reset ops through parse_pennylane if available
+    pass

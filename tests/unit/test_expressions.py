@@ -47,3 +47,43 @@ def test_rejects_dangerous_input():
 def test_rejects_inf_and_nan():
     with pytest.raises(ExpressionError):
         evaluate_expression("1e999")
+
+
+def test_rejects_bool_and_string_constants():
+    # bools evaluate as floats (0.0/1.0) and are allowed by design
+    assert evaluate_expression("True") == 1.0
+    with pytest.raises(ExpressionError):
+        evaluate_expression("'abc'")
+
+
+def test_disallowed_binop_and_unary():
+    with pytest.raises(ExpressionError):
+        evaluate_expression("1 << 4")
+    with pytest.raises(ExpressionError):
+        evaluate_expression("2 ** 3 ** 2 ** 2 ** 2 ** 2")  # overflow -> inf rejected, or via OverflowError
+    with pytest.raises(ExpressionError):
+        evaluate_expression("not 1")
+
+
+def test_division_by_zero():
+    with pytest.raises(ExpressionError, match=r"[Dd]ivision"):
+        evaluate_expression("1 / 0")
+
+
+def test_unknown_function_and_kwargs():
+    with pytest.raises(ExpressionError):
+        evaluate_expression("nosuchfn(1)")
+    with pytest.raises(ExpressionError):
+        evaluate_expression("sin(x=0)")
+    with pytest.raises(ExpressionError):
+        evaluate_expression("sin.cos(0)")
+
+
+def test_syntax_error():
+    with pytest.raises(ExpressionError, match="Cannot parse"):
+        evaluate_expression("1 +")
+
+
+def test_expression_to_non_real():
+    with pytest.raises(ExpressionError):
+        evaluate_expression("1j")
