@@ -106,8 +106,8 @@ exported = to_qiskit(ir)               # back to QuantumCircuit; same unitary
 | T3.2/T3.3 Compromised compiler/backend | pre/post-compile or cross-backend divergence | ZX-calculus equivalence (`compare --formal`), randomized equivalence to ~20 qubits (`compare`, polynomial identity testing), differential Aer-vs-numpy distribution test | statistical/exact |
 
 Confidence scores and false-positive probabilities are attached to every finding; the built-in
-corpus evaluates to **50/50 attacks detected, 0/50 clean-circuit false positives** (synthetic
-Phase-1 corpus of 100 circuits — see `benchmarks/evaluate.py` and `benchmarks/generate_corpus.py`;
+corpus evaluates to **215/215 attacks detected, 0/202 clean-circuit false positives** (synthetic
+Phase-1 corpus of 417 circuits — see `benchmarks/evaluate.py` and `benchmarks/generate_corpus.py`;
 real-world calibration is Phase 2+ work).
 
 ## Project layout
@@ -139,7 +139,7 @@ mypy src                               # type-check (clean)
 
 ## Roadmap (from the spec)
 
-* **Phase 1 (done):** CircuitIR, QASM parser (100-qubit circuits verified), Qiskit round-trip export (`to_qiskit`, semantics-preserving — acceptance criterion met), gate database with 101 standard gates, structural analyzer, unitary verifier, randomized equivalence (~20 qubits), CLI, SARIF/JSON/HTML/PDF, benchmark suite (50 clean + 50 malicious, TPR 100% / FPR 0%), paper 1 — threat taxonomy ([docs/research/threat_taxonomy_paper.md](docs/research/threat_taxonomy_paper.md)).
+* **Phase 1 (done):** CircuitIR, QASM parser (100-qubit circuits verified), Qiskit round-trip export (`to_qiskit`, semantics-preserving — acceptance criterion met), gate database with 101 standard gates, structural analyzer, unitary verifier, randomized equivalence (~20 qubits), CLI, SARIF/JSON/HTML/PDF, benchmark suite (202 clean + 215 malicious, TPR 100% / FPR 0%), paper 1 — threat taxonomy ([docs/research/threat_taxonomy_paper.md](docs/research/threat_taxonomy_paper.md)).
 * Exact/dynamic equivalence has hardware limits: random testing catches large deviations but not angles of ≲1e-3 rad; use `--formal` or dense verification when feasible.
 * **Phase 2:** dynamic analysis depth (fuzzer, tomography prober), Cirq/PennyLane/QASM3 parity, differential threshold calibration, paper 2.
 * **Phase 3:** full ZX property verification, ML anomaly detection (GNN), evasion-resistance suite, community signature ecosystem.
