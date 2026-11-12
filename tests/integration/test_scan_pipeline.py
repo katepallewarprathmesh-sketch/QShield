@@ -1,7 +1,6 @@
 import json
 
 import numpy as np
-
 from typer.testing import CliRunner
 
 from qshield import Scanner, scan

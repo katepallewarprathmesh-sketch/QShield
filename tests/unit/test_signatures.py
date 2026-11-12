@@ -101,7 +101,7 @@ def test_validate_signature_bad_id_and_severity_and_threat():
         validate_signature({**base, "severity": "catastrophic"})
     with pytest.raises(SignatureError, match="threat_type"):
         validate_signature({**base, "threat_type": "X9.9"})
-    with pytest.raises(SignatureError, match="detection.method"):
+    with pytest.raises(SignatureError, match=r"detection\.method"):
         validate_signature({**base, "detection": {"method": "magic"}})
     with pytest.raises(SignatureError, match="must be a mapping"):
         validate_signature({**base, "detection": "nope"})
