@@ -70,6 +70,9 @@ where = ["src"]
 "qshield" = ["signatures/builtin/*.yaml", "reporting/templates/*.jinja2"]
 
 [tool.pytest.ini_options]
+markers = [
+    "slow: long-running tests (deselect with -m 'not slow')",
+]
 testpaths = ["tests"]
 addopts = "-q"
 

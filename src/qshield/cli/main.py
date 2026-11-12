@@ -158,6 +158,8 @@ def compare(
     suspicious: Path = typer.Argument(..., exists=True, help="Circuit under audit"),
     tolerance: float = typer.Option(1e-6, "--tolerance"),
     formal: bool = typer.Option(False, "--formal", help="Decide equivalence with the ZX-calculus engine (pyzx)"),
+    randomized: bool = typer.Option(False, "--randomized", help="Force randomized (high-probability) equivalence checking — practical to ~20 qubits"),
+    samples: int = typer.Option(8, "--samples", help="Number of random inputs for --randomized"),
 ) -> None:
     """Compare two circuits structurally and (when small) unitarily."""
     try:
@@ -200,6 +202,18 @@ def compare(
         console.print(f"ZX-calculus: {verdict} — {result.message} [{result.method}]")
         raise typer.Exit(code=0 if result.equivalent else 1)
 
+    if randomized:
+        from qshield.static import randomized_equivalence
+
+        try:
+            report = randomized_equivalence(a, b, num_samples=samples, seed=0)
+        except Exception as exc:
+            console.print(f"[red]Randomized check failed: {exc}[/red]")
+            raise typer.Exit(code=2) from exc
+        verdict = "[green]EQUIVALENT[/green]" if report.equivalent else "[red]DIFFERENT[/red]"
+        console.print(f"Randomized check ({report.num_samples} samples, {report.num_qubits} qubits): {verdict} — {report.summary()}")
+        raise typer.Exit(code=0 if report.equivalent else 1)
+
     # unitary comparison when feasible
     ua, ub = a.to_unitary(), b.to_unitary()
     if ua is not None and ub is not None and ua.shape == ub.shape:
@@ -207,9 +221,23 @@ def compare(
         verdict = "[green]EQUIVALENT[/green]" if dist < tolerance else f"[red]DIFFERENT[/red] (‖ΔU‖={dist:.3e})"
         console.print(f"Unitary distance: {dist:.3e} → {verdict}")
         raise typer.Exit(code=0 if dist < tolerance else 1)
-    else:
-        console.print("[dim]Unitary comparison skipped (too large or non-unitary)[/dim]")
-        raise typer.Exit(code=0 if ca == cb else 1)
+
+    # dense unitary out of reach: fall back to randomized checking (not a proof, but strong evidence)
+    if a.num_qubits <= 22:
+        from qshield.static import randomized_equivalence
+
+        try:
+            report = randomized_equivalence(a, b, num_samples=samples, seed=0)
+        except Exception as exc:
+            console.print(f"[dim]Randomized fallback unavailable ({exc})[/dim]")
+            console.print("[dim]Unitary comparison skipped (too large or non-unitary)[/dim]")
+            raise typer.Exit(code=0 if ca == cb else 1) from exc
+        verdict = "[green]EQUIVALENT[/green]" if report.equivalent else "[red]DIFFERENT[/red]"
+        console.print(f"Randomized check ({report.num_samples} samples, {report.num_qubits} qubits): {verdict} — {report.summary()}")
+        console.print("[dim]High-probability equivalence (polynomial identity testing), not a proof — use --formal for a decision procedure.[/dim]")
+        raise typer.Exit(code=0 if report.equivalent else 1)
+    console.print("[dim]Unitary comparison skipped (too large or non-unitary)[/dim]")
+    raise typer.Exit(code=0 if ca == cb else 1)
 
 
 # ==================================================================
