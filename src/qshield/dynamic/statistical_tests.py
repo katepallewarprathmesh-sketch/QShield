@@ -20,6 +20,8 @@ class ComparisonResult:
     significance_level: float
     suspicious: bool
     verdict: str
+    js_threshold: float = 0.05
+    tv_threshold: float = 0.1
 
 
 @dataclass
@@ -46,19 +48,54 @@ def _aligned(p: dict[str, float], q: dict[str, float]) -> tuple[np.ndarray, np.n
 
 
 def chi_squared_test(observed: dict[str, int], expected_probs: dict[str, float]) -> tuple[float, float]:
-    """Chi-squared goodness-of-fit; returns (statistic, p_value)."""
-    keys = sorted(expected_probs)
+    """Chi-squared goodness-of-fit; returns (statistic, p_value).
+
+    Bins follow the *union* of observed and expected outcomes, with a
+    pseudocount floor (0.5) on bins whose expected probability is zero —
+    otherwise rigged outcomes outside the reference support would be
+    invisible to the test.
+    """
+    keys = sorted(set(observed) | set(expected_probs))
+    if not keys:
+        raise ValueError("Expected distribution is empty")
     obs = np.array([observed.get(k, 0) for k in keys], dtype=float)
-    exp = np.array([expected_probs[k] for k in keys], dtype=float)
     total = obs.sum()
     if total <= 0:
         raise ValueError("Observed distribution is empty")
-    exp = exp * total
-    mask = exp > 0
-    if mask.sum() < 2:
-        raise ValueError("Expected distribution needs at least 2 non-zero bins")
-    stat, p = stats.chisquare(f_obs=obs[mask], f_exp=exp[mask])
+    exp = np.array([expected_probs.get(k, 0.0) for k in keys], dtype=float) * total
+    exp = np.maximum(exp, 0.5)
+    exp = exp / exp.sum() * total  # keep sums equal for scipy
+    if len(keys) == 1:
+        # single deterministic outcome: exact match or hopeless
+        return (0.0, 1.0) if obs[0] == total else (float(total - obs[0]), 0.0)
+    stat, p = stats.chisquare(f_obs=obs, f_exp=exp)
     return float(stat), float(p)
+
+
+def chi_squared_homogeneity(a: dict[str, int], b: dict[str, int]) -> tuple[float, float]:
+    """Two-sample chi-squared homogeneity test on two count histograms.
+
+    Valid under arbitrary (unknown) shared noise, unlike goodness-of-fit
+    against a reference probability vector.  Bins are the union of the two
+    supports; expected counts come from the pooled proportions.
+    """
+    keys = sorted(set(a) | set(b))
+    if len(keys) <= 1:
+        return 0.0, 1.0
+    va = np.array([a.get(k, 0) for k in keys], dtype=float)
+    vb = np.array([b.get(k, 0) for k in keys], dtype=float)
+    na, nb = va.sum(), vb.sum()
+    if na == 0 or nb == 0:
+        raise ValueError("Both distributions must be non-empty")
+    pooled = va + vb
+    prop = pooled / pooled.sum()
+    ea, eb = prop * na, prop * nb
+    ea = np.maximum(ea, 1e-9)
+    eb = np.maximum(eb, 1e-9)
+    stat = float(np.sum((va - ea) ** 2 / ea + (vb - eb) ** 2 / eb))
+    # homogeneity chi2 with k bins has k-1 degrees of freedom
+    p = float(stats.chi2.sf(stat, df=len(keys) - 1))
+    return stat, p
 
 
 def kl_divergence(p: dict[str, float], q: dict[str, float], epsilon: float = 1e-10) -> float:
@@ -98,12 +135,45 @@ def compare_distributions(
     trusted_results: dict[str, int],
     untrusted_results: dict[str, int],
     significance_level: float = 0.01,
+    js_threshold: float = 0.05,
+    tv_threshold: float = 0.1,
+    noise_aware: bool = False,
+    chi_mode: str = "homogeneity",
 ) -> ComparisonResult:
-    """Full statistical comparison of two measurement distributions."""
+    """Full statistical comparison of two measurement distributions.
+
+    ``js_threshold``/``tv_threshold`` are the noise-aware cut-offs: when the
+    untrusted backend is expected to run with a noise floor (e.g. a depolarizing
+    channel of rate ``eps``), raise them so honest noise does not trip the
+    alarm.  Benchmark-calibrated guidance (see ``benchmarks/evaluate_dynamic.py``):
+    TV drift from per-gate depolarizing noise grows roughly linearly with
+    ``eps * n_noisy_gates``; a safe inflation is ``tv_threshold + 2*eps*gate_count``
+    and the analogous ``js_threshold + 1.5*eps*gate_count``.  The defaults keep
+    the original strict behaviour (JS > 0.05 or TV > 0.1).
+
+    ``chi_mode`` selects the chi-squared flavour:
+
+    - ``"homogeneity"`` (default): two-sample chi-squared between the two
+      count histograms — the statistically correct test when both backends
+      contribute sampling noise (the trusted reference is itself counts, and
+      goodness-of-fit against *empirical* probabilities approximately doubles
+      the statistic, inflating false positives ~10x above nominal).
+    - ``"goodness_of_fit"``: Pearson chi-squared against the trusted
+      probabilities.  Only valid when the reference probabilities are exact
+      (e.g. analytic) — otherwise wildly anti-conservative at large shots.
+
+    With ``noise_aware=True`` the homogeneity test is used *and* the caller
+    typically inflates ``js_threshold``/``tv_threshold`` to the noise floor.
+    """
     p_norm = _normalise(trusted_results)
     q_norm = _normalise(untrusted_results)
 
-    _chi_stat, chi_p = chi_squared_test(untrusted_results, p_norm)
+    if chi_mode == "homogeneity" or noise_aware:
+        _chi_stat, chi_p = chi_squared_homogeneity(trusted_results, untrusted_results)
+    elif chi_mode == "goodness_of_fit":
+        _chi_stat, chi_p = chi_squared_test(untrusted_results, p_norm)
+    else:
+        raise ValueError(f"Unknown chi_mode {chi_mode!r}; expected 'homogeneity' or 'goodness_of_fit'")
     kl = kl_divergence(q_norm, p_norm)
     js = jensen_shannon_divergence(p_norm, q_norm)
     tv = total_variation_distance(p_norm, q_norm)
@@ -118,7 +188,7 @@ def compare_distributions(
     en = np.sqrt(n_eff) * ks_stat
     ks_p = float(np.exp(-2 * en * en) * 2)
 
-    suspicious = (chi_p < significance_level) or (js > 0.05) or (tv > 0.1)
+    suspicious = (chi_p < significance_level) or (js > js_threshold) or (tv > tv_threshold)
     if suspicious:
         verdict = "DIVERGENT: distributions differ significantly"
     else:
@@ -133,6 +203,8 @@ def compare_distributions(
         significance_level=significance_level,
         suspicious=suspicious,
         verdict=verdict,
+        js_threshold=js_threshold,
+        tv_threshold=tv_threshold,
     )
 
 

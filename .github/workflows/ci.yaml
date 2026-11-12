@@ -28,6 +28,8 @@ jobs:
         run: pytest --cov=qshield --cov-report=term-missing
       - name: Benchmark corpus (TPR/FPR)
         run: python benchmarks/evaluate.py
+      - name: Dynamic benchmark (M2.2 acceptance: TPR/FPR across noise models)
+        run: python benchmarks/evaluate_dynamic.py
       - name: Dogfood (self-scan example circuits)
         run: |
           qshield scan tests/fixtures/clean_circuits/bell_state.qasm --fail-on high

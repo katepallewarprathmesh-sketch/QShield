@@ -1,0 +1,29 @@
+{
+  "circuits": 24,
+  "scenarios": {
+    "A_ideal_vs_ideal_fpr": 0.025,
+    "B1_ideal_vs_noise_0.001_flag_rate": 0.8083333333333333,
+    "B1_ideal_vs_noise_0.01_flag_rate": 0.8333333333333334,
+    "B1_ideal_vs_noise_0.05_flag_rate": 0.8333333333333334,
+    "B2_twins_amplitude_damping_0.001_fpr": 0.008333333333333333,
+    "B2_twins_amplitude_damping_0.01_fpr": 0.0,
+    "B2_twins_amplitude_damping_0.05_fpr": 0.0,
+    "B2_twins_depolarizing_0.001_fpr": 0.0,
+    "B2_twins_depolarizing_0.01_fpr": 0.0,
+    "B2_twins_depolarizing_0.05_fpr": 0.0,
+    "B2_worst_fpr_across_noise_models": 0.008333333333333333,
+    "C_trojan_delta_0.05_tpr": 0.9,
+    "C_trojan_delta_0.1_tpr": 0.9583333333333334,
+    "C_trojan_delta_0.2_tpr": 0.9583333333333334,
+    "C_trojan_delta_0.3_tpr": 0.9583333333333334,
+    "D_trojan_under_noise_tpr_noise_aware": 1.0
+  },
+  "seeds": 60,
+  "shots": 10000,
+  "verdict": {
+    "fpr_aer_twins_worst_across_noise_models": 0.008333333333333333,
+    "fpr_ideal": 0.025,
+    "pass": true,
+    "tpr_min_delta_ge_0.2": 0.9583333333333334
+  }
+}
