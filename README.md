@@ -123,7 +123,7 @@ src/qshield/
 ├── reporting/       # Finding model, SARIF / JSON / HTML exporters
 ├── cli/             # typer CLI (scan, compare, verify, audit-deps, db, init-config)
 └── scanner.py       # public API: qshield.Scanner / qshield.scan / ScanResults
-tests/               # 318 unit+integration+security benchmark tests (95% coverage)
+tests/               # 349 unit+integration+security benchmark tests (95% coverage)
 benchmarks/          # evaluate.py — Phase-1 detection-rate report
 examples/            # quickstart for each supported framework
 ```
@@ -133,8 +133,10 @@ examples/            # quickstart for each supported framework
 ```bash
 pip install -e '.[dev,qiskit,cirq,formal]'
 python -m pytest tests                 # run the suite
+python benchmarks/evaluate_ml.py       # ML CV benchmark (needs qshield[ml])
+python benchmarks/evasion_evaluate.py --skip-static   # red/blue evasion benchmark
 python benchmarks/evaluate.py          # detection-rate table
-ruff check src tests                   # lint (clean)
+ruff check src tests benchmarks         # lint (clean)
 mypy src                               # type-check (clean)
 ```
 
@@ -144,7 +146,8 @@ mypy src                               # type-check (clean)
 * Exact/dynamic equivalence has hardware limits: random testing catches large deviations but not angles of ≲1e-3 rad; use `--formal` or dense verification when feasible.
 * **Phase 2 (done):** sandboxed execution with measurement interception (Born-rule collapse logging, ancilla density snapshots with purity, wall-clock limits), noise-aware differential tester (homogeneity chi²; measured TPR 0.958 @ δ≥0.1 rigging, FPR 0.025 ideal, 0.008 across depolarizing+amplitude-damping Aer twins), mutation fuzzer with coverage-guided corpus minimization (camouflage evasion 0.736 → 0.000 after effective-usage analyzer hardening), OpenQASM 3.0 subset parser, paper 2 — detection methods ([docs/research/detection_methods_paper.md](docs/research/detection_methods_paper.md)).
 * **Phase 3 (in progress):** ZX-calculus equivalence engine (proven-equivalence reductions for Clifford fragments; 100/150-qubit identical and camouflaged pairs verified in <0.31s; exact tensor fallback capped at 10 qubits, 'undecidable' beyond that — never a false verdict, never an OOM; `qshield compare --formal`), ML anomaly detection ([benchmarks/evaluate_ml.py](benchmarks/evaluate_ml.py); GNN autoencoder trained on clean only — TPR 0.58 / FPR 0.07, plus a supervised GNN classifier — TPR 0.991 / FPR 0.079 / AUROC 0.978, nested-calibration 5-fold CV; LOO saliency explainability; `pip install 'qshield[ml]'`).
-* **Phase 3 (planned):** evasion-resistance suite, community signature ecosystem.
+* **Phase 3 (M3.3 done):** evasion-resistance suite — 5 semantics-preserving attack classes (camouflage, synonym rewrites, rotation splitting, identity dead-code, qubit relabeling), adversarial-training hardening lifts the GNN's overall resistance from 0.732 to 0.828 (acceptance ≥ 0.80 met), with attacked-clean FPR ≤ 0.059 ([analysis](docs/research/evasion_analysis.md), [benchmark](benchmarks/evasion_results.json)).
+* **Phase 3 (planned):** ML anomaly detection for large circuits, community signature ecosystem.
 * **Phase 4:** cloud runtime monitor (API proxy, result validation), hardware validation, CI/CD marketplace integration, v1.0.
 
 ## License

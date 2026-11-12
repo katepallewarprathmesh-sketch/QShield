@@ -1,0 +1,384 @@
+{
+  "dataset": {
+    "total": 417,
+    "clean": 202,
+    "malicious": 215
+  },
+  "config": {
+    "folds": 3,
+    "epochs": 40,
+    "hardened_epochs": 40,
+    "hidden": 64,
+    "seed": 0,
+    "threshold_target_fpr": 0.05
+  },
+  "static": {
+    "camouflage": {
+      "malicious_detected": 44,
+      "malicious_total": 215,
+      "clean_flagged": 0,
+      "clean_total": 195,
+      "skipped_resource_cap": 7,
+      "max_qubits": 10,
+      "detection_under_attack": 0.2047,
+      "attacked_clean_fpr": 0.0
+    },
+    "synonyms": {
+      "malicious_detected": 44,
+      "malicious_total": 215,
+      "clean_flagged": 0,
+      "clean_total": 195,
+      "skipped_resource_cap": 7,
+      "max_qubits": 10,
+      "detection_under_attack": 0.2047,
+      "attacked_clean_fpr": 0.0
+    },
+    "rotation_split": {
+      "malicious_detected": 45,
+      "malicious_total": 215,
+      "clean_flagged": 0,
+      "clean_total": 195,
+      "skipped_resource_cap": 7,
+      "max_qubits": 10,
+      "detection_under_attack": 0.2093,
+      "attacked_clean_fpr": 0.0
+    },
+    "dead_code": {
+      "malicious_detected": 44,
+      "malicious_total": 215,
+      "clean_flagged": 0,
+      "clean_total": 195,
+      "skipped_resource_cap": 7,
+      "max_qubits": 10,
+      "detection_under_attack": 0.2047,
+      "attacked_clean_fpr": 0.0
+    },
+    "qubit_relabel": {
+      "malicious_detected": 59,
+      "malicious_total": 215,
+      "clean_flagged": 0,
+      "clean_total": 195,
+      "skipped_resource_cap": 7,
+      "max_qubits": 10,
+      "detection_under_attack": 0.2744,
+      "attacked_clean_fpr": 0.0
+    },
+    "unattacked": {
+      "malicious_detected": 59,
+      "malicious_total": 215,
+      "clean_flagged": 0,
+      "clean_total": 195,
+      "detection_under_attack": 0.2744,
+      "attacked_clean_fpr": 0.0
+    }
+  },
+  "folds": [
+    {
+      "fold": 0,
+      "gnn_threshold": 0.9552,
+      "gnn_hardened_threshold": 0.505,
+      "attacks": {
+        "camouflage": {
+          "gnn": {
+            "detection_under_attack": 0.3239,
+            "attacked_clean_fpr": 0.0,
+            "resisted": 23,
+            "attempts": 71
+          },
+          "gnn_hardened": {
+            "detection_under_attack": 0.6479,
+            "attacked_clean_fpr": 0.0,
+            "resisted": 46,
+            "attempts": 71
+          }
+        },
+        "synonyms": {
+          "gnn": {
+            "detection_under_attack": 0.4789,
+            "attacked_clean_fpr": 0.0147,
+            "resisted": 34,
+            "attempts": 71
+          },
+          "gnn_hardened": {
+            "detection_under_attack": 0.8028,
+            "attacked_clean_fpr": 0.0441,
+            "resisted": 57,
+            "attempts": 71
+          }
+        },
+        "rotation_split": {
+          "gnn": {
+            "detection_under_attack": 0.9014,
+            "attacked_clean_fpr": 0.0294,
+            "resisted": 64,
+            "attempts": 71
+          },
+          "gnn_hardened": {
+            "detection_under_attack": 0.9577,
+            "attacked_clean_fpr": 0.0441,
+            "resisted": 68,
+            "attempts": 71
+          }
+        },
+        "dead_code": {
+          "gnn": {
+            "detection_under_attack": 0.0,
+            "attacked_clean_fpr": 0.0,
+            "resisted": 0,
+            "attempts": 71
+          },
+          "gnn_hardened": {
+            "detection_under_attack": 0.3521,
+            "attacked_clean_fpr": 0.0588,
+            "resisted": 25,
+            "attempts": 71
+          }
+        },
+        "qubit_relabel": {
+          "gnn": {
+            "detection_under_attack": 0.8592,
+            "attacked_clean_fpr": 0.0294,
+            "resisted": 61,
+            "attempts": 71
+          },
+          "gnn_hardened": {
+            "detection_under_attack": 0.9577,
+            "attacked_clean_fpr": 0.0441,
+            "resisted": 68,
+            "attempts": 71
+          }
+        }
+      }
+    },
+    {
+      "fold": 1,
+      "gnn_threshold": 0.9461,
+      "gnn_hardened_threshold": 0.6468,
+      "attacks": {
+        "camouflage": {
+          "gnn": {
+            "detection_under_attack": 0.8333,
+            "attacked_clean_fpr": 0.1343,
+            "resisted": 60,
+            "attempts": 72
+          },
+          "gnn_hardened": {
+            "detection_under_attack": 0.9583,
+            "attacked_clean_fpr": 0.1194,
+            "resisted": 69,
+            "attempts": 72
+          }
+        },
+        "synonyms": {
+          "gnn": {
+            "detection_under_attack": 0.9444,
+            "attacked_clean_fpr": 0.2537,
+            "resisted": 68,
+            "attempts": 72
+          },
+          "gnn_hardened": {
+            "detection_under_attack": 0.9444,
+            "attacked_clean_fpr": 0.0448,
+            "resisted": 68,
+            "attempts": 72
+          }
+        },
+        "rotation_split": {
+          "gnn": {
+            "detection_under_attack": 0.9444,
+            "attacked_clean_fpr": 0.0896,
+            "resisted": 68,
+            "attempts": 72
+          },
+          "gnn_hardened": {
+            "detection_under_attack": 0.9444,
+            "attacked_clean_fpr": 0.0299,
+            "resisted": 68,
+            "attempts": 72
+          }
+        },
+        "dead_code": {
+          "gnn": {
+            "detection_under_attack": 0.4444,
+            "attacked_clean_fpr": 0.0448,
+            "resisted": 32,
+            "attempts": 72
+          },
+          "gnn_hardened": {
+            "detection_under_attack": 0.7778,
+            "attacked_clean_fpr": 0.0299,
+            "resisted": 56,
+            "attempts": 72
+          }
+        },
+        "qubit_relabel": {
+          "gnn": {
+            "detection_under_attack": 0.9444,
+            "attacked_clean_fpr": 0.0746,
+            "resisted": 68,
+            "attempts": 72
+          },
+          "gnn_hardened": {
+            "detection_under_attack": 0.9444,
+            "attacked_clean_fpr": 0.0149,
+            "resisted": 68,
+            "attempts": 72
+          }
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "gnn_threshold": 0.4561,
+      "gnn_hardened_threshold": 0.9996,
+      "attacks": {
+        "camouflage": {
+          "gnn": {
+            "detection_under_attack": 0.6528,
+            "attacked_clean_fpr": 0.0597,
+            "resisted": 47,
+            "attempts": 72
+          },
+          "gnn_hardened": {
+            "detection_under_attack": 0.6111,
+            "attacked_clean_fpr": 0.0,
+            "resisted": 44,
+            "attempts": 72
+          }
+        },
+        "synonyms": {
+          "gnn": {
+            "detection_under_attack": 0.9861,
+            "attacked_clean_fpr": 0.403,
+            "resisted": 71,
+            "attempts": 72
+          },
+          "gnn_hardened": {
+            "detection_under_attack": 0.8611,
+            "attacked_clean_fpr": 0.0896,
+            "resisted": 62,
+            "attempts": 72
+          }
+        },
+        "rotation_split": {
+          "gnn": {
+            "detection_under_attack": 0.9861,
+            "attacked_clean_fpr": 0.0746,
+            "resisted": 71,
+            "attempts": 72
+          },
+          "gnn_hardened": {
+            "detection_under_attack": 0.8611,
+            "attacked_clean_fpr": 0.0746,
+            "resisted": 62,
+            "attempts": 72
+          }
+        },
+        "dead_code": {
+          "gnn": {
+            "detection_under_attack": 0.7083,
+            "attacked_clean_fpr": 0.0448,
+            "resisted": 51,
+            "attempts": 72
+          },
+          "gnn_hardened": {
+            "detection_under_attack": 0.9028,
+            "attacked_clean_fpr": 0.0448,
+            "resisted": 65,
+            "attempts": 72
+          }
+        },
+        "qubit_relabel": {
+          "gnn": {
+            "detection_under_attack": 0.9583,
+            "attacked_clean_fpr": 0.0597,
+            "resisted": 69,
+            "attempts": 72
+          },
+          "gnn_hardened": {
+            "detection_under_attack": 0.8889,
+            "attacked_clean_fpr": 0.0597,
+            "resisted": 64,
+            "attempts": 72
+          }
+        }
+      }
+    }
+  ],
+  "mean": {
+    "gnn": {
+      "per_attack": {
+        "camouflage": {
+          "detection_under_attack": 0.6047,
+          "resisted": 130,
+          "attempts": 215,
+          "attacked_clean_fpr": 0.0644
+        },
+        "synonyms": {
+          "detection_under_attack": 0.8047,
+          "resisted": 173,
+          "attempts": 215,
+          "attacked_clean_fpr": 0.2228
+        },
+        "rotation_split": {
+          "detection_under_attack": 0.9442,
+          "resisted": 203,
+          "attempts": 215,
+          "attacked_clean_fpr": 0.0644
+        },
+        "dead_code": {
+          "detection_under_attack": 0.386,
+          "resisted": 83,
+          "attempts": 215,
+          "attacked_clean_fpr": 0.0297
+        },
+        "qubit_relabel": {
+          "detection_under_attack": 0.9209,
+          "resisted": 198,
+          "attempts": 215,
+          "attacked_clean_fpr": 0.0545
+        }
+      },
+      "overall_resistance": 0.7321,
+      "resisted": 787,
+      "attempts": 1075
+    },
+    "gnn_hardened": {
+      "per_attack": {
+        "camouflage": {
+          "detection_under_attack": 0.7395,
+          "resisted": 159,
+          "attempts": 215,
+          "attacked_clean_fpr": 0.0396
+        },
+        "synonyms": {
+          "detection_under_attack": 0.8698,
+          "resisted": 187,
+          "attempts": 215,
+          "attacked_clean_fpr": 0.0594
+        },
+        "rotation_split": {
+          "detection_under_attack": 0.9209,
+          "resisted": 198,
+          "attempts": 215,
+          "attacked_clean_fpr": 0.0495
+        },
+        "dead_code": {
+          "detection_under_attack": 0.6791,
+          "resisted": 146,
+          "attempts": 215,
+          "attacked_clean_fpr": 0.0446
+        },
+        "qubit_relabel": {
+          "detection_under_attack": 0.9302,
+          "resisted": 200,
+          "attempts": 215,
+          "attacked_clean_fpr": 0.0396
+        }
+      },
+      "overall_resistance": 0.8279,
+      "resisted": 890,
+      "attempts": 1075
+    }
+  }
+}
