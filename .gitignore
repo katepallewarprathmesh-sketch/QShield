@@ -12,3 +12,11 @@ htmlcov/
 *.sarif
 report.html
 results.json
+.mypy_cache/
+.ruff_cache/
+.venv*/
+.env
+.env.*
+*.log
+.DS_Store
+out/
