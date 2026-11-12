@@ -1,0 +1,38 @@
+{
+  "name": "qshield-vscode",
+  "displayName": "QSHIELD — Quantum Circuit Security",
+  "description": "Inline warnings from the QSHIELD quantum supply-chain scanner (backdoors, trojan unitaries, circuit tampering) in .qasm files.",
+  "version": "0.1.0",
+  "publisher": "qshield",
+  "license": "Apache-2.0",
+  "engines": { "vscode": "^1.75.0" },
+  "categories": ["Linters", "Other"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "qshield.scanFile", "title": "QSHIELD: Scan current circuit" }
+    ],
+    "configuration": {
+      "title": "QSHIELD",
+      "properties": {
+        "qshield.executable": {
+          "type": "string",
+          "default": "qshield",
+          "description": "Path to the qshield CLI (defaults to PATH)"
+        },
+        "qshield.minSeverity": {
+          "type": "string",
+          "enum": ["info", "low", "medium", "high", "critical"],
+          "default": "low",
+          "description": "Minimum severity to surface as inline diagnostics"
+        },
+        "qshield.scanOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Scan quantum circuit files automatically on save"
+        }
+      }
+    }
+  }
+}

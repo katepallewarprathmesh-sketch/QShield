@@ -1,0 +1,146 @@
+name: 'QSHIELD Scan'
+description: >-
+  Scan quantum circuits (OpenQASM/QPY/QIR) for backdoors, trojan unitaries and
+  supply-chain tampering with the QSHIELD static analyzer. Emits JSON and SARIF
+  reports and fails the job when findings meet the chosen severity.
+author: 'QSHIELD project'
+branding:
+  icon: 'shield'
+  color: 'blue'
+
+inputs:
+  paths:
+    description: 'Glob (or newline-separated list) of circuit files to scan'
+    required: false
+    default: '**/*.qasm'
+  min-severity:
+    description: 'Minimum severity to report (info|low|medium|high|critical)'
+    required: false
+    default: 'low'
+  fail-on:
+    description: 'Fail the job when findings of at least this severity exist (info|low|medium|high|critical|never)'
+    required: false
+    default: 'high'
+  python-version:
+    description: 'Python version used to run QSHIELD'
+    required: false
+    default: '3.13'
+  upload-sarif:
+    description: 'Upload the SARIF report to GitHub code scanning (requires upload-sarif permission)'
+    required: false
+    default: 'false'
+  sarif-out:
+    description: 'Where to write the SARIF report'
+    required: false
+    default: 'qshield-results.sarif'
+  json-out:
+    description: 'Where to write the JSON report'
+    required: false
+    default: 'qshield-results.json'
+
+outputs:
+  findings-total:
+    description: 'Total number of findings across all scanned circuits'
+    value: ${{ steps.scan.outputs.findings-total }}
+  sarif-path:
+    description: 'Path to the written SARIF report'
+    value: ${{ inputs.sarif-out }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install QSHIELD (from this repository)
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install "${{ github.action_path }}/../.."
+
+    - name: Run QSHIELD scan
+      id: scan
+      shell: bash
+      env:
+        QSHIELD_PATHS: ${{ inputs.paths }}
+        QSHIELD_MIN_SEVERITY: ${{ inputs.min-severity }}
+        QSHIELD_FAIL_ON: ${{ inputs.fail-on }}
+        QSHIELD_SARIF: ${{ inputs.sarif-out }}
+        QSHIELD_JSON: ${{ inputs.json-out }}
+      run: |
+        set -euo pipefail
+        python - <<'PY'
+        import glob, json, os, sys
+        from pathlib import Path
+
+        import qshield
+
+        paths = []
+        for raw in os.environ["QSHIELD_PATHS"].splitlines():
+            raw = raw.strip()
+            if not raw:
+                continue
+            paths.extend(glob.glob(raw, recursive=True) or [raw])
+        paths = sorted({p for p in paths if Path(p).is_file()})
+        if not paths:
+            print("::warning::QSHIELD: no circuit files matched; nothing to scan")
+
+        findings, warnings = [], []
+        for p in paths:
+            try:
+                results = qshield.scan(p, name=Path(p).name)
+            except Exception as exc:  # one bad file must not abort the job
+                warnings.append(f"{p}: {exc}")
+                continue
+            for f in results.findings:
+                findings.append({
+                    "severity": f.severity,
+                    "threat_type": f.threat_type,
+                    "title": f.title,
+                    "file": str(p),
+                })
+
+        total = len(findings)
+        Path(os.environ["QSHIELD_JSON"]).write_text(json.dumps(
+            {"files_scanned": len(paths), "findings": findings, "warnings": warnings},
+            indent=1))
+
+        # SARIF via the library exporter for parity with `qshield scan --format sarif`
+        try:
+            from qshield.scanner import Scanner
+            scanner = Scanner(config="default")
+            for p in paths:
+                scanner.add_circuit(p, name=Path(p).name)
+            sarif = scanner.run().to_sarif()
+            Path(os.environ["QSHIELD_SARIF"]).write_text(sarif)
+        except Exception as exc:
+            print(f"::warning::QSHIELD: could not write SARIF: {exc}")
+
+        print(f"QSHIELD scanned {len(paths)} file(s), {total} finding(s)")
+        for f in findings:
+            print(f"  [{f['severity'].upper():8}] {f['file']}: {f['threat_type']}: {f['title']}")
+
+        out_path = os.environ.get("GITHUB_OUTPUT")
+        if out_path:
+            with open(out_path, "a", encoding="utf-8") as fh:
+                fh.write(f"findings-total={total}\n")
+
+        fail_on = os.environ["QSHIELD_FAIL_ON"].strip().lower()
+        rank = {"info": 0, "low": 1, "medium": 2, "high": 3, "critical": 4}
+        if fail_on == "never":
+            sys.exit(0)
+        threshold = rank.get(fail_on, 3)
+        triggered = [f for f in findings if rank.get(f["severity"], 0) >= threshold]
+        if triggered:
+            print(f"::error::QSHIELD: {len(triggered)} finding(s) at or above '{fail_on}'")
+            sys.exit(1)
+        sys.exit(0)
+        PY
+
+    - name: Upload SARIF to code scanning
+      if: ${{ inputs.upload-sarif == 'true' }}
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ${{ inputs.sarif-out }}

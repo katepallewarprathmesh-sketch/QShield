@@ -1,0 +1,85 @@
+# QSHIELD GitLab CI/CD template — include in your .gitlab-ci.yml:
+#
+#   include:
+#     - local: 'ci-templates/gitlab/qshield-scan.yml'
+#   # or, after this template is distributed with your runner:
+#   # - project: 'your-org/qshield', file: 'ci-templates/gitlab/qshield-scan.yml', ref: 'main'
+#
+#   qshield_scan:
+#     extends: .qshield_scan
+#
+# Optional variables (set in CI/CD settings):
+#   QSHIELD_PATHS        glob(s) of circuits to scan   (default: **/*.qasm)
+#   QSHIELD_MIN_SEVERITY minimum severity to report    (default: low)
+#   QSHIELD_FAIL_ON      severity that fails the job   (default: high)
+
+.qshield_scan:
+  image: python:3.13-slim
+  stage: test
+  variables:
+    QSHIELD_PATHS: "**/*.qasm"
+    QSHIELD_MIN_SEVERITY: "low"
+    QSHIELD_FAIL_ON: "high"
+    QSHIELD_SARIF: "qshield-results.sarif"
+    QSHIELD_JSON: "qshield-results.json"
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install "git+https://github.com/qshield/qshield.git"  # or your mirrored fork / wheel
+  script:
+    - |
+      python - <<'PY'
+      import glob, json, os, sys
+      from pathlib import Path
+
+      import qshield
+
+      paths = []
+      for raw in os.environ.get("QSHIELD_PATHS", "**/*.qasm").splitlines():
+          raw = raw.strip()
+          if raw:
+              paths.extend(glob.glob(raw, recursive=True) or [raw])
+      paths = sorted({p for p in paths if Path(p).is_file()})
+      if not paths:
+          print("QSHIELD: no circuit files matched; nothing to scan")
+
+      rank = {"info": 0, "low": 1, "medium": 2, "high": 3, "critical": 4}
+      findings = []
+      for p in paths:
+          try:
+              results = qshield.scan(p, name=Path(p).name)
+          except Exception as exc:
+              print(f"QSHIELD: skipping {p}: {exc}")
+              continue
+          for f in results.findings:
+              findings.append({"severity": f.severity, "threat_type": f.threat_type,
+                               "title": f.title, "file": p})
+              print(f"[{f.severity.upper():8}] {p}: {f.threat_type}: {f.title}")
+
+      Path(os.environ["QSHIELD_JSON"]).write_text(json.dumps(
+          {"files_scanned": len(paths), "findings": findings}, indent=1), encoding="utf-8")
+      try:
+          from qshield.scanner import Scanner
+          scanner = Scanner(config="default")
+          for p in paths:
+              scanner.add_circuit(p, name=Path(p).name)
+          Path(os.environ["QSHIELD_SARIF"]).write_text(scanner.run().to_sarif(), encoding="utf-8")
+      except Exception as exc:
+          print(f"QSHIELD: could not write SARIF: {exc}")
+
+      print(f"QSHIELD scanned {len(paths)} file(s), {len(findings)} finding(s)")
+      fail_on = os.environ.get("QSHIELD_FAIL_ON", "high").strip().lower()
+      if fail_on != "never":
+          threshold = rank.get(fail_on, 3)
+          if any(rank.get(f["severity"], 0) >= threshold for f in findings):
+              print(f"QSHIELD: failing build (findings >= '{fail_on}')")
+              sys.exit(1)
+      PY
+  artifacts:
+    when: always
+    expire_in: 2 weeks
+    # GitLab's security dashboards require GitLab's own SAST report schema;
+    # QSHIELD emits SARIF 2.1.0 + JSON, attached here as downloadable
+    # artifacts. Pipe them into your own dashboard/ingestion.
+    paths:
+      - qshield-results.json
+      - qshield-results.sarif
