@@ -1,0 +1,22 @@
+id: "QSig-2024-0003"
+name: "Steganographic Parameter Encoding"
+version: "1.0"
+author: "QSHIELD Core Team"
+date: "2024-06-01"
+severity: "high"
+threat_type: "T2.2"
+description: |
+  Detects rotation angles snapped to a fine pi-rational grid
+  (pi/4096) whose quantised byte values are all printable ASCII —
+  characteristic of payloads exfiltrated inside gate parameters.
+detection:
+  method: "structural"
+  structural_pattern:
+    type: "parameter_grid_encoding"
+    grid: "pi/4096"
+    min_run: 6
+    ascii_range: [32, 126]
+references:
+  - "spec://QSHIELD/2.1#T2.2"
+false_positive_probability: 0.35
+remediation: "Decode the angles, inspect the payload, rebuild the circuit from a trusted source."

@@ -1,0 +1,21 @@
+id: "QSig-2024-0002"
+name: "Ancilla Information Leakage"
+version: "1.0"
+author: "QSHIELD Core Team"
+date: "2024-06-01"
+severity: "low"
+threat_type: "T2.1"
+description: |
+  Detects qubits that are entangled with the main computation exactly once,
+  never otherwise used, and measured at the end. This is the canonical
+  pattern for copying computation data into an ancilla to exfiltrate it.
+detection:
+  method: "structural"
+  structural_pattern:
+    type: "leaf_ancilla"
+    max_ancilla_uses: 1
+    require_measurement: true
+references:
+  - "spec://QSHIELD/2.1#T2.1"
+false_positive_probability: 0.6
+remediation: "Remove the ancilla or prove (via partial-trace analysis) it is independent of the computation."

@@ -1,0 +1,20 @@
+id: "QSig-2024-0004"
+name: "Measurement Basis Manipulation"
+version: "1.0"
+author: "QSHIELD Core Team"
+date: "2024-06-01"
+severity: "medium"
+threat_type: "T2.3"
+description: |
+  Detects a basis-changing gate (H, S, SDG, X, Y, T, TDG) placed immediately
+  before measurement on the same qubit. Changes the effective measurement
+  basis, enabling information theft from input states.
+detection:
+  method: "structural"
+  structural_pattern:
+    type: "measurement_basis"
+    gates: ["h", "s", "sdg", "x", "y", "t", "tdg"]
+references:
+  - "spec://QSHIELD/2.1#T2.3"
+false_positive_probability: 0.45
+remediation: "Confirm the basis rotation is required by the algorithm; otherwise remove it."

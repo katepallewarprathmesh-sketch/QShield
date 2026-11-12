@@ -1,0 +1,22 @@
+id: "QSig-2024-0005"
+name: "Distributed Micro-Rotation Backdoor"
+version: "1.0"
+author: "QSHIELD Core Team"
+date: "2024-06-01"
+severity: "medium"
+threat_type: "T1.1"
+description: |
+  Detects many tiny rotations (|theta| < 0.01 rad) spread across the circuit.
+  Each individually looks like a legitimate small angle; only the cumulative
+  effect creates the backdoor (ADV-001 in the benchmark suite).
+detection:
+  method: "structural"
+  structural_pattern:
+    type: "micro_rotation_spread"
+    max_angle: 0.01
+    min_occurrences: 6
+    accumulate_per_qubit: true
+references:
+  - "spec://QSHIELD/8.2#ADV-001"
+false_positive_probability: 0.45
+remediation: "Accumulate the rotations per qubit and compare to the claimed algorithm."

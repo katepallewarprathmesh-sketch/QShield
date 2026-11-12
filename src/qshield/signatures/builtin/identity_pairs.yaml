@@ -1,0 +1,23 @@
+id: "QSig-2024-0001"
+name: "Hidden Identity Gate Pair"
+version: "1.0"
+author: "QSHIELD Core Team"
+date: "2024-06-01"
+severity: "low"
+threat_type: "T1.3"
+description: |
+  Detects pairs of gates that compose to (near-)identity, e.g. H-H, X-X,
+  CX-CX, RZ(a)-RZ(-a). Such pairs are either compiler artefacts or remnants
+  of obfuscation and removed backdoors. They should be absent from clean,
+  optimised quantum code.
+detection:
+  method: "structural"
+  structural_pattern:
+    type: "gate_sequence_inverse"
+    window: 8
+    tolerance: 1.0e-6
+    condition: "G1.qubits == G2.qubits AND G2 ~= adjoint(G1)"
+references:
+  - "spec://QSHIELD/4.2"
+false_positive_probability: 0.5
+remediation: "Remove the cancelling pair or justify its presence."

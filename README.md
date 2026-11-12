@@ -1,0 +1,130 @@
+# 🛡 QSHIELD — Quantum Software Supply Chain Security Framework
+
+> Detect, analyze and prevent security vulnerabilities in **quantum software supply chains**:
+> backdoor gates, trojan unitaries, covert channels and malicious circuit modifications in
+> quantum programs, libraries and cloud services.
+
+**Status: Phase 1 (Foundation) — working vertical slice.** QSHIELD parses OpenQASM 2.0
+and Qiskit/Cirq/PennyLane circuits into a framework-agnostic IR, runs structural static
+analysis, exact unitary/density-matrix verification, ZX-calculus equivalence checking,
+differential simulation testing, quantum supply-chain audits, and emits CI-ready reports
+(SARIF / JSON / HTML). See [docs/spec/QSHIELD.md](docs/spec/QSHIELD.md) for the full
+specification-driven roadmap (4 phases, 2024–2029 research plan).
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ LAYER 1 · STATIC          │ LAYER 2 · DYNAMIC      │ LAYER 3    │
+│ structural analyzer        │ sandbox simulator      │ runtime    │
+│ unitary verifier           │ differential testing   │ monitor    │
+│ dependency scanner         │ statistical tests      │ (roadmap)  │
+│ formal ZX check (pyzx)     │                        │            │
+└──────────────┬─────────────┴───────────┬────────────┴────────────┘
+               │     LAYER 4 · REPORTING & POLICY                  │
+               │ SARIF · JSON · HTML · CI gate (GitHub Actions)   │
+               └────────────────────────────────────────────────────┘
+```
+
+## Why
+
+Everyone is busy with post-quantum cryptography (PQC) — security for *classical* data against
+quantum attacks. Almost nobody is securing **quantum software itself**. Classical SAST/DAST/SCA
+tools cannot analyze quantum circuits: gates are unitary matrices, states can't be copied for
+inspection, and measurement is destructive. QSHIELD is purpose-built for this territory
+(see the threat taxonomy T1–T4 / attacker models A1–A4 in the spec).
+
+## Install
+
+```bash
+pip install -e .                       # core (OpenQASM parser, static analysis, CLI)
+pip install -e '.[qiskit,cirq]'        # + framework parsers (qiskit-aer used by --full)
+pip install -e '.[formal]'             # + ZX-calculus verification (PyZX, Z3)
+pip install -e '.[dev]'                # + test/lint tooling
+```
+
+Requires Python ≥ 3.10.
+
+## Quickstart
+
+### CLI
+
+```bash
+qshield scan circuit.qasm                       # scan (text report)
+qshield scan circuit.qasm --fail-on high        # CI gate: exit 1 on high+ findings
+qshield scan . --recursive --format sarif -o out.sarif   # GitHub Security tab
+qshield scan circuit.qasm --full                # + differential simulation testing
+qshield compare original.qasm suspicious.qasm --formal   # ZX-calculus equivalence proof
+qshield verify circuit.qasm --expected-unitary u.npy     # matrix check (≤12 qubits)
+qshield audit-deps --requirements requirements.txt       # quantum supply-chain audit
+qshield db search ancilla                       # query builtin signatures
+qshield init-config                             # write .qshield.yaml template
+```
+
+### Python API
+
+```python
+import qshield
+
+results = qshield.scan("circuit.qasm")          # quick static scan
+print(results.is_clean, results.summary.total)
+
+scanner = qshield.Scanner(config="strict")      # or "default" | "permissive" | path/to/.qshield.yaml
+scanner.add_circuit(my_qiskit_circuit)          # QuantumCircuit / cirq.Circuit / qml tape / QASM text
+scanner.add_package("qiskit-nature", version="0.7.0")
+results = scanner.run(dynamic_shots=10_000)
+print(results.to_json(), results.to_sarif(), results.to_html())
+```
+
+## What it detects (Phase 1)
+
+| Spec threat | Example | Detection | Verdict |
+|---|---|---|---|
+| T1.1 Parameter perturbation | `rz(π/4 + 0.001)` | exact unitary compare vs expected (`verify`, `expected_unitary=`), distributed micro-rotation spread analysis | catches cumulative drift |
+| T1.3 Extra gate injection / obfuscation | `cx … cx` cancelling pairs, gate-count anomalies | structural analysis + signature matching | immediate |
+| T2.1 Ancilla information leakage | ancilla copying input before mixing | exact partial-trace independence test (≤8 qubits) | deterministic |
+| T2.2 Parameter-encoded payloads | angles = bytes on a π/4096 grid | grid-alignment + ASCII-run signature | deterministic |
+| T2.3 Measurement basis manipulation | `h` right before `measure` | structural + signature | immediate |
+| T3.1 Package tampering | typosquatting, pinned-vulnerable versions, direct-URL installs | embedded advisory DB + similarity scan | immediate |
+| T3.2/T3.3 Compromised compiler/backend | pre/post-compile or cross-backend divergence | ZX-calculus equivalence (`compare --formal`), differential Aer-vs-numpy distribution test | statistical/exact |
+
+Confidence scores and false-positive probabilities are attached to every finding; the built-in
+corpus evaluates to **12/12 attacks detected, 0/13 clean-circuit false positives** (synthetic
+Phase-1 corpus of 25 circuits — see `benchmarks/evaluate.py`; real-world calibration is Phase 2+ work).
+
+## Project layout
+
+```
+src/qshield/
+├── core/            # CircuitIR, gate database (unitaries), QASM parser, config, framework adapters
+├── static/          # structural analyzer, unitary/density-matrix verifier, dependency scanner
+├── dynamic/         # sandboxed NumPy simulator, statistical tests, Aer differential tester
+├── formal/          # ZX-calculus equivalence checker (PyZX), property-verification hooks
+├── signatures/      # YAML threat signatures ("YARA for quantum") + builtin QSig-2024-0001..0005
+├── reporting/       # Finding model, SARIF / JSON / HTML exporters
+├── cli/             # typer CLI (scan, compare, verify, audit-deps, db, init-config)
+└── scanner.py       # public API: qshield.Scanner / qshield.scan / ScanResults
+tests/               # 128 unit+integration+security benchmark tests
+benchmarks/          # evaluate.py — Phase-1 detection-rate report
+examples/            # quickstart for each supported framework
+```
+
+## Development
+
+```bash
+pip install -e '.[dev,qiskit,cirq,formal]'
+python -m pytest tests                 # run the suite
+python benchmarks/evaluate.py          # detection-rate table
+ruff check src tests                   # lint (clean)
+mypy src                               # type-check (clean)
+```
+
+## Roadmap (from the spec)
+
+* **Phase 1 (done):** CircuitIR, QASM parser, structural analyzer, unitary verifier, CLI, SARIF/JSON/HTML, benchmark suite, paper 1 (threat taxonomy).
+* **Phase 2:** dynamic analysis depth (fuzzer, tomography prober), Cirq/PennyLane/QASM3 parity, differential threshold calibration, paper 2.
+* **Phase 3:** full ZX property verification, ML anomaly detection (GNN), evasion-resistance suite, community signature ecosystem.
+* **Phase 4:** cloud runtime monitor (API proxy, result validation), hardware validation, CI/CD marketplace integration, v1.0.
+
+## License
+
+Apache 2.0 — see [LICENSE](LICENSE). The threat taxonomy and specification are part of an
+ongoing PhD research programme; contributions (signatures, analyzers, corpus circuits) are welcome.

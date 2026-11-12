@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>QSHIELD Security Report — {{ report.name }}</title>
+<style>
+  :root { --bg:#0b1020; --panel:#131a33; --ink:#e8ecf8; --muted:#8b97b8;
+          --critical:#ff3b5c; --high:#ff7a45; --medium:#ffc53d; --low:#4dabff; --info:#9aa7c7; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+  header { padding: 28px 40px; border-bottom:1px solid #232c52;
+           background:linear-gradient(135deg,#131a33 0%, #0b1020 100%); }
+  header h1 { margin:0; font-size:1.6rem; letter-spacing:.04em; }
+  header h1 .logo { color:#5eead4; }
+  header p { color:var(--muted); margin:.35rem 0 0; font-size:.9rem; }
+  main { padding: 28px 40px; max-width: 1100px; }
+  .summary { display:flex; gap:14px; flex-wrap:wrap; margin: 18px 0 26px; }
+  .tile { background:var(--panel); border:1px solid #232c52; border-radius:12px;
+          padding:14px 18px; min-width:120px; }
+  .tile .n { font-size:1.5rem; font-weight:700; }
+  .tile .t { color:var(--muted); font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; }
+  .finding { background:var(--panel); border:1px solid #232c52; border-left:4px solid var(--info);
+             border-radius:10px; padding:16px 18px; margin:0 0 14px; }
+  .finding.critical { border-left-color: var(--critical); }
+  .finding.high    { border-left-color: var(--high); }
+  .finding.medium  { border-left-color: var(--medium); }
+  .finding.low     { border-left-color: var(--low); }
+  .finding.info    { border-left-color: var(--info); }
+  .finding h3 { margin:0 0 6px; font-size:1.0rem; display:flex; gap:10px; align-items:center; }
+  .badge { font-size:.65rem; text-transform:uppercase; padding:2px 8px; border-radius:999px;
+           border:1px solid currentColor; letter-spacing:.06em; }
+  .critical .badge { color: var(--critical); } .high .badge { color: var(--high); }
+  .medium .badge { color: var(--medium); } .low .badge { color: var(--low); }
+  .info .badge { color: var(--info); }
+  .meta { color:var(--muted); font-size:.78rem; margin:.4rem 0 .6rem; }
+  .desc { font-size:.92rem; line-height:1.45; }
+  details { margin-top:8px; } summary { cursor:pointer; color:#5eead4; font-size:.82rem; }
+  code, pre { background:#0b1020; border:1px solid #232c52; border-radius:6px;
+              padding:2px 6px; font-family: ui-monospace, Menlo, monospace; font-size:.8rem; }
+  pre { padding:10px; overflow:auto; }
+  .clean { text-align:center; padding:60px 0; color:#5eead4; }
+  footer { color:var(--muted); font-size:.75rem; padding: 18px 40px; border-top:1px solid #232c52; }
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="logo">🛡 QSHIELD</span> Security Report</h1>
+  <p>{{ report.name }} — generated {{ report.generated_at }} — source hash <code>{{ report.source_hash[:16] }}</code></p>
+</header>
+<main>
+  <div class="summary">
+    <div class="tile"><div class="n">{{ summary.total }}</div><div class="t">Findings</div></div>
+    <div class="tile"><div class="n" style="color:var(--critical)">{{ summary.critical }}</div><div class="t">Critical</div></div>
+    <div class="tile"><div class="n" style="color:var(--high)">{{ summary.high }}</div><div class="t">High</div></div>
+    <div class="tile"><div class="n" style="color:var(--medium)">{{ summary.medium }}</div><div class="t">Medium</div></div>
+    <div class="tile"><div class="n" style="color:var(--low)">{{ summary.low }}</div><div class="t">Low</div></div>
+    <div class="tile"><div class="n">{{ report.num_qubits }} / {{ report.num_gates }}</div><div class="t">Qubits / Gates</div></div>
+  </div>
+
+  {% if findings %}
+    {% for f in findings %}
+    <div class="finding {{ f.severity }}">
+      <h3><span class="badge">{{ f.severity }}</span> {{ f.title }}</h3>
+      <div class="meta">
+        {{ f.threat_type }} · confidence {{ '%.2f' % f.confidence }} · id {{ f.finding_id }}
+        {% if f.signature_id %} · signature {{ f.signature_id }}{% endif %}
+        {% if f.location.gate_indices %} · gates {{ f.location.gate_indices }}{% endif %}
+        {% if f.location.qubit_indices %} · qubits {{ f.location.qubit_indices }}{% endif %}
+      </div>
+      <div class="desc">{{ f.description }}</div>
+      {% if f.remediation %}
+      <div class="meta" style="margin-top:6px">Remediation: {{ f.remediation }}</div>
+      {% endif %}
+      {% if f.evidence and f.evidence.details %}
+      <details><summary>Evidence</summary><pre>{{ f.evidence.details | tojson(indent=2) }}</pre></details>
+      {% endif %}
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="clean"><h2>✓ No findings above threshold</h2><p>The circuit passed all enabled analyses.</p></div>
+  {% endif %}
+</main>
+<footer>QSHIELD {{ version }} — Quantum Software Supply Chain Security Framework — Apache 2.0</footer>
+</body>
+</html>
