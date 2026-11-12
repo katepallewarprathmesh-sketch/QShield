@@ -47,6 +47,7 @@ Requires Python ≥ 3.10.
 
 ### Documentation
 
+* [Developer guide](docs/developer_guide/contributing.md)
 * [Quickstart](docs/user_guide/quickstart.md)
 * [Configuration](docs/user_guide/configuration.md)
 * [CI/CD integration](docs/user_guide/ci_cd_integration.md)
@@ -121,7 +122,7 @@ src/qshield/
 ├── reporting/       # Finding model, SARIF / JSON / HTML exporters
 ├── cli/             # typer CLI (scan, compare, verify, audit-deps, db, init-config)
 └── scanner.py       # public API: qshield.Scanner / qshield.scan / ScanResults
-tests/               # 181 unit+integration+security benchmark tests
+tests/               # 256 unit+integration+security benchmark tests (93% coverage)
 benchmarks/          # evaluate.py — Phase-1 detection-rate report
 examples/            # quickstart for each supported framework
 ```
