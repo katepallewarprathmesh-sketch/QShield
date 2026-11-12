@@ -45,6 +45,15 @@ Requires Python ≥ 3.10.
 
 ## Quickstart
 
+### Documentation
+
+* [Quickstart](docs/user_guide/quickstart.md)
+* [Configuration](docs/user_guide/configuration.md)
+* [CI/CD integration](docs/user_guide/ci_cd_integration.md)
+* [Custom signatures](docs/user_guide/custom_signatures.md)
+* [Threat taxonomy paper](docs/research/threat_taxonomy_paper.md)
+* [Full specification](docs/spec/QSHIELD.md)
+
 ### CLI
 
 ```bash
