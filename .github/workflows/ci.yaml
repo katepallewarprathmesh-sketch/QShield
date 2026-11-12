@@ -28,7 +28,7 @@ jobs:
         run: pytest --cov=qshield --cov-report=term-missing
       - name: Benchmark corpus (TPR/FPR)
         run: python benchmarks/evaluate.py
-      - name: Dynamic benchmark (M2.2 acceptance: TPR/FPR across noise models)
+      - name: "Dynamic benchmark (M2.2 acceptance: TPR/FPR across noise models)"
         run: python benchmarks/evaluate_dynamic.py
       - name: Fuzz the analyzer (M2.3; crashes must be 0)
         run: python benchmarks/fuzz_coverage.py
