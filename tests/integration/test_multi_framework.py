@@ -63,3 +63,13 @@ def test_qiskit_scan_clean():
     results = scanner.run()
     high = [f for f in results.findings if f.severity_rank >= 3]
     assert not high
+
+
+def test_qasm3_subset_matches_qasm2():
+    q3_src = """OPENQASM 3.0;
+qubit[2] q;
+h q[0];
+cx q[0], q[1];
+rz(0.5) q[0];
+"""
+    assert np.allclose(parse_qasm(QASM_BELL_RZ).to_unitary(), parse_qasm(q3_src).to_unitary(), atol=1e-9)

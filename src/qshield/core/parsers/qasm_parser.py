@@ -13,6 +13,16 @@ Supported:
 * conditional gates ``if (creg == n) ...`` are parsed, flagged in metadata and
   excluded from the unitary (they are classical feedback, not unitaries)
 
+OpenQASM 3.0 subset (normalized to the 2.0 dialect before parsing):
+
+* ``OPENQASM 3.0;`` version headers and ``stdgates.inc`` includes
+* ``qubit[n]`` / ``bit[n]`` declarations, ``x[i] = measure q[i];`` and
+  ``c = measure q;`` assignment forms (mapped to ``measure ... -> ...``)
+* ``$i`` global qubit addressing (single qubit register only)
+* gate modifiers ``inv @`` and ``ctrl @`` (incl. stacked), applied to any
+  gate with a gate-database unitary: ``ctrl @ rz(0.5) q[0], q[1];`` equals
+  ``crz(0.5)``. Custom ``def`` blocks are rejected with a clear error.
+
 The parser annotates every gate with its unitary matrix when the gate is
 known to the built-in gate database.
 """
@@ -23,6 +33,8 @@ import hashlib
 import re
 import uuid
 from dataclasses import dataclass, field
+
+import numpy as np
 
 from qshield.core.circuit_ir import CircuitIR, GateNode, GateType
 from qshield.core.gate_database import GATE_DB
@@ -149,6 +161,16 @@ _QUBIT_REF_RE = re.compile(r"^(?P<reg>[A-Za-z_]\w*)(?:\s*\[\s*(?P<idx>\d+)\s*\])
 
 def _resolve_qubit_ref(ref: str, state: _ParserState, env: dict[str, int]) -> list[int]:
     ref = ref.strip()
+    dollar = _QASM3_DOLLAR_RE.match(ref)
+    if dollar:
+        # QASM 3 $i: global qubit index; supported only with a single qubit register
+        if len(state.qregs) != 1:
+            raise QASMParseError("'$i' addressing requires exactly one qubit register")
+        reg = next(iter(state.qregs.values()))
+        i = int(dollar.group(1))
+        if i >= reg.size:
+            raise QASMParseError(f"Qubit ${i} out of bounds (size {reg.size})")
+        return [reg.offset + i]
     m = _QUBIT_REF_RE.match(ref)
     if not m:
         raise QASMParseError(f"Invalid qubit reference: {ref!r}")
@@ -180,7 +202,7 @@ def _parse_gate_call(stmt: str):
     if not m:
         return None
     name = m.group("name")
-    reserved = {"qreg", "creg", "measure", "barrier", "OPENQASM", "include", "gate", "if", "reset", "opaque", "let", "int", "float"}
+    reserved = {"qreg", "creg", "measure", "barrier", "OPENQASM", "include", "gate", "if", "reset", "opaque", "let", "int", "float", "const", "qubit", "bit", "angle", "bool", "def", "defcal", "extern", "pragma", "input", "output", "box", "stretch", "duration"}
     if name in reserved or name.upper() == "OPENQASM":
         return None
     params_raw = m.group("params")
@@ -192,17 +214,79 @@ def _parse_gate_call(stmt: str):
 
 
 # ----------------------------------------------------------------------
+# OpenQASM 3.0 subset support
+# ----------------------------------------------------------------------
+
+_QASM3_VERSION_RE = re.compile(r"^OPENQASM\s+3", re.IGNORECASE | re.MULTILINE)
+_QASM3_QUBIT_DECL_RE = re.compile(r"^qubit\s*\[\s*(\d+)\s*\]\s+([A-Za-z_]\w*)\s*;", re.M)
+_QASM3_BIT_DECL_RE = re.compile(r"^bit\s*\[\s*(\d+)\s*\]\s+([A-Za-z_]\w*)\s*;", re.M)
+_QASM3_MEASURE_ASSIGN_RE = re.compile(
+    r"^([A-Za-z_]\w*)\s*\[\s*(\d+)\s*\]\s*=\s*measure\s+([A-Za-z_]\w*)(?:\s*\[\s*(\d+)\s*\])?\s*;",
+    re.M,
+)
+_QASM3_MEASURE_ALL_RE = re.compile(
+    r"^([A-Za-z_]\w*)\s*=\s*measure\s+([A-Za-z_]\w*)\s*;", re.M,
+)
+_QASM3_MOD_RE = re.compile(
+    r"^(?P<mods>(?:(?:ctrl|inv)\s*@\s*)+)(?P<rest>.*)$", re.IGNORECASE | re.DOTALL,
+)
+_QASM3_DOLLAR_RE = re.compile(r"^\$(\d+)$")
+
+
+def normalize_qasm3(source: str) -> str:
+    """Rewrite the supported QASM 3.0 subset into the 2.0 dialect.
+
+    Supported: ``qubit[n]``/``bit[n]`` declarations, ``x = measure y;`` and
+    ``c[i] = measure q[i];`` assignment form, ``OPENQASM 3[.0]`` headers
+    (handled by the shared version matcher), includes of stdgates.inc.
+    Anything else either survives unchanged (gate syntax is shared) or is
+    skipped downstream with an "unrecognised statement" warning — never
+    silently mis-parsed.  Custom ``def`` gates are rejected explicitly in
+    :func:`parse_qasm`.
+    """
+    out = _QASM3_QUBIT_DECL_RE.sub(r"qreg \2[\1];", source)
+    out = _QASM3_BIT_DECL_RE.sub(r"creg \2[\1];", out)
+    out = _QASM3_MEASURE_ASSIGN_RE.sub(lambda m: f"measure {m.group(3)}[{m.group(4)}] -> {m.group(1)}[{m.group(2)}];" if m.group(4) is not None else f"measure {m.group(3)} -> {m.group(1)}[{m.group(2)}];", out)
+    out = _QASM3_MEASURE_ALL_RE.sub(r"measure \2 -> \1;", out)
+    return out
+
+
+def _controlled_unitary(u: np.ndarray) -> np.ndarray:
+    """Single-control expansion of ``u``: block-diag(I, u).
+
+    The control is the most-significant qubit of the expanded gate.
+    """
+    dim = u.shape[0]
+    ident = np.eye(dim, dtype=complex)
+    top = np.hstack([ident, np.zeros_like(ident)])
+    bot = np.hstack([np.zeros_like(u), u])
+    return np.vstack([top, bot])
+
+
+# ----------------------------------------------------------------------
 # Main parser
 # ----------------------------------------------------------------------
 
 def parse_qasm(source: str, name: str = "circuit") -> CircuitIR:
-    """Parse an OpenQASM source string into a :class:`CircuitIR`."""
+    """Parse an OpenQASM source string into a :class:`CircuitIR`.
+
+    Handles OpenQASM 2.0 and the supported QASM 3.0 subset (see module
+    docstring); QASM 3.0 sources are normalized to the 2.0 dialect first.
+    """
     source_hash = hashlib.sha256(source.encode("utf-8")).hexdigest()
+    if _QASM3_VERSION_RE.search(source):
+        source = normalize_qasm3(source)
     try:
         cleaned = _strip_comments(source)
         cleaned, defs = _remove_gate_blocks(cleaned)
     except QASMParseError as exc:
         raise QASMParseError(str(exc)) from exc
+
+    if _QASM3_VERSION_RE.search(source) and re.search(r"(?m)^\s*def\s+[A-Za-z_]", source):
+        raise QASMParseError(
+            "OpenQASM 3.0 'def' blocks are not supported; inline the gate body "
+            "or express it as an OpenQASM 2.0 'gate' block"
+        )
 
     state = _ParserState()
     for definition, _pos in defs:
@@ -304,6 +388,40 @@ def parse_qasm(source: str, name: str = "circuit") -> CircuitIR:
                     f"measure size mismatch: {len(src_qubits)} qubits vs {len(dst_bits)} bits"
                 )
             measurements.extend(zip(src_qubits, dst_bits, strict=True))
+            continue
+
+        mod_match = _QASM3_MOD_RE.match(stmt)
+        if mod_match:
+            mods = [m.lower() for m in re.findall(r"ctrl|inv", mod_match.group("mods"), re.IGNORECASE)]
+            inner = _parse_gate_call(mod_match.group("rest").strip())
+            if inner is None:
+                raise QASMParseError(f"Malformed modified gate call: {stmt!r}")
+            gname, gparams, gargs = inner
+            params = [evaluate_expression(p, {}) for p in gparams]
+            qubits = _flatten_refs([a.strip() for a in gargs], state, env={})
+            canonical = GATE_DB.canon(gname)
+            mat = GATE_DB.matrix(canonical, params)
+            if mat is None:
+                raise QASMParseError(
+                    f"Gate modifiers require a gate-database unitary; {gname!r} has none"
+                )
+            for mod in reversed(mods):  # rightmost modifier applies first
+                mat = mat.conj().T if mod == "inv" else _controlled_unitary(mat)
+            expected = int(np.log2(mat.shape[0]))
+            if len(qubits) != expected:
+                raise QASMParseError(
+                    f"{'@'.join(mods)} @ {gname} acts on {expected} qubit(s), got {len(qubits)}"
+                )
+            node = GateNode(
+                gate_id=new_gate_id(),
+                gate_name="_".join(reversed(mods)) + "_" + canonical,
+                gate_type=GateType.CUSTOM,
+                qubits=list(qubits),
+                parameters=list(params),
+                unitary=mat,
+                source_location=f"{name}:{lineno}",
+            )
+            gates.append(node)
             continue
 
         parsed = _parse_gate_call(stmt)
