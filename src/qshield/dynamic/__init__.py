@@ -15,3 +15,19 @@ __all__ = [
     "SandboxExecutor",
     "SandboxViolation",
 ]
+
+from qshield.dynamic.quantum_fuzzer import (
+    MUTATORS,
+    CircuitFuzzer,
+    FuzzReport,
+    fuzz_input_states,
+    random_statevector,
+)
+
+__all__ += [
+    "MUTATORS",
+    "CircuitFuzzer",
+    "FuzzReport",
+    "fuzz_input_states",
+    "random_statevector",
+]

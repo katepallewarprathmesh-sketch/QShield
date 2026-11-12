@@ -30,6 +30,8 @@ jobs:
         run: python benchmarks/evaluate.py
       - name: Dynamic benchmark (M2.2 acceptance: TPR/FPR across noise models)
         run: python benchmarks/evaluate_dynamic.py
+      - name: Fuzz the analyzer (M2.3; crashes must be 0)
+        run: python benchmarks/fuzz_coverage.py
       - name: Dogfood (self-scan example circuits)
         run: |
           qshield scan tests/fixtures/clean_circuits/bell_state.qasm --fail-on high

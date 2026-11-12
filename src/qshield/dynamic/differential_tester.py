@@ -9,7 +9,7 @@ Significant divergence indicates a tampered circuit or a broken backend.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from qshield.core.circuit_ir import CircuitIR
 from qshield.dynamic.sandbox_executor import SandboxExecutor
@@ -135,8 +135,13 @@ class DifferentialTester:
                 comparison=None,
                 message="Qiskit Aer not available or circuit not executable; differential check skipped",
             )
+        # Compare pre-measurement distributions: the Aer path drops
+        # measurements (statevector semantics), so the NumPy path must too —
+        # otherwise a measured circuit appears as a single collapsed outcome
+        # on one side vs a full distribution on the other.
+        unitary_view = replace(circuit, measurements=[])
         executor = SandboxExecutor()
-        backend_a = executor.sample_distribution(circuit, shots=self.shots)
+        backend_a = executor.sample_distribution(unitary_view, shots=self.shots)
         comparison = compare_distributions(backend_a, backend_b, self.significance_level)
         return DifferentialReport(
             compared=True,

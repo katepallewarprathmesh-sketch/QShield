@@ -27,6 +27,47 @@ from qshield.core.config import QShieldConfig, load_config
 from qshield.reporting.finding import CircuitLocation, Evidence, Finding
 
 _WINDOW = 8
+
+
+def _cancelling_pair_members(gates, tol):
+    """Indices of gates that participate in a matched cancelling pair.
+
+    Identity noise (s+sdg, h+h, cx+cx separated) is the classic camouflage
+    for hidden structure.  Effective-usage accounting for the leaf-ancilla
+    and low-activity rules discounts these gates so that inserting pairs
+    cannot disguise a minimally-touched measured qubit.  Greedy, not
+    injective: a gate with any cancelling partner is noise for usage
+    purposes.
+    """
+    members: set[int] = set()
+    for i, gi in enumerate(gates):
+        if gi.unitary is None:
+            continue
+        for j in range(i + 1, min(i + 1 + _WINDOW, len(gates))):
+            gj = gates[j]
+            intervening = gates[i + 1:j]
+            if any(set(g.qubits) & set(gi.qubits) for g in intervening):
+                break
+            if not _same_qubit_set(gi, gj):
+                continue
+            dist = _mats_cancel(gi, gj, tol)
+            if dist is not None and dist < tol:
+                members.add(i)
+                members.add(j)
+                break
+    return members
+
+
+def _effective_usage(circuit, tol):
+    usage: Counter[int] = Counter()
+    noise = _cancelling_pair_members(circuit.gates, tol)
+    for i, gate in enumerate(circuit.gates):
+        if i in noise:
+            continue
+        for q in gate.qubits:
+            usage[q] += 1
+    return usage
+
 _CANCEL_TOL = 1e-6
 
 # Gates whose presence right before measurement is worth flagging (T2.3).
@@ -82,7 +123,7 @@ class StructuralAnalyzer:
     # ------------------------------------------------------------------
     def check_dead_qubits(self, circuit: CircuitIR) -> list[Finding]:
         findings: list[Finding] = []
-        usage = circuit.get_qubit_usage()
+        usage = _effective_usage(circuit, float(self.config.threshold("cancellation_tolerance")))
         measured = {q for q, _ in circuit.measurements}
         ent_pairs = circuit.get_entanglement_map()
         entangled = {q for pair in ent_pairs for q in pair}
@@ -185,7 +226,7 @@ class StructuralAnalyzer:
     # ------------------------------------------------------------------
     def check_entanglement_anomaly(self, circuit: CircuitIR) -> list[Finding]:
         findings: list[Finding] = []
-        usage = circuit.get_qubit_usage()
+        usage = _effective_usage(circuit, float(self.config.threshold("cancellation_tolerance")))
         measured = {q for q, _ in circuit.measurements}
 
         for gate_idx, gate in enumerate(circuit.gates):
