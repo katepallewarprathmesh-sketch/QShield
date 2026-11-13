@@ -1,0 +1,1 @@
+{"rows": [{"label": "Qubits", "a": 2, "b": 2, "match": true}, {"label": "Classical bits", "a": 2, "b": 2, "match": true}, {"label": "Gates", "a": 2, "b": 2, "match": true}, {"label": "Depth", "a": 2, "b": 2, "match": true}], "verdict": "EQUIVALENT", "detail": "Exact unitary distance \u2016\u0394U\u2016 = 0.000e+00 (proof for \u226412 qubits)"}
