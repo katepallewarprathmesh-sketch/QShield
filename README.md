@@ -58,6 +58,19 @@ results = qshield.scan("circuit.qasm")          # quick static scan
 print(results.is_clean, results.summary.total)
 ```
 
+## Optional AI assistance (cloud, advisory)
+
+```bash
+pip install sarvamai
+export SARVAM_API_KEY=...        # or gitignored .env
+qshield ai triage circuit.qasm   # plain-English findings + remediation priority (sends finding summaries, not the raw circuit)
+qshield ai report circuit.qasm --to hi-IN   # audit report in Hindi/Marathi/etc.
+qshield ai speak "text"          # Bulbul text-to-speech
+qshield ai listen clip.wav       # Saaras speech-to-text
+```
+
+Advisory only, never a verdict — the offline core never touches the network; `qshield ai` is opt-in.
+
 ## What it detects
 
 | Threat | Example | Verdict |

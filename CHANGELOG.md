@@ -3,6 +3,12 @@
 All notable changes to QSHIELD. Historical spec annotations live in
 `docs/spec/QSHIELD.md`; this file records released versions.
 
+## [Unreleased]
+
+### Added
+- **Optional Sarvam AI assistance — `qshield ai`** (`triage` / `speak` / `listen` / `report`). Cloud, opt-in only, advisory only — the offline core is untouched. `triage` sends finding *summaries* (never the raw circuit) to 105B for plain-English explanation and remediation prioritization; `speak`/`listen` use Bulbul TTS / Saaras STT (voice round-trip verified); `report` renders the short audit report in 22 Indian languages via Sarvam-Translate. Requires `pip install sarvamai` and `SARVAM_API_KEY` (.env gitignored). LLM output is a lead for human auditors, never a verdict.
+- `scripts/sarvam_chat.py` — minimal API sanity check.
+
 ## [1.1.1] — 2026-11-13 · Supply-chain framing + static demo + Docker
 
 ### Added

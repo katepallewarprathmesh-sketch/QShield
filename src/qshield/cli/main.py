@@ -450,6 +450,106 @@ app.add_typer(sig_app, name="sig")
 runtime_app = typer.Typer(help="Runtime cloud-API monitor (interceptor proxy, M4.1)")
 app.add_typer(runtime_app, name="runtime")
 
+# ==================================================================
+# ai (OPTIONAL, cloud — Sarvam AI; advisory only, not the offline core)
+# ==================================================================
+ai_app = typer.Typer(
+    help="AI-assisted analysis via Sarvam AI (OPTIONAL, CLOUD). Sends findings to api.sarvam.ai; advisory only — never a verdict. Requires pip install sarvamai and SARVAM_API_KEY."
+)
+app.add_typer(ai_app, name="ai")
+
+_AI_DISCLAIMER = "[dim]AI-advisory (Sarvam AI, cloud) — verify against the evidence. LLM output is not a verdict.[/dim]"
+
+
+@ai_app.command("triage")
+def ai_triage(
+    circuit: Path = typer.Argument(..., help="Circuit file (.qasm) to analyze", exists=True),
+    speak: Path | None = typer.Option(None, "--speak", help="Also synthesize the triage with Bulbul TTS and save to this .wav file"),
+    language: str = typer.Option("hi-IN", "--lang", help="TTS language code for --speak"),
+    speaker: str = typer.Option("simran_en_customer", "--speaker", help="Bulbul speaker id for --speak"),
+) -> None:
+    """Explain QSHIELD findings in plain English and prioritize remediation. Advisory only."""
+    from qshield import ai as qai
+
+    try:
+        payload = qai.scan_findings(circuit)
+        console.print(_AI_DISCLAIMER)
+        console.print(f"[dim]Sending {len(payload['findings'])} finding(s) summary to Sarvam AI (raw circuit is NOT sent)…[/dim]")
+        reply = qai.triage(payload)
+    except qai.SarvamUnavailable as exc:
+        console.print(f"[red]{exc}[/red]")
+        raise typer.Exit(code=2) from exc
+    console.rule("[bold]QSHIELD AI Triage[/bold]")
+    console.print(reply)
+    if speak is not None:
+        try:
+            qai.speak(reply[:1500], speak, language_code=language, speaker=speaker)
+            console.print(f"[green]Speech saved to {speak}[/green]")
+        except Exception as exc:
+            console.print(f"[red]TTS failed: {exc}[/red]")
+            raise typer.Exit(code=2) from exc
+
+
+@ai_app.command("speak")
+def ai_speak(
+    text: str = typer.Argument(..., help="Text to synthesize"),
+    out: Path = typer.Option(Path("qshield-speech.wav"), "--out", "-o", help="Output audio file"),
+    language: str = typer.Option("hi-IN", "--lang", help="Language code (e.g. hi-IN, en-IN, ta-IN)"),
+    speaker: str = typer.Option("simran_en_customer", "--speaker", help="Bulbul speaker id"),
+) -> None:
+    """Text to speech via Bulbul (cloud). Saves an audio file."""
+    from qshield import ai as qai
+
+    try:
+        path = qai.speak(text, out, language_code=language, speaker=speaker)
+    except qai.SarvamUnavailable as exc:
+        console.print(f"[red]{exc}[/red]")
+        raise typer.Exit(code=2) from exc
+    console.print(f"[green]Saved {path}[/green]")
+
+
+@ai_app.command("listen")
+def ai_listen(
+    audio: Path = typer.Argument(..., help="Audio file to transcribe (.wav etc.)", exists=True),
+    mode: str = typer.Option("transcribe", "--mode", help="transcribe|translate|verbatim|translit|codemix"),
+) -> None:
+    """Speech to text via Saaras (cloud). Prints the transcript."""
+    from qshield import ai as qai
+
+    try:
+        transcript = qai.listen(audio, mode=mode)
+    except qai.SarvamUnavailable as exc:
+        console.print(f"[red]{exc}[/red]")
+        raise typer.Exit(code=2) from exc
+    console.print(transcript)
+
+
+@ai_app.command("report")
+def ai_report(
+    circuit: Path = typer.Argument(..., help="Circuit file (.qasm) to analyze", exists=True),
+    to: str = typer.Option("hi-IN", "--to", help="Target language code, e.g. hi-IN, ta-IN, te-IN, mr-IN, bn-IN"),
+    out: Path | None = typer.Option(None, "--out", "-o", help="Also write the translated report to this file"),
+) -> None:
+    """Translate a short audit report into an Indian language (Mayura/Sarvam-Translate)."""
+    from qshield import ai as qai
+
+    try:
+        payload = qai.scan_findings(circuit)
+        summary_en = qai.english_report(payload)
+        console.rule("[bold]Report (English)[/bold]")
+        console.print(summary_en)
+        console.print(_AI_DISCLAIMER)
+        translated = qai.translate(summary_en, target_language_code=to, source_language_code="en-IN")
+    except qai.SarvamUnavailable as exc:
+        console.print(f"[red]{exc}[/red]")
+        raise typer.Exit(code=2) from exc
+    console.rule(f"[bold]Report ({to})[/bold]")
+    console.print(translated)
+    if out is not None:
+        out.write_text(translated, encoding="utf-8")
+        console.print(f"[green]Saved {out}[/green]")
+
+
 _ID_RE = __import__("re").compile(r"^QSig-(\d{4})-(\d{4})$")
 _ROOT = Path(__file__).resolve().parents[3]
 
