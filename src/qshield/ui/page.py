@@ -6,7 +6,7 @@ WORKBENCH_HTML = r"""<!doctype html>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="color-scheme" content="dark" />
-<title>QSHIELD · Quantum Circuit Security Workbench</title>
+<title>QSHIELD · Quantum Supply-Chain Security Workbench</title>
 <style>
 :root {
   --bg: #0a111c; --bg2: #0e1724; --panel: #111c2c; --panel2: #16233a;
@@ -103,7 +103,7 @@ footer { border-top: 1px solid var(--line); margin-top: 34px; padding: 16px 0; c
       <path d="M24 2 L44 10 V22 C44 36 36 45 24 46 C12 45 4 36 4 22 V10 Z" fill="#0f2b23" stroke="#39e6c0" stroke-width="2.4" stroke-linejoin="round"/>
       <path d="M15 24.5 L21.5 31 L34 17.5" stroke="#39e6c0" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
-    <div><b>QSHIELD</b><small>Quantum Circuit Security Workbench</small></div>
+    <div><b>QSHIELD</b><small>Quantum Supply-Chain Security Workbench</small></div>
   </div>
   <span class="tag">SOFTWARE-ONLY · OFFLINE · NO HARDWARE</span>
 </div></header>
@@ -219,7 +219,7 @@ measure q -> c;</textarea>
     </div>
   </section>
 
-  <footer>QSHIELD Workbench — offline circuit security audit. Evidence, not proofs. Numbers measured on bundled fixtures.</footer>
+  <footer>QSHIELD Workbench — offline quantum supply-chain security audit. Evidence, not proofs. Numbers measured on bundled fixtures.</footer>
 </div>
 
 <script>

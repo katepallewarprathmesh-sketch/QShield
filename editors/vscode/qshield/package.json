@@ -1,6 +1,6 @@
 {
   "name": "qshield-vscode",
-  "displayName": "QSHIELD — Quantum Circuit Security",
+  "displayName": "QSHIELD — Quantum Supply-Chain Security",
   "description": "Inline warnings from the QSHIELD quantum supply-chain scanner (backdoors, trojan unitaries, circuit tampering) in .qasm files.",
   "version": "0.1.0",
   "publisher": "qshield",
