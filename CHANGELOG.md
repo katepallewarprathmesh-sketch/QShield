@@ -3,6 +3,24 @@
 All notable changes to QSHIELD. Historical spec annotations live in
 `docs/spec/QSHIELD.md`; this file records released versions.
 
+## [1.1.0] — 2026-11-12 · Workbench pivot (software-only)
+
+**Scope change (breaking for claims):** QSHIELD is now explicitly and permanently software-only. No QPU, no device SDK, no hardware in any acceptance criterion — M4.2 (real-hardware validation) is superseded; the publication roadmap is out of scope. Detection/verification/scoring all run offline. See `docs/PRODUCT_V2.md` and the v2.0 amendment atop `docs/spec/QSHIELD.md`.
+
+### Added
+- **QSHIELD Workbench** (`qshield ui`, `src/qshield/ui/`) — offline, local, stdlib-only web UI: Overview dashboard (corpus + measured headline numbers), Scan (paste/load `.qasm` → severity-ranked findings with gate indices), Compare (exact-unitary ≤12 qubits, or ZX-calculus for decidable fragments → EQUIVALENT/DIFFERENT/UNDECIDED), About & limits page. Zero network calls; 127.0.0.1 default bind; 8 MiB body cap; content never executed.
+- **Policy Studio** (`src/qshield/policy.py`, novel) — policy-as-code for circuits: six builtin heuristic hygiene policies (opaque-rotation ban, measurement fan-out ceiling, depth/width ceilings, two-qubit-density ceiling, Toffoli ban) with strict spec validation, plus live TPR/FPR scoring on the bundled 417-circuit fixture corpus (202 clean / 215 malicious). Fixture-corpus rates — not field rates.
+- **Robustness Probe** (`src/qshield/redteam.py`, novel) — after a flag, re-scans the circuit under five semantics-preserving camouflage transforms (camouflage, synonyms, rotation_split, dead_code, qubit_relabel) × k seeded variants; reports per-finding survived/fragile/evaded with per-attack breakdown. Evidence stability — not a proof of safety.
+- CLI: `qshield ui [--host] [--port]`.
+- Tests: 21 new (policy engine, probe, HTTP endpoints incl. 400/404 paths). New suite total 468 passed / 1 skipped locally (two environment-dependency failures only: qiskit-Aer and pyzx absent in this sandbox; CI green covers them).
+
+### Changed
+- Version 1.0.0 → 1.1.0. README gains the v2.0 software-only banner, Workbench quickstart and corrected status; stale "Phase 1 vertical slice" already fixed in 648e166.
+- Spec gains the v2.0 scope amendment (CRLF round-trip preserved); M4.2 and publication milestones remain in the document as historical record, explicitly superseded.
+
+### Honest limits (unchanged)
+- Fixture-corpus metrics, not field rates; twin-calibrated dynamic results are simulator-measured; findings are evidence, not proofs; community pack ships zero signatures by design.
+
 ## [1.0.0] — 2026-11-12
 
 First production release. Phases 1–4 of the roadmap are implemented; see the

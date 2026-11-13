@@ -790,6 +790,17 @@ def runtime_check(
 
 
 @app.command()
+def ui(
+    host: str = typer.Option("127.0.0.1", "--host", help="Bind address (127.0.0.1 offline default; 0.0.0.0 only behind explicit flag)"),
+    port: int = typer.Option(8765, "--port", "-p", help="Port to bind"),
+) -> None:
+    """Launch the QSHIELD Workbench — offline, local, no-hardware web UI."""
+    from qshield.ui import run_workbench
+
+    run_workbench(host=host, port=port)
+
+
+@app.command()
 def version() -> None:
     """Print the QSHIELD version."""
     console.print(f"qshield {__version__}")

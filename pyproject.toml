@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qshield"
-version = "1.0.0"
+version = "1.1.0"
 description = "Quantum Software Supply Chain Security Framework"
 readme = "README.md"
 license = { text = "Apache-2.0" }
@@ -103,6 +103,10 @@ ignore = [
 "examples/**" = ["S101"]
 "benchmarks/**" = ["S101"]
 "docs/**" = ["RUF001", "RUF002", "RUF003", "S101"]
+"src/qshield/ui/server.py" = ["TRY301"]      # uniform try->PolicyError->400 mapping in the request handler is intentional
+"src/qshield/policy.py" = ["TRY301"]        # same raise->400 idiom at corpus-load boundary
+"src/qshield/redteam.py" = ["TRY301"]       # parse failures inside probe are data, not crashes
+"tests/integration/test_ui_server.py" = ["S310"]  # urlopen only against the ephemeral localhost fixture server
 
 [tool.mypy]
 python_version = "3.10"

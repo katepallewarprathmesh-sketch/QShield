@@ -7,7 +7,13 @@
 > backdoor gates, trojan unitaries, covert channels and malicious circuit modifications in
 > quantum programs, libraries and cloud services.
 
-**Status: v1.0.0 (tagged locally) — all four roadmap phases implemented and measured; one acceptance criterion unmet (M4.2 real-hardware validation — no device credentials).** QSHIELD parses OpenQASM 2.0/3.0 and Qiskit/Cirq/PennyLane circuits into a framework-agnostic IR, runs structural static analysis, exact unitary/density-matrix verification, ZX-calculus equivalence checking, sandboxed differential testing, quantum supply-chain audits, an intercepting runtime cloud monitor, and emits CI-ready reports (SARIF / JSON / HTML). Measured: 447 tests (95% coverage), 1000-qubit static scan ≈ 2 s, runtime overhead p95 ≈ 1.5 ms. See [docs/spec/QSHIELD.md](docs/spec/QSHIELD.md) for the full specification-driven roadmap with per-milestone annotations, and [docs/limitations.md](docs/limitations.md) before quoting any number.
+> **v2.0 — SOFTWARE-ONLY, by design and forever.** No QPU, no device SDK, no cloud account,
+> no hardware in any acceptance criterion — detection, verification and scoring all run
+> offline on files. Publication is out of scope. See
+> [docs/PRODUCT_V2.md](docs/PRODUCT_V2.md). The UI surface is the **QSHIELD Workbench**
+> (`qshield ui`) — offline, local, stdlib-only.
+
+**Status: v1.1.0 — software-only workbench pivot.** All detection runs offline; no hardware, network or account is ever required, now and by design permanently. M4.2 (real-hardware validation) and the publication roadmap are **superseded** — see the v2.0 scope amendment in [docs/spec/QSHIELD.md](docs/spec/QSHIELD.md) and [docs/PRODUCT_V2.md](docs/PRODUCT_V2.md). QSHIELD parses OpenQASM 2.0/3.0 and Qiskit/Cirq/PennyLane circuits into a framework-agnostic IR, runs structural static analysis, exact unitary/density-matrix verification, ZX-calculus equivalence checking, sandboxed differential testing, quantum supply-chain audits, an intercepting runtime monitor, and emits CI-ready reports (SARIF / JSON / HTML). Measured: 447 tests (95% coverage), 1000-qubit static scan ≈ 2 s, runtime overhead p95 ≈ 1.5 ms — simulator/fixture-corpus numbers, not field rates. New in v1.1.0: **QSHIELD Workbench UI**, **Policy Studio** (policy-as-code scored on the bundled 417-circuit corpus) and the **Robustness Probe** (do your findings survive semantics-preserving camouflage?).
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -21,6 +27,23 @@
                │ SARIF · JSON · HTML · CI gate (GitHub Actions)   │
                └────────────────────────────────────────────────────┘
 ```
+
+## Workbench (UI)
+
+```bash
+pip install -e .
+qshield ui                 # http://127.0.0.1:8765 — offline, local, no telemetry
+```
+
+Tabbed console: **Overview** (corpus + measured headline numbers) · **Scan** (paste/load a
+`.qasm`, get severity-ranked findings with gate indices) · **Compare** (exact-unitary or
+ZX equivalence of two circuits) · **Robustness Probe** (novel — re-scans your flagged
+circuit under five semantics-preserving camouflage transforms; shows per-finding
+survived/fragile/evaded verdicts) · **Policy Studio** (novel — your own lint-style
+security policies as reviewable specs, scored live on the bundled 417-circuit fixture
+corpus with TPR/FPR per policy) · **About & limits**.
+
+Every analysis path is offline: no hardware, no cloud, no accounts, no network calls.
 
 ## Why
 
