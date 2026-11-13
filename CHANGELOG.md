@@ -3,6 +3,18 @@
 All notable changes to QSHIELD. Historical spec annotations live in
 `docs/spec/QSHIELD.md`; this file records released versions.
 
+## [1.1.1] — 2026-11-13 · Supply-chain framing + static demo + Docker
+
+### Added
+- **Dockerfile** + `.dockerignore` — slim non-root image; `docker build -t qshield . && docker run -p 8765:8765 qshield`. Includes `tests/fixtures` so Policy Studio works in-container.
+- **Static Workbench demo** on GitHub Pages (`katepallewarprathmesh-sketch.github.io/QShield/`) — same UI, browser-only; responses are precomputed outputs of the real engine on the bundled fixtures, honestly labeled as such. Reproducible via `scripts/build_static_site.py`.
+- GitHub repo description/topics now lead with the supply-chain positioning (`supply-chain-security`, `software-supply-chain`, `trojan-detection`).
+
+### Changed
+- **Supply-chain framing everywhere user-facing**: Workbench `<title>`/header, VS Code extension display name, GitHub description, static demo.
+- **README rewritten** — abstraction pass: internals hidden, only the required surface (what/why/install/quickstart/limits) shown; stale test count refreshed (468).
+- Publish process: normal pushes only (no history rewrites).
+
 ## [1.1.0] — 2026-11-12 · Workbench pivot (software-only)
 
 **Scope change (breaking for claims):** QSHIELD is now explicitly and permanently software-only. No QPU, no device SDK, no hardware in any acceptance criterion — M4.2 (real-hardware validation) is superseded; the publication roadmap is out of scope. Detection/verification/scoring all run offline. See `docs/PRODUCT_V2.md` and the v2.0 amendment atop `docs/spec/QSHIELD.md`.

@@ -82,7 +82,7 @@ print(results.is_clean, results.summary.total)
 
 ## Status & license
 
-**v1.1.0** — software-only. See `CHANGELOG.md` for release notes.
+**v1.1.1** — software-only. See `CHANGELOG.md` for release notes.
 Apache 2.0 — see [LICENSE](LICENSE). Contributions (signatures, analyzers, corpus circuits) welcome.
 
 ## Development
