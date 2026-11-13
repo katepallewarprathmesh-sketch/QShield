@@ -112,9 +112,9 @@ async function apiPost(path, body) {
 """ % js(canned)
 
 html = WORKBENCH_HTML
-assert html.count("</style>") == 1 and html.count("</header>") == 1 and html.count("</body>") == 1
+assert html.count("</style>") == 1 and html.count("<body>") == 1 and html.count("</body>") == 1
 html = html.replace("</style>", banner_css + "</style>", 1)
-html = html.replace("</header>", banner + "</header>", 1)
+html = html.replace("<body>", "<body>\n" + banner, 1)
 html = html.replace("</body>", shim + "</body>", 1)
 OUT.mkdir(parents=True, exist_ok=True)
 (OUT / "index.html").write_text(html)
