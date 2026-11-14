@@ -13,6 +13,9 @@ All notable changes to QSHIELD. Historical spec annotations live in
 - `scripts/sarvam_chat.py` — minimal API sanity check.
 - **Workbench AI tab** — all three AI features in the UI (opt-in, cloud, advisory): AI Triage with live Sarvam 105B reply (finding summaries only, never raw circuit); Speak (Bulbul TTS, 9 languages) and Listen (Saaras STT, browser mic) cards; Sarvam-Translate audit reports in 22 languages shown side-by-side with the English source. Key stays server-side (never reaches the browser); `/api/ai/status|triage|speak|listen|report`. Static demo ships precomputed real outputs (ancilla fixture) and disables cloud calls honestly.
 
+### Security
+- **Parser hardening** (production-hardening roadmap, input-handling audit): parameter expressions are capped (≤ 2048 chars), exponents are capped (|exp| ≤ 128 — kills the `rz(2**10**10)` hang), oversized numeric literals rejected, math-domain/arity errors surface as `ExpressionError`, and deeply-nested expressions/null bytes can no longer escape as raw tracebacks. The QASM parser now enforces source size (1 MiB), register width (512 qubits / 1024 classical bits), total emitted gates (100 000), custom-gate expansion depth (16) and a 10 s parse budget — violations raise `QASMParseError`, never a hang or silent truncation. The only public failure mode of `parse_qasm` is now `QASMParseError`. Per-statement line lookup is O(log n) (was O(n²) on statement-heavy files). Found + fixed via property-based fuzzing (hypothesis) — including a latent crash on `sqrt()` with zero arguments. New: 19 fuzz/robustness tests (`tests/security/test_parser_fuzz.py`, `test_parser_robustness.py`).
+
 ## [1.1.1] — 2026-11-13 · Supply-chain framing + static demo + Docker
 
 ### Added

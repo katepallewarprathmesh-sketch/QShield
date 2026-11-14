@@ -29,8 +29,10 @@ known to the built-in gate database.
 
 from __future__ import annotations
 
+import bisect
 import hashlib
 import re
+import time
 import uuid
 from dataclasses import dataclass, field
 
@@ -48,6 +50,18 @@ _GATE_DEF_RE = re.compile(
     r"(?P<qubits>[A-Za-z_][\w\[\]\s,]*)\s*\{",
     re.MULTILINE,
 )
+
+
+# Resource limits — QASM sources come from untrusted circuit files.
+# Anything a legitimate circuit would not come close to hitting; anything
+# adversarial is rejected loudly instead of hanging or exhausting memory.
+MAX_SOURCE_BYTES = 1 << 20      # 1 MiB of UTF-8 source
+MAX_QUBITS = 512                # total qubits across qubit registers
+MAX_MEASURE_BITS = 1024         # total classical bits
+MAX_GATES = 100_000             # unitary gates emitted after expansion
+MAX_EXPANSION_DEPTH = 16        # recursive custom-gate expansion cap
+MAX_LITERAL_DIGITS = 18         # int literals (register sizes, indices) longer than this are rejected
+TIME_BUDGET_S = 10.0            # wall-clock ceiling for parsing one source
 
 
 class QASMParseError(ValueError):
@@ -87,6 +101,19 @@ def _strip_comments(source: str) -> str:
 
 def _line_of(source: str, index: int) -> int:
     return source.count("\n", 0, index) + 1
+
+
+def _to_uint(text: str, what: str, max_value: int = MAX_QUBITS) -> int:
+    """Parse a non-negative integer literal from untrusted source, with caps."""
+    if len(text) > MAX_LITERAL_DIGITS:
+        raise QASMParseError(f"{what} too large: literal exceeds {MAX_LITERAL_DIGITS} digits")
+    try:
+        value = int(text)
+    except ValueError:
+        raise QASMParseError(f"Invalid {what}: {text!r}") from None
+    if value > max_value:
+        raise QASMParseError(f"{what} too large: {value} exceeds cap of {max_value}")
+    return value
 
 
 def _remove_gate_blocks(source: str) -> tuple[str, list[tuple[_GateDefinition, int]]]:
@@ -167,7 +194,7 @@ def _resolve_qubit_ref(ref: str, state: _ParserState, env: dict[str, int]) -> li
         if len(state.qregs) != 1:
             raise QASMParseError("'$i' addressing requires exactly one qubit register")
         reg = next(iter(state.qregs.values()))
-        i = int(dollar.group(1))
+        i = _to_uint(dollar.group(1), "qubit index", max_value=10**9)
         if i >= reg.size:
             raise QASMParseError(f"Qubit ${i} out of bounds (size {reg.size})")
         return [reg.offset + i]
@@ -180,7 +207,7 @@ def _resolve_qubit_ref(ref: str, state: _ParserState, env: dict[str, int]) -> li
         reg = state.qregs[reg_name]
         if idx is None:
             return list(range(reg.offset, reg.offset + reg.size))
-        i = int(idx)
+        i = _to_uint(idx, "qubit index", max_value=10**9)
         if i >= reg.size:
             raise QASMParseError(f"Qubit index {reg_name}[{i}] out of bounds (size {reg.size})")
         return [reg.offset + i]
@@ -267,13 +294,33 @@ def _controlled_unitary(u: np.ndarray) -> np.ndarray:
 # Main parser
 # ----------------------------------------------------------------------
 
-def parse_qasm(source: str, name: str = "circuit") -> CircuitIR:
+def _parse_qasm_impl(
+    source: str,
+    name: str = "circuit",
+    *,
+    max_source_bytes: int = MAX_SOURCE_BYTES,
+    max_qubits: int = MAX_QUBITS,
+    max_gates: int = MAX_GATES,
+    max_expansion_depth: int = MAX_EXPANSION_DEPTH,
+    time_budget_s: float = TIME_BUDGET_S,
+) -> CircuitIR:
     """Parse an OpenQASM source string into a :class:`CircuitIR`.
 
     Handles OpenQASM 2.0 and the supported QASM 3.0 subset (see module
     docstring); QASM 3.0 sources are normalized to the 2.0 dialect first.
+
+    Resource limits (``max_source_bytes``, ``max_qubits``, ``max_gates``,
+    ``max_expansion_depth``, ``time_budget_s``) bound the work any source can
+    trigger. Exceeding one raises :class:`QASMParseError` — loudly, never a
+    hang or silent truncation.
     """
-    source_hash = hashlib.sha256(source.encode("utf-8")).hexdigest()
+    t_start = time.monotonic()
+    source_bytes = source.encode("utf-8")
+    if len(source_bytes) > max_source_bytes:
+        raise QASMParseError(
+            f"Source exceeds size cap: {len(source_bytes)} bytes > {max_source_bytes}"
+        )
+    source_hash = hashlib.sha256(source_bytes).hexdigest()
     if _QASM3_VERSION_RE.search(source):
         source = normalize_qasm3(source)
     try:
@@ -307,6 +354,10 @@ def parse_qasm(source: str, name: str = "circuit") -> CircuitIR:
 
     def add_gate(gate_name: str, params: list[float], qubits: list[int], index: int):
         nonlocal gate_counter
+        if gate_counter >= max_gates:
+            raise QASMParseError(f"Gate count exceeds cap of {max_gates}")
+        if gate_counter & 0xFF == 0 and time.monotonic() - t_start > time_budget_s:
+            raise QASMParseError(f"Parse exceeded time budget of {time_budget_s}s")
         canonical = GATE_DB.canon(gate_name)
         spec = GATE_DB.get_spec(canonical)
         unitary = GATE_DB.matrix(canonical, params)
@@ -325,12 +376,17 @@ def parse_qasm(source: str, name: str = "circuit") -> CircuitIR:
         )
         gates.append(node)
 
+    newline_offsets = [i for i, ch in enumerate(cleaned) if ch == "\n"]
+
+    def _lineno(index: int) -> int:
+        return bisect.bisect_right(newline_offsets, index) + 1
+
     statements = list(_iter_statements(cleaned))
     for stmt_text, stmt_index in statements:
         stmt = stmt_text.strip()
         if not stmt:
             continue
-        lineno = _line_of(cleaned, stmt_index)
+        lineno = _lineno(stmt_index)
 
         m = re.match(r"^OPENQASM\s+([\d.]+)", stmt, re.IGNORECASE)
         if m:
@@ -343,17 +399,22 @@ def parse_qasm(source: str, name: str = "circuit") -> CircuitIR:
 
         m = _QREG_RE.match(stmt)
         if m:
-            reg = _Register(m.group("name"), int(m.group("size")), 0)
+            reg_size = _to_uint(m.group("size"), f"{m.group('kind')} size", max_value=(MAX_QUBITS if m.group("kind") == "qreg" else MAX_MEASURE_BITS))
+            reg = _Register(m.group("name"), reg_size, 0)
             if m.group("kind") == "qreg":
                 if reg.name in state.qregs:
                     raise QASMParseError(f"Duplicate qreg {reg.name!r}")
                 reg.offset = sum(r.size for r in state.qregs.values())
+                if q_offset + reg.size > max_qubits:
+                    raise QASMParseError(f"Total qubits exceed cap of {max_qubits}")
                 state.qregs[reg.name] = reg
                 q_offset += reg.size
             else:
                 if reg.name in state.cregs:
                     raise QASMParseError(f"Duplicate creg {reg.name!r}")
                 reg.offset = sum(r.size for r in state.cregs.values())
+                if c_offset + reg.size > MAX_MEASURE_BITS:
+                    raise QASMParseError(f"Total classical bits exceed cap of {MAX_MEASURE_BITS}")
                 state.cregs[reg.name] = reg
                 c_offset += reg.size
             continue
@@ -397,7 +458,10 @@ def parse_qasm(source: str, name: str = "circuit") -> CircuitIR:
             if inner is None:
                 raise QASMParseError(f"Malformed modified gate call: {stmt!r}")
             gname, gparams, gargs = inner
-            params = [evaluate_expression(p, {}) for p in gparams]
+            try:
+                params = [evaluate_expression(p, {}) for p in gparams]
+            except ExpressionError as exc:
+                raise QASMParseError(f"In modifiers on {gname!r}: {exc}") from exc
             qubits = _flatten_refs([a.strip() for a in gargs], state, env={})
             canonical = GATE_DB.canon(gname)
             mat = GATE_DB.matrix(canonical, params)
@@ -434,6 +498,7 @@ def parse_qasm(source: str, name: str = "circuit") -> CircuitIR:
             env={}, qubit_env={}, state=state,
             emit=lambda gname, ps, qs, _ln=lineno: add_gate(gname, ps, qs, _ln),
             depth=0,
+            max_depth=max_expansion_depth,
         )
 
     num_qubits = q_offset
@@ -498,7 +563,7 @@ def _flatten_creg_refs(refs: list[str], state: _ParserState) -> list[int]:
         if idx is None:
             out.extend(range(reg.offset, reg.offset + reg.size))
         else:
-            i = int(idx)
+            i = _to_uint(idx, "classical bit index", max_value=10**9)
             if i >= reg.size:
                 raise QASMParseError(f"Classical bit {reg_name}[{i}] out of bounds")
             out.append(reg.offset + i)
@@ -600,3 +665,38 @@ def _expand_call(
 
     # Unknown gate: keep it (custom/foreign) but with no unitary.
     emit(name, params, expanded_qubits)
+
+
+def parse_qasm(
+    source: str,
+    name: str = "circuit",
+    *,
+    max_source_bytes: int = MAX_SOURCE_BYTES,
+    max_qubits: int = MAX_QUBITS,
+    max_gates: int = MAX_GATES,
+    max_expansion_depth: int = MAX_EXPANSION_DEPTH,
+    time_budget_s: float = TIME_BUDGET_S,
+) -> CircuitIR:
+    """Parse an OpenQASM source string into a :class:`CircuitIR`.
+
+    Guarantees the only exception raised for any input is
+    :class:`QASMParseError` — the parser never lets a recursion error,
+    memory blow-up, or unexpected failure escape as a raw traceback.
+    See :func:`_parse_qasm_impl` for the resource-limit contract.
+    """
+    try:
+        return _parse_qasm_impl(
+            source,
+            name=name,
+            max_source_bytes=max_source_bytes,
+            max_qubits=max_qubits,
+            max_gates=max_gates,
+            max_expansion_depth=max_expansion_depth,
+            time_budget_s=time_budget_s,
+        )
+    except QASMParseError:
+        raise
+    except RecursionError as exc:
+        raise QASMParseError("Parse recursion limit exceeded (input too complex)") from exc
+    except MemoryError as exc:
+        raise QASMParseError("Parse ran out of memory (input too large)") from exc

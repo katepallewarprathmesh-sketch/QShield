@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from qshield.core.circuit_ir import CircuitIR
-from qshield.core.parsers.qasm_parser import QASMParseError, parse_qasm
+from qshield.core.parsers.qasm_parser import MAX_SOURCE_BYTES, QASMParseError, parse_qasm
 
 __all__ = [
     "QASMParseError",
@@ -64,6 +64,8 @@ def parse_file(path: str | Path, name: str | None = None) -> CircuitIR:
     path = Path(path)
     if not path.exists():
         raise FileNotFoundError(f"Circuit file not found: {path}")
+    if path.stat().st_size > MAX_SOURCE_BYTES:
+        raise ValueError(f"Circuit file exceeds size cap: {path.stat().st_size} bytes > {MAX_SOURCE_BYTES}")
     source = path.read_text(encoding="utf-8")
     suffix = path.suffix.lower()
     if suffix in (".qasm", ".qasm2", ".qasm3", ".q"):

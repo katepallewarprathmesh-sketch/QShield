@@ -9,8 +9,15 @@ from __future__ import annotations
 
 import ast
 import math
+import re
 from collections.abc import Callable
 from typing import Any
+
+# Resource limits — parameter expressions come from untrusted circuit files.
+MAX_EXPRESSION_LENGTH = 2048      # characters; legit gate params are a handful
+MAX_POW_EXPONENT = 128            # |exponent| cap; kills 2**10**10-class DoS
+MAX_CONSTANT_DIGITS = 400         # int literals longer than this are rejected
+_LONG_NUMBER_RE = re.compile(r"\d{401,}")
 
 MATH_FUNCS: dict[str, Callable[..., float]] = {
     "sin": math.sin,
@@ -57,7 +64,10 @@ def _eval_node(node: ast.AST, env: dict[str, float]) -> Any:
         if isinstance(node.value, bool):
             return float(node.value)
         if isinstance(node.value, (int, float)):
-            return float(node.value)
+            try:
+                return float(node.value)
+            except OverflowError:
+                raise ExpressionError("Numeric constant too large") from None
         raise ExpressionError(f"Disallowed constant: {node.value!r}")
     if isinstance(node, ast.Name):
         if node.id in env:
@@ -71,6 +81,18 @@ def _eval_node(node: ast.AST, env: dict[str, float]) -> Any:
             raise ExpressionError(f"Disallowed operator: {type(node.op).__name__}")
         left = _eval_node(node.left, env)
         right = _eval_node(node.right, env)
+        if isinstance(node.op, ast.Pow):
+            # Cap |exponent| — left**right with a huge exponent is a memory/CPU bomb.
+            if abs(right) > MAX_POW_EXPONENT:
+                raise ExpressionError(f"Exponent too large (|exp| > {MAX_POW_EXPONENT})")
+            if abs(right) > 0 and abs(left) > 1.0 and right > 0:
+                # left**right must stay representable
+                try:
+                    import math as _math
+                    if right * _math.log10(abs(left)) > 308:
+                        raise ExpressionError("Power result too large")
+                except ValueError:
+                    pass
         try:
             return op(left, right)
         except ZeroDivisionError as exc:
@@ -91,7 +113,10 @@ def _eval_node(node: ast.AST, env: dict[str, float]) -> Any:
         if func is None:
             raise ExpressionError(f"Unknown function: {node.func.id!r}")
         args = [_eval_node(a, env) for a in node.args]
-        return func(*args)
+        try:
+            return func(*args)
+        except (TypeError, ValueError, OverflowError) as exc:
+            raise ExpressionError(f"Invalid arguments to {node.func.id!r}: {exc}") from exc
     raise ExpressionError(f"Disallowed expression element: {type(node).__name__}")
 
 
@@ -105,11 +130,18 @@ def evaluate_expression(expr: str, env: dict[str, float] | None = None) -> float
     text = expr.strip()
     if not text:
         raise ExpressionError("Empty expression")
+    if len(text) > MAX_EXPRESSION_LENGTH:
+        raise ExpressionError(f"Expression too long (>{MAX_EXPRESSION_LENGTH} chars)")
+    if _LONG_NUMBER_RE.search(text):
+        raise ExpressionError("Numeric literal too long")
     try:
         tree = ast.parse(text, mode="eval")
-    except SyntaxError as exc:
+    except (SyntaxError, ValueError, RecursionError) as exc:
         raise ExpressionError(f"Cannot parse expression: {expr!r}") from exc
-    value = _eval_node(tree, env)
+    try:
+        value = _eval_node(tree, env)
+    except RecursionError as exc:
+        raise ExpressionError("Expression too deeply nested") from exc
     if not isinstance(value, (int, float)) or math.isnan(float(value)):
         raise ExpressionError(f"Expression did not evaluate to a real number: {expr!r}")
     if math.isinf(float(value)):
