@@ -14,6 +14,9 @@ All notable changes to QSHIELD. Historical spec annotations live in
 - **Workbench AI tab** — all three AI features in the UI (opt-in, cloud, advisory): AI Triage with live Sarvam 105B reply (finding summaries only, never raw circuit); Speak (Bulbul TTS, 9 languages) and Listen (Saaras STT, browser mic) cards; Sarvam-Translate audit reports in 22 languages shown side-by-side with the English source. Key stays server-side (never reaches the browser); `/api/ai/status|triage|speak|listen|report`. Static demo ships precomputed real outputs (ancilla fixture) and disables cloud calls honestly.
 
 ### Added
+- **Golden static-scan tests** — `tests/integration/test_golden_static_scan.py` + `tests/fixtures/golden_static_scan.json` pin the exact findings (1,323 fingerprints across all 417 bundled fixtures) of the static pipeline, in emission order, excluding randomized ids/timing. Refresh deliberately with `QSHIELD_UPDATE_GOLDEN=1 pytest tests/integration/test_golden_static_scan.py` after intentional engine changes. Guards the "existing outputs unchanged" contract for the circuit IR.
+
+### Added
 - **Dependency & secret hygiene** (supply-chain hardening) — GitHub Actions pinned to full commit SHAs (dependabot keeps them fresh); `dependabot.yml` with weekly pip + github-actions updates (grouped); `requirements-dev-lock.txt`, a sorted, fully-pinned known-good dev snapshot; new CI `audit` job fails on known vulnerabilities in the runtime closure (clean as of 2026-11-14). Secret scanning and push protection were already enabled repository-wide.
 
 ### Added
