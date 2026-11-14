@@ -38,6 +38,9 @@ canned = {
     "policy_full": json.loads((CANNED / "policy_full.json").read_text()),
     "policy_60": json.loads((CANNED / "policy_60.json").read_text()),
     "example": (CANNED / "ancilla_leakage.qasm").read_text(),
+    "ai_triage_ancilla": json.loads((CANNED / "ai_triage_ancilla.json").read_text()),
+    "ai_report_ancilla_hi": json.loads((CANNED / "ai_report_ancilla_hi-IN.json").read_text()),
+    "ai_report_ancilla_mr": json.loads((CANNED / "ai_report_ancilla_mr-IN.json").read_text()),
 }
 
 banner_css = """
@@ -76,6 +79,9 @@ async function api(path) {
   if (p === '/api/overview') return __clone(__D.overview);
   if (p === '/api/policies') return __clone(__D.policies);
   if (p === '/api/example') return { qasm: __D.example };
+  if (p === '/api/ai/status') return { configured: false, disclaimer: 'AI-advisory (Sarvam AI, cloud) — verify against the evidence. LLM output is not a verdict. (static demo: AI is off)' };
+  if (p === '/api/ai/speak') throw __limitation('speech synthesis');
+  if (p === '/api/ai/listen') throw __limitation('speech transcription');
   throw __limitation('this endpoint');
 }
 async function apiPost(path, body) {
@@ -98,6 +104,18 @@ async function apiPost(path, body) {
     if (k === 'ancilla') return __clone(__D.robustness_ancilla);
     if (k === 'bell') return __clone(__D.robustness_bell);
     throw __limitation('probing arbitrary circuits');
+  }
+  if (path === '/api/ai/report') {
+    const k = __kind(body.qasm);
+    if (k === 'ancilla' && body.to === 'hi-IN') return { ...__clone(__D.ai_report_ancilla_hi), note: '(static demo: precomputed by the real engine + Sarvam-Translate on the bundled fixture)' };
+    if (k === 'ancilla' && body.to === 'mr-IN') return { ...__clone(__D.ai_report_ancilla_mr), note: '(static demo: precomputed by the real engine + Sarvam-Translate on the bundled fixture)' };
+    throw __limitation('localized reports for arbitrary circuits/languages');
+  }
+  if (path === '/api/ai/speak' || path === '/api/ai/listen') throw __limitation('cloud voice features (run locally with SARVAM_API_KEY)');
+  if (path === '/api/ai/triage') {
+    const k = __kind(body.qasm);
+    if (k === 'ancilla') return { ...__clone(__D.ai_triage_ancilla), note: '(static demo: reply was precomputed by the real engine + Sarvam AI on the bundled fixture)' };
+    throw __limitation('AI triage of arbitrary circuits');
   }
   if (path === '/api/policy-eval') {
     const src = body.sample ? __D.policy_60 : __D.policy_full;

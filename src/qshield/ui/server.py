@@ -4,7 +4,8 @@ Security properties (by construction, not configuration):
 * binds 127.0.0.1 by default; 0.0.0.0 only behind an explicit --host flag
 * never executes uploaded content — QASM is parsed, never run
 * 8 MiB request body cap; JSON in / JSON out; no shell, no filesystem writes
-* zero outbound network calls; corpora are read read-only from disk
+* zero outbound network calls — EXCEPT the opt-in `/api/ai/*` endpoints, which
+  call Sarvam AI (cloud) only when invoked, and send finding summaries only
 """
 
 from __future__ import annotations
@@ -168,6 +169,10 @@ class WorkbenchHandler(BaseHTTPRequestHandler):
                     ],
                 },
             )
+        elif path == "/api/ai/status":
+            from qshield import ai as qai
+
+            self._json(200, {"configured": qai.configured(), "disclaimer": qai.disclaimer()})
         elif path == "/api/policies":
             self._json(200, {"policies": [p.to_dict() for p in builtin_policies()]})
         elif path == "/api/example":
@@ -204,6 +209,75 @@ class WorkbenchHandler(BaseHTTPRequestHandler):
 
                 ir = parse_qasm(qasm, name="probe")
                 self._json(200, probe_finding_robustness(ir, variants_per_attack=2))
+            elif path == "/api/ai/speak":
+                text = str(body.get("text", "")).strip()
+                if not text:
+                    raise PolicyError("provide 'text' to synthesize")
+                if len(text) > 1500:
+                    raise PolicyError("text too long — 1500 characters max")
+                from qshield import ai as qai
+
+                lang = str(body.get("language_code", "hi-IN"))
+                speaker = str(body.get("speaker", qai.DEFAULT_SPEAKER))
+                audio = qai.tts_bytes(text, language_code=lang, speaker=speaker)
+                self._send(200, audio, "audio/wav")
+            elif path == "/api/ai/report":
+                qasm = str(body.get("qasm", "")).strip()
+                if not qasm:
+                    raise PolicyError("provide 'qasm' source text")
+                to = str(body.get("to", "hi-IN")).strip()
+                import re as _re
+
+                if not _re.fullmatch(r"[a-z]{2}-IN", to):
+                    raise PolicyError("'to' must be an Indian language code like hi-IN, mr-IN, ta-IN")
+                from qshield import ai as qai
+                from qshield.core.parsers.qasm_parser import parse_qasm
+
+                ir = parse_qasm(qasm, name="workbench")
+                payload = qai.scan_findings_ir(ir, name="circuit.qasm")
+                english = qai.english_report(payload)
+                translated = qai.translate(english, target_language_code=to, source_language_code="en-IN")
+                self._json(
+                    200,
+                    {"english": english, "translated": translated, "to": to,
+                     "disclaimer": qai.disclaimer()},
+                )
+            elif path == "/api/ai/listen":
+                import base64
+
+                b64 = str(body.get("audio_b64", ""))
+                if not b64:
+                    raise PolicyError("provide 'audio_b64' (base64-encoded audio)")
+                mode = str(body.get("mode", "transcribe"))
+                if mode not in ("transcribe", "translate", "verbatim", "translit", "codemix"):
+                    raise PolicyError("mode must be transcribe|translate|verbatim|translit|codemix")
+                try:
+                    data = base64.b64decode(b64, validate=True)
+                except Exception as exc:
+                    raise PolicyError("audio_b64 is not valid base64") from exc
+                if len(data) > MAX_BODY:
+                    raise PolicyError("audio exceeds 8 MiB cap")
+                from qshield import ai as qai
+
+                self._json(200, {"transcript": qai.stt_bytes(data, mode=mode)})
+            elif path == "/api/ai/triage":
+                qasm = str(body.get("qasm", "")).strip()
+                if not qasm:
+                    raise PolicyError("provide 'qasm' source text")
+                from qshield import ai as qai
+                from qshield.core.parsers.qasm_parser import parse_qasm
+
+                ir = parse_qasm(qasm, name="workbench")
+                payload = qai.scan_findings_ir(ir, name=Path("circuit.qasm").name)
+                reply = qai.triage(payload)
+                self._json(
+                    200,
+                    {
+                        "reply": reply,
+                        "findings_sent": len(payload["findings"]),
+                        "disclaimer": qai.disclaimer(),
+                    },
+                )
             elif path == "/api/policy-eval":
                 ids = body.get("ids")
                 if not isinstance(ids, list) or not all(isinstance(i, str) for i in ids) or not ids:
@@ -216,8 +290,11 @@ class WorkbenchHandler(BaseHTTPRequestHandler):
                 self._json(404, {"error": "not found"})
         except PolicyError as exc:
             self._json(400, {"error": str(exc)})
-        except Exception as exc:  # never take the server down with a bad input
-            self._json(500, {"error": f"{type(exc).__name__}: {exc}"})
+        except Exception as exc:  # Sarvam/AI upstream failures surface as 503; the rest as 500
+            if type(exc).__name__ in ("SarvamUnavailable", "APIError", "APIConnectionError", "RateLimitError"):
+                self._json(503, {"error": f"AI upstream error: {exc}"})
+            else:
+                self._json(500, {"error": f"{type(exc).__name__}: {exc}"})
 
 
 def run_workbench(host: str = "127.0.0.1", port: int = 8765) -> None:

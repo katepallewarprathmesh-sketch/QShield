@@ -56,13 +56,7 @@ def _client():
     return SarvamAI(api_subscription_key=key)
 
 
-def scan_findings(path: Path) -> dict:
-    """Run the local static + supply-chain analyzer and return a compact payload."""
-    from qshield.scanner import Scanner
-
-    sc = Scanner(config="default")
-    sc.add_circuit(str(path), name=path.stem)
-    results = sc.run(analyses=["static", "supply_chain"])
+def _payload(results, circuit_name: str) -> dict:
     findings = []
     for f in results.findings:
         findings.append(
@@ -81,7 +75,7 @@ def scan_findings(path: Path) -> dict:
         )
     s = results.summary
     return {
-        "circuit": path.name,
+        "circuit": circuit_name,
         "summary": {
             "total": s.total,
             "critical": s.critical,
@@ -92,6 +86,38 @@ def scan_findings(path: Path) -> dict:
         },
         "findings": findings,
     }
+
+
+def scan_findings(path: Path) -> dict:
+    """Run the local static + supply-chain analyzer and return a compact payload."""
+    from qshield.scanner import Scanner
+
+    sc = Scanner(config="default")
+    sc.add_circuit(str(path), name=path.stem)
+    results = sc.run(analyses=["static", "supply_chain"])
+    return _payload(results, path.name)
+
+
+def scan_findings_ir(ir, name: str = "workbench") -> dict:
+    """Same payload, from an already-parsed CircuitIR (e.g. in-memory Workbench uploads)."""
+    from qshield.scanner import Scanner
+
+    sc = Scanner(config="default", parallel=False)
+    sc.add_circuit(ir)
+    results = sc.run(analyses=["static"])
+    return _payload(results, name)
+
+
+def configured() -> bool:
+    """True if a SARVAM_API_KEY is discoverable (env or gitignored .env). Never reveals it."""
+    repo_root = Path(__file__).resolve().parents[2]
+    _load_dotenv(Path.cwd() / ".env")
+    _load_dotenv(repo_root / ".env")
+    return bool(os.environ.get("SARVAM_API_KEY"))
+
+
+def disclaimer() -> str:
+    return _DISCLAIMER
 
 
 def triage(payload: dict) -> str:
@@ -115,30 +141,36 @@ def triage(payload: dict) -> str:
     return response.choices[0].message.content
 
 
-def speak(text: str, out: Path, language_code: str = "hi-IN", speaker: str = DEFAULT_SPEAKER) -> Path:
+def tts_bytes(text: str, language_code: str = "hi-IN", speaker: str = DEFAULT_SPEAKER) -> bytes:
+    """Synthesize speech in memory; returns audio bytes."""
+    import base64
+
     client = _client()
     audio = client.text_to_speech.convert(
         text=text, language_code=language_code, model=TTS_MODEL, speaker=speaker
     )
     data = getattr(audio, "audios", None)
-    try:
-        from sarvamai.play import save
+    if not data:
+        raise SarvamUnavailable("Sarvam TTS returned no audio payload")
+    return base64.b64decode("".join(data))
 
-        save(audio, str(out))
-    except Exception:
-        import base64
 
-        if not data:
-            raise SarvamUnavailable("Sarvam TTS returned no audio payload") from None
-        out.write_bytes(base64.b64decode("".join(data)))
+def stt_bytes(data: bytes, mode: str = "transcribe") -> str:
+    """Transcribe audio bytes; no temp files."""
+    import io
+
+    client = _client()
+    response = client.speech_to_text.transcribe(file=io.BytesIO(data), model=STT_MODEL, mode=mode)
+    return response.transcript
+
+
+def speak(text: str, out: Path, language_code: str = "hi-IN", speaker: str = DEFAULT_SPEAKER) -> Path:
+    out.write_bytes(tts_bytes(text, language_code=language_code, speaker=speaker))
     return out
 
 
 def listen(path: Path, mode: str = "transcribe") -> str:
-    client = _client()
-    with open(path, "rb") as fh:
-        response = client.speech_to_text.transcribe(file=fh, model=STT_MODEL, mode=mode)
-    return response.transcript
+    return stt_bytes(path.read_bytes(), mode=mode)
 
 
 def translate(text: str, target_language_code: str, source_language_code: str = "en-IN") -> str:

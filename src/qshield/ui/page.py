@@ -161,6 +161,7 @@ tbody tr:last-child td { border-bottom: 0; }
 .legend .cell small { display: block; color: var(--dim); font-size: 10.5px; margin-top: 6px; }
 @media (max-width: 1080px) { .legend { grid-template-columns: repeat(2, 1fr); } }
 
+.ai-reply { white-space: pre-wrap; font-size: 13px; line-height: 1.62; color: #dbe7f5; max-height: 560px; overflow-y: auto; }
 .muted { color: var(--dim); font-size: 12px; }
 .limit li { margin: 4px 0; color: #b9c8d8; font-size: 13px; }
 .err { color: #ff9d9d; background: #241014; border: 1px solid #57201f; border-radius: 10px; padding: 10px 12px; font-size: 13px; white-space: pre-wrap; }
@@ -320,6 +321,67 @@ measure q -> c;</textarea>
     </div>
   </section>
 
+  <section class="tab" id="tab-ai">
+    <div class="card" style="border-color:rgba(255,216,77,.4); background:linear-gradient(180deg, rgba(255,216,77,.06), var(--panel))">
+      <h3 style="color:#ffe27a">⚠ Opt-in cloud feature — read before use</h3>
+      <p class="muted" style="margin:0">AI Triage sends a <b>summary of findings</b> (never the raw circuit source) to <b>Sarvam AI</b> (api.sarvam.ai) for explanation and prioritization. Output is <b>advisory — never a verdict</b> and can be wrong; a human auditor decides. Static analysis, comparison, Policy Studio and the rest of this page remain fully offline. Requires <span class="mono">SARVAM_API_KEY</span> on the machine running the Workbench server.</p>
+    </div>
+    <div class="cols-2 grid" style="margin-top:14px">
+      <div class="card">
+        <h3>AI Triage <span class="pill medium" style="vertical-align:2px">cloud · advisory</span></h3>
+        <div id="ai-status" class="muted" style="margin-bottom:8px">checking AI configuration…</div>
+        <label class="small" for="ai-qasm">Circuit under review</label>
+        <textarea id="ai-qasm" spellcheck="false" placeholder="OPENQASM 2.0;&#10;include &quot;qelib1.inc&quot;;&#10;qreg q[3];&#10;cx q[0],q[2]; …"></textarea>
+        <div class="row">
+          <button class="btn" onclick="runAiTriage()">Explain with AI</button>
+          <button class="btn secondary" onclick="loadAiExample()">Load ancilla-leakage example</button>
+        </div>
+        <p class="muted" style="margin-top:10px">Findings summary is sent; your circuit text stays here. Model: sarvam-105b-conversations.</p>
+      </div>
+      <div class="card"><h3>AI reply</h3><div id="ai-out" class="muted">The triage reply will appear here — plain English, per-finding disposition, and an overall BLOCK / REVIEW / TRACK recommendation. Advisory only.</div></div>
+    </div>
+
+    <div class="cols-2 grid" style="margin-top:14px">
+      <div class="card">
+        <h3>Speak <span class="pill medium" style="vertical-align:2px">Bulbul · cloud</span></h3>
+        <label class="small" for="tts-text">Text to speak</label>
+        <textarea id="tts-text" spellcheck="false" style="min-height:110px" placeholder="Type what QSHIELD should say, or use “Speak this reply” after a triage…"></textarea>
+        <label class="small" for="tts-lang">Language</label>
+        <select id="tts-lang"><option value="hi-IN">Hindi (hi-IN)</option><option value="en-IN">English - India (en-IN)</option><option value="mr-IN">Marathi (mr-IN)</option><option value="ta-IN">Tamil (ta-IN)</option><option value="te-IN">Telugu (te-IN)</option><option value="bn-IN">Bengali (bn-IN)</option><option value="gu-IN">Gujarati (gu-IN)</option><option value="kn-IN">Kannada (kn-IN)</option><option value="ml-IN">Malayalam (ml-IN)</option></select>
+        <div class="row">
+          <button class="btn" onclick="runTts()">Synthesize</button>
+          <label class="muted" style="font-size:11.5px; display:flex; gap:6px; align-items:center"><input type="checkbox" id="tts-auto" checked /> auto-play</label>
+        </div>
+        <audio id="tts-audio" controls style="width:100%; margin-top:10px; display:none"></audio>
+        <div id="tts-out" class="muted" style="margin-top:8px"></div>
+      </div>
+      <div class="card">
+        <h3>Listen <span class="pill medium" style="vertical-align:2px">Saaras · cloud</span></h3>
+        <p class="muted" style="margin-top:0">Record with your microphone, then transcribe. Audio leaves this machine only when you click <b>Transcribe</b> — it is sent to Sarvam AI and never stored by the Workbench.</p>
+        <div class="row">
+          <button class="btn" id="rec-btn" onclick="toggleRecord()">● Record</button>
+          <button class="btn secondary" id="rec-stop" onclick="stopRecord()" disabled>■ Stop</button>
+          <button class="btn secondary" id="rec-send" onclick="sendRecording()" disabled>Transcribe</button>
+        </div>
+        <div id="rec-status" class="muted" style="margin:10px 0 4px">idle — microphone permission is requested only when you press Record</div>
+        <label class="small" for="rec-out">Transcript</label>
+        <textarea id="rec-out" style="min-height:110px" placeholder="Transcript appears here…" readonly></textarea>
+      </div>
+    </div>
+
+      <div class="card" style="margin-top:14px">
+        <h3>Audit report in your language <span class="pill medium" style="vertical-align:2px">Sarvam-Translate · cloud</span></h3>
+        <p class="muted" style="margin-top:0">A short factual report of the scan (counts, findings, remediation) — machine-translated with Sarvam-Translate (formal mode). Translations can err; the English original is shown alongside for review.</p>
+        <label class="small" for="rep-lang">Target language</label>
+        <select id="rep-lang"><option value="hi-IN">Hindi (hi-IN)</option><option value="mr-IN">Marathi (mr-IN)</option><option value="ta-IN">Tamil (ta-IN)</option><option value="te-IN">Telugu (te-IN)</option><option value="bn-IN">Bengali (bn-IN)</option><option value="gu-IN">Gujarati (gu-IN)</option><option value="kn-IN">Kannada (kn-IN)</option><option value="ml-IN">Malayalam (ml-IN)</option><option value="en-IN">English - India (en-IN)</option></select>
+        <div class="row"><button class="btn" onclick="runLocalizedReport()">Render report (uses the circuit above)</button><button class="btn secondary" onclick="copyReport()">Copy translated</button></div>
+        <div class="grid cols-2" style="margin-top:12px; gap:12px">
+          <div><label class="small">English (source)</label><div id="rep-en" class="ai-reply" style="max-height:260px">Render to see the source report.</div></div>
+          <div><label class="small">Translated</label><div id="rep-out" class="ai-reply" style="max-height:260px">अनुवाद यहाँ दिखाई देगा।</div></div>
+        </div>
+      </div>
+  </section>
+
   <section class="tab" id="tab-about">
     <div class="card">
       <h3>About &amp; honest limits</h3>
@@ -330,7 +392,7 @@ measure q -> c;</textarea>
         <li><b>Metrics:</b> fixture-corpus numbers (202 clean / 215 malicious). Field rates unknown. Twin-calibrated dynamic results are simulator-measured.</li>
         <li><b>Formal verdicts:</b> Equivalent/NotEquivalent only on decidable ZX fragments; otherwise honest <span class="mono">Unknown</span>.</li>
         <li><b>Community signatures:</b> ships empty by design — no invented threats, no silent updates.</li>
-        <li><b>Network:</b> this page makes zero requests to the internet. Delete the file and nothing else broke.</li>
+        <li><b>Network:</b> this page makes zero direct requests to the internet. Only the opt-in <b>AI</b> tab calls out — from the local Workbench server to api.sarvam.ai, on your click: AI Triage sends finding summaries, Speak/Listen send your text/audio respectively. Delete it and nothing else broke.</li>
       </ul>
       <p class="muted">QSHIELD Workbench · Apache-2.0</p>
     </div>
@@ -349,6 +411,7 @@ const TABS = [
   ["compare", "Compare", '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="16" rx="1.5"/><rect x="14" y="4" width="7" height="16" rx="1.5"/><line x1="7" y1="9" x2="10" y2="9"/><line x1="17" y1="15" x2="20" y2="15"/></svg>'],
   ["robustness", "Robustness Probe", '<svg viewBox="0 0 24 24"><path d="M12 2 L20 6 V12 C20 17.5 16.5 21 12 22 C7.5 21 4 17.5 4 12 V6 Z"/><path d="M9.5 12.5 L11.5 14.5 L15 10.5"/></svg>'],
   ["policy", "Policy Studio", '<svg viewBox="0 0 24 24"><path d="M9 4 h6 a1 1 0 0 1 1 1 v2 h3 v14 a1 1 0 0 1 -1 1 h-12 a1 1 0 0 1 -1 -1 v-14 h3 v-2 a1 1 0 0 1 1 -1 Z"/><line x1="9.5" y1="12" x2="14.5" y2="12"/><line x1="9.5" y1="16" x2="14.5" y2="16"/></svg>'],
+  ["ai", "AI Triage", '<svg viewBox="0 0 24 24"><path d="M12 3v3"/><path d="M12 18v3"/><path d="M3 12h3"/><path d="M18 12h3"/><path d="M5.6 5.6l2.1 2.1"/><path d="M16.3 16.3l2.1 2.1"/><path d="M5.6 18.4l2.1-2.1"/><path d="M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="4"/></svg>'],
   ["about", "About & limits", '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><line x1="12" y1="7.5" x2="12.01" y2="7.5"/></svg>'],
 ];
 const $ = (s, r=document) => r.querySelector(s);
@@ -484,7 +547,95 @@ async function runPolicyEval() {
       <p class="muted">Corpus: ${d.corpus.clean} clean + ${d.corpus.malicious} malicious (${d.corpus.skipped_unparseable} skipped unparseable). ${esc(d.note)}</p>`;
   } catch (e) { out.innerHTML = `<div class="err">${esc(e.message)}</div>`; }
 }
-buildTabs(); loadPolicies();
+async function aiStatus() {
+  const el = $('#ai-status');
+  try {
+    const d = await api('/api/ai/status');
+    el.innerHTML = d.configured
+      ? '<span class="pill robust">AI configured</span> <span class="muted">Sarvam AI reachable on demand · finding summaries only</span>'
+      : '<span class="pill fragile">AI not configured</span> <span class="muted">set SARVAM_API_KEY on the Workbench server (.env) — everything else works offline</span>';
+  } catch (e) { el.textContent = 'AI status unavailable'; }
+}
+async function loadAiExample() {
+  try { const d = await api('/api/example?name=ancilla_leakage'); $('#ai-qasm').value = d.qasm; } catch (e) { /* keep placeholder */ }
+}
+async function runAiTriage() {
+  const out = $('#ai-out'); spin(out);
+  try {
+    const d = await apiPost('/api/ai/triage', { qasm: $('#ai-qasm').value });
+    lastAiReply = d.reply;
+    out.innerHTML = '<div class="ai-reply">' + esc(d.reply) + '</div>' +
+      '<p class="muted" style="margin-top:10px; border-top:1px solid var(--line); padding-top:10px">' + esc(d.findings_sent) + ' finding(s) summary sent · ' + esc(d.disclaimer) + '</p>' +
+      '<button class="btn secondary" onclick="speakLastReply()">🔊 Speak this reply</button>';
+  } catch (e) { out.innerHTML = '<div class="err">' + esc(e.message) + '</div>'; }
+}
+let lastAiReply = '';
+let recMedia = null, recChunks = [], recBlob = null;
+async function speakText(text) {
+  const outEl = $('#tts-out'); outEl.textContent = 'synthesizing…';
+  try {
+    const res = await fetch('/api/ai/speak', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: String(text).slice(0, 1500), language_code: $('#tts-lang').value }) });
+    if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error || ('HTTP ' + res.status)); }
+    const url = URL.createObjectURL(await res.blob());
+    const a = $('#tts-audio'); a.src = url; a.style.display = 'block';
+    if ($('#tts-auto').checked) await a.play().catch(() => {});
+    outEl.textContent = 'done — audio stays in your browser';
+  } catch (e) { outEl.innerHTML = '<div class="err">' + esc(e.message) + '</div>'; }
+}
+function runTts() { const t = $('#tts-text').value.trim(); if (t) speakText(t); }
+function speakLastReply() { if (!lastAiReply) return; $('#tts-text').value = lastAiReply.slice(0, 1500); speakText(lastAiReply); }
+async function toggleRecord() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    recChunks = []; recBlob = null;
+    recMedia = new MediaRecorder(stream);
+    recMedia.ondataavailable = e => { if (e.data && e.data.size) recChunks.push(e.data); };
+    recMedia.onstop = () => {
+      recBlob = new Blob(recChunks, { type: recMedia.mimeType || 'audio/webm' });
+      stream.getTracks().forEach(t => t.stop());
+      $('#rec-stop').disabled = true; $('#rec-btn').disabled = false; $('#rec-send').disabled = false;
+      $('#rec-status').textContent = 'recorded ' + Math.round(recBlob.size / 1024) + ' KB — click Transcribe to send to Sarvam AI';
+    };
+    recMedia.start();
+    $('#rec-btn').disabled = true; $('#rec-stop').disabled = false; $('#rec-send').disabled = true;
+    $('#rec-status').textContent = '● recording…';
+  } catch (e) { $('#rec-status').innerHTML = '<span class="err">microphone unavailable: ' + esc(e.message) + '</span>'; }
+}
+function stopRecord() { if (recMedia && recMedia.state !== 'inactive') recMedia.stop(); }
+function blobToB64(blob) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(String(r.result).split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(blob);
+  });
+}
+async function sendRecording() {
+  if (!recBlob) return;
+  $('#rec-status').textContent = 'transcribing via Saaras…';
+  try {
+    const b64 = await blobToB64(recBlob);
+    const d = await apiPost('/api/ai/listen', { audio_b64: b64, mode: 'transcribe' });
+    $('#rec-out').value = d.transcript;
+    $('#rec-status').textContent = 'done — audio was sent to Sarvam AI for transcription only';
+  } catch (e) { $('#rec-status').innerHTML = '<div class="err">' + esc(e.message) + '</div>'; }
+}
+async function runLocalizedReport() {
+  const en = $('#rep-en'), out = $('#rep-out');
+  en.innerHTML = '<span class="spinner"></span> generating…';
+  out.innerHTML = '<span class="spinner"></span> translating…';
+  try {
+    const d = await apiPost('/api/ai/report', { qasm: $('#ai-qasm').value, to: $('#rep-lang').value });
+    en.textContent = d.english;
+    out.textContent = d.translated;
+  } catch (e) { en.innerHTML = '<div class="err">' + esc(e.message) + '</div>'; out.textContent = ''; }
+}
+async function copyReport() {
+  const out = $('#rep-out').textContent || '';
+  try { await navigator.clipboard.writeText(out); $('#rep-out').style.outline = '2px solid var(--acc)'; setTimeout(() => { $('#rep-out').style.outline = 'none'; }, 800); } catch (e) { /* clipboard unavailable */ }
+}
+buildTabs(); loadPolicies(); aiStatus();
 </script>
 </body>
 </html>

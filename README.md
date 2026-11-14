@@ -69,7 +69,7 @@ qshield ai speak "text"          # Bulbul text-to-speech
 qshield ai listen clip.wav       # Saaras speech-to-text
 ```
 
-Advisory only, never a verdict — the offline core never touches the network; `qshield ai` is opt-in.
+Advisory only, never a verdict — the offline core never touches the network; `qshield ai` is opt-in. The **Workbench** surfaces the same features (AI Triage tab + the `qshield ui` page, key stays server-side).
 
 ## What it detects
 
