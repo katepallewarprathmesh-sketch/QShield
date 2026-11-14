@@ -11,6 +11,7 @@ Security properties (by construction, not configuration):
 from __future__ import annotations
 
 import json
+import os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
@@ -23,7 +24,8 @@ from qshield.redteam import probe_finding_robustness
 from qshield.ui.page import WORKBENCH_HTML
 
 MAX_BODY = 8 * 1024 * 1024
-FIXTURE_ROOT = Path(__file__).resolve().parents[3] / "tests" / "fixtures"
+
+FIXTURE_ROOT = Path(os.environ.get("QSHIELD_FIXTURES_DIR") or Path(__file__).resolve().parents[3] / "tests" / "fixtures")
 
 
 def _repo_fixtures_dir(kind: str) -> Path:

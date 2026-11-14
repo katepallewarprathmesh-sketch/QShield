@@ -11,6 +11,7 @@ COPY src ./src
 COPY tests/fixtures ./tests/fixtures   # lets Policy Studio score on the bundled corpus
 
 RUN pip install --no-cache-dir . && useradd -m app
+ENV QSHIELD_FIXTURES_DIR=/app/tests/fixtures
 USER app
 EXPOSE 8765
 CMD ["qshield", "ui", "--host", "0.0.0.0", "--port", "8765"]

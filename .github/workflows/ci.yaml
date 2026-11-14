@@ -46,3 +46,24 @@ jobs:
         run: |
           qshield scan tests/fixtures/clean_circuits/bell_state.qasm --fail-on high
           qshield scan tests/fixtures/malicious_circuits/ancilla_leakage.qasm || test $? -eq 1
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t qshield .
+      - name: Non-root check
+        run: |
+          uid="$(docker run --rm qshield id -u)"
+          echo "image uid=$uid"
+          test "$uid" != "0"
+      - name: Smoke — scan bundled fixture
+        run: |
+          out="$(docker run --rm qshield qshield scan tests/fixtures/malicious_circuits/ancilla_leakage.qasm --fail-on never)"
+          echo "$out"
+          echo "$out" | grep -q "T2.1"
+      - name: Smoke — fixture corpus visible to Policy Studio
+        run: |
+          docker run --rm qshield python -c "from qshield.ui.server import FIXTURE_ROOT; assert FIXTURE_ROOT.exists(), FIXTURE_ROOT; print('fixtures at', FIXTURE_ROOT)"
+
