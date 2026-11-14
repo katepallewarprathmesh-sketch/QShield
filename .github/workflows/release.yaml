@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generate CycloneDX SBOM (JSON + XML)
+        run: scripts/generate_sbom.sh dist-sbom
+      - name: Create or update GitHub Release and attach SBOM
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --generate-notes --verify-tag
+          gh release upload "$TAG" dist-sbom/qshield-sbom.json dist-sbom/qshield-sbom.xml dist-sbom/requirements-resolved.txt --clobber

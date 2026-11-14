@@ -69,3 +69,19 @@ jobs:
         run: |
           docker run --rm qshield python -c "from qshield.ui.server import FIXTURE_ROOT; assert FIXTURE_ROOT.exists(), FIXTURE_ROOT; print('fixtures at', FIXTURE_ROOT)"
 
+  sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generate CycloneDX SBOM (JSON + XML)
+        run: scripts/generate_sbom.sh dist-sbom
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qshield-sbom
+          path: dist-sbom/
+          if-no-files-found: error
+
