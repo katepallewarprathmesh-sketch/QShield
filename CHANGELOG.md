@@ -6,6 +6,9 @@ All notable changes to QSHIELD. Historical spec annotations live in
 ## [Unreleased]
 
 ### Added
+- **CI hardening (Phase 1 of the global-scale implementation plan)** — Docker image now build-verified in CI with a non-root assertion and a bundled-fixture scan smoke (`T2.1` expected); Workbench policy fixture root is overridable via `QSHIELD_FIXTURES_DIR`; CI matrix is now Python 3.10–3.13 × Qiskit 1.4.x and 2.x; optional-extra tests (`qiskit`-backed differential tester, `pyzx` formal path) carry explicit skip reasons instead of failing in minimal environments. Docker image contains no AI features enabled and needs no network.
+
+### Added
 - **Optional Sarvam AI assistance — `qshield ai`** (`triage` / `speak` / `listen` / `report`). Cloud, opt-in only, advisory only — the offline core is untouched. `triage` sends finding *summaries* (never the raw circuit) to 105B for plain-English explanation and remediation prioritization; `speak`/`listen` use Bulbul TTS / Saaras STT (voice round-trip verified); `report` renders the short audit report in 22 Indian languages via Sarvam-Translate. Requires `pip install sarvamai` and `SARVAM_API_KEY` (.env gitignored). LLM output is a lead for human auditors, never a verdict.
 - `scripts/sarvam_chat.py` — minimal API sanity check.
 - **Workbench AI tab** — all three AI features in the UI (opt-in, cloud, advisory): AI Triage with live Sarvam 105B reply (finding summaries only, never raw circuit); Speak (Bulbul TTS, 9 languages) and Listen (Saaras STT, browser mic) cards; Sarvam-Translate audit reports in 22 languages shown side-by-side with the English source. Key stays server-side (never reaches the browser); `/api/ai/status|triage|speak|listen|report`. Static demo ships precomputed real outputs (ancilla fixture) and disables cloud calls honestly.

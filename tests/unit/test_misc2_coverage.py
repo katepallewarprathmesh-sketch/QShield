@@ -8,6 +8,7 @@ import pytest
 
 from qshield.core.circuit_ir import CircuitIR, GateNode, GateType
 from qshield.core.parsers.qasm_parser import parse_qasm
+from qshield.formal import pyzx_available
 from qshield.scanner import Scanner
 from qshield.static.randomized_equivalence import (
     RandomizedVerificationError,
@@ -100,6 +101,10 @@ def test_aer_distribution_unknown_gate_returns_none():
 
 
 def test_aer_distribution_cu3_gate():
+    pytest.importorskip(
+        "qiskit",
+        reason="optional [qiskit] extra not installed — qiskit-backed differential tester test",
+    )
     from qshield.dynamic.differential_tester import aer_distribution
 
     circuit = _circuit([_gate("cu3", [0, 1], [0.3, 0.2, 0.1])], num_qubits=2)
@@ -120,6 +125,10 @@ def test_verify_ancillas_independent_returns_report():
 
 # -- scanner: formal analysis path (pyzx present and absent) -----------------
 
+@pytest.mark.skipif(
+    not pyzx_available(),
+    reason="optional [formal] extra (pyzx) not installed — formal-enabled scanner path test",
+)
 def test_formal_enabled_pyzx_present(tmp_path):
     cfg = tmp_path / "formal_on.yaml"
     cfg.write_text("analysis:\n  formal: true\n")
