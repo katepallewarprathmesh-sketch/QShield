@@ -345,6 +345,34 @@ measure q -> c;</textarea>
       </div>
       <div class="card"><h3>AI reply</h3><div id="ai-out" class="muted">The triage reply will appear here — plain English, per-finding disposition, and an overall BLOCK / REVIEW / TRACK recommendation. Advisory only.</div></div>
     </div>
+
+    <div class="cols-2 grid" style="margin-top:14px">
+      <div class="card">
+        <h3>Speak <span class="pill medium" style="vertical-align:2px">Bulbul · cloud</span></h3>
+        <label class="small" for="tts-text">Text to speak</label>
+        <textarea id="tts-text" spellcheck="false" style="min-height:110px" placeholder="Type what QSHIELD should say, or use “Speak this reply” after a triage…"></textarea>
+        <label class="small" for="tts-lang">Language</label>
+        <select id="tts-lang"><option value="hi-IN">Hindi (hi-IN)</option><option value="en-IN">English - India (en-IN)</option><option value="mr-IN">Marathi (mr-IN)</option><option value="ta-IN">Tamil (ta-IN)</option><option value="te-IN">Telugu (te-IN)</option><option value="bn-IN">Bengali (bn-IN)</option><option value="gu-IN">Gujarati (gu-IN)</option><option value="kn-IN">Kannada (kn-IN)</option><option value="ml-IN">Malayalam (ml-IN)</option></select>
+        <div class="row">
+          <button class="btn" onclick="runTts()">Synthesize</button>
+          <label class="muted" style="font-size:11.5px; display:flex; gap:6px; align-items:center"><input type="checkbox" id="tts-auto" checked /> auto-play</label>
+        </div>
+        <audio id="tts-audio" controls style="width:100%; margin-top:10px; display:none"></audio>
+        <div id="tts-out" class="muted" style="margin-top:8px"></div>
+      </div>
+      <div class="card">
+        <h3>Listen <span class="pill medium" style="vertical-align:2px">Saaras · cloud</span></h3>
+        <p class="muted" style="margin-top:0">Record with your microphone, then transcribe. Audio leaves this machine only when you click <b>Transcribe</b> — it is sent to Sarvam AI and never stored by the Workbench.</p>
+        <div class="row">
+          <button class="btn" id="rec-btn" onclick="toggleRecord()">● Record</button>
+          <button class="btn secondary" id="rec-stop" onclick="stopRecord()" disabled>■ Stop</button>
+          <button class="btn secondary" id="rec-send" onclick="sendRecording()" disabled>Transcribe</button>
+        </div>
+        <div id="rec-status" class="muted" style="margin:10px 0 4px">idle — microphone permission is requested only when you press Record</div>
+        <label class="small" for="rec-out">Transcript</label>
+        <textarea id="rec-out" style="min-height:110px" placeholder="Transcript appears here…" readonly></textarea>
+      </div>
+    </div>
   </section>
 
   <section class="tab" id="tab-about">
@@ -357,7 +385,7 @@ measure q -> c;</textarea>
         <li><b>Metrics:</b> fixture-corpus numbers (202 clean / 215 malicious). Field rates unknown. Twin-calibrated dynamic results are simulator-measured.</li>
         <li><b>Formal verdicts:</b> Equivalent/NotEquivalent only on decidable ZX fragments; otherwise honest <span class="mono">Unknown</span>.</li>
         <li><b>Community signatures:</b> ships empty by design — no invented threats, no silent updates.</li>
-        <li><b>Network:</b> this page makes zero direct requests to the internet. Only the opt-in <b>AI Triage</b> tab calls out — from the local Workbench server to api.sarvam.ai, on your click, sending finding summaries only. Delete it and nothing else broke.</li>
+        <li><b>Network:</b> this page makes zero direct requests to the internet. Only the opt-in <b>AI</b> tab calls out — from the local Workbench server to api.sarvam.ai, on your click: AI Triage sends finding summaries, Speak/Listen send your text/audio respectively. Delete it and nothing else broke.</li>
       </ul>
       <p class="muted">QSHIELD Workbench · Apache-2.0</p>
     </div>
@@ -528,9 +556,63 @@ async function runAiTriage() {
   const out = $('#ai-out'); spin(out);
   try {
     const d = await apiPost('/api/ai/triage', { qasm: $('#ai-qasm').value });
+    lastAiReply = d.reply;
     out.innerHTML = '<div class="ai-reply">' + esc(d.reply) + '</div>' +
-      '<p class="muted" style="margin-top:10px; border-top:1px solid var(--line); padding-top:10px">' + esc(d.findings_sent) + ' finding(s) summary sent · ' + esc(d.disclaimer) + '</p>';
+      '<p class="muted" style="margin-top:10px; border-top:1px solid var(--line); padding-top:10px">' + esc(d.findings_sent) + ' finding(s) summary sent · ' + esc(d.disclaimer) + '</p>' +
+      '<button class="btn secondary" onclick="speakLastReply()">🔊 Speak this reply</button>';
   } catch (e) { out.innerHTML = '<div class="err">' + esc(e.message) + '</div>'; }
+}
+let lastAiReply = '';
+let recMedia = null, recChunks = [], recBlob = null;
+async function speakText(text) {
+  const outEl = $('#tts-out'); outEl.textContent = 'synthesizing…';
+  try {
+    const res = await fetch('/api/ai/speak', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: String(text).slice(0, 1500), language_code: $('#tts-lang').value }) });
+    if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error || ('HTTP ' + res.status)); }
+    const url = URL.createObjectURL(await res.blob());
+    const a = $('#tts-audio'); a.src = url; a.style.display = 'block';
+    if ($('#tts-auto').checked) await a.play().catch(() => {});
+    outEl.textContent = 'done — audio stays in your browser';
+  } catch (e) { outEl.innerHTML = '<div class="err">' + esc(e.message) + '</div>'; }
+}
+function runTts() { const t = $('#tts-text').value.trim(); if (t) speakText(t); }
+function speakLastReply() { if (!lastAiReply) return; $('#tts-text').value = lastAiReply.slice(0, 1500); speakText(lastAiReply); }
+async function toggleRecord() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    recChunks = []; recBlob = null;
+    recMedia = new MediaRecorder(stream);
+    recMedia.ondataavailable = e => { if (e.data && e.data.size) recChunks.push(e.data); };
+    recMedia.onstop = () => {
+      recBlob = new Blob(recChunks, { type: recMedia.mimeType || 'audio/webm' });
+      stream.getTracks().forEach(t => t.stop());
+      $('#rec-stop').disabled = true; $('#rec-btn').disabled = false; $('#rec-send').disabled = false;
+      $('#rec-status').textContent = 'recorded ' + Math.round(recBlob.size / 1024) + ' KB — click Transcribe to send to Sarvam AI';
+    };
+    recMedia.start();
+    $('#rec-btn').disabled = true; $('#rec-stop').disabled = false; $('#rec-send').disabled = true;
+    $('#rec-status').textContent = '● recording…';
+  } catch (e) { $('#rec-status').innerHTML = '<span class="err">microphone unavailable: ' + esc(e.message) + '</span>'; }
+}
+function stopRecord() { if (recMedia && recMedia.state !== 'inactive') recMedia.stop(); }
+function blobToB64(blob) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(String(r.result).split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(blob);
+  });
+}
+async function sendRecording() {
+  if (!recBlob) return;
+  $('#rec-status').textContent = 'transcribing via Saaras…';
+  try {
+    const b64 = await blobToB64(recBlob);
+    const d = await apiPost('/api/ai/listen', { audio_b64: b64, mode: 'transcribe' });
+    $('#rec-out').value = d.transcript;
+    $('#rec-status').textContent = 'done — audio was sent to Sarvam AI for transcription only';
+  } catch (e) { $('#rec-status').innerHTML = '<div class="err">' + esc(e.message) + '</div>'; }
 }
 buildTabs(); loadPolicies(); aiStatus();
 </script>
@@ -561,6 +643,8 @@ async function api(path) {
   if (p === '/api/policies') return __clone(__D.policies);
   if (p === '/api/example') return { qasm: __D.example };
   if (p === '/api/ai/status') return { configured: false, disclaimer: 'AI-advisory (Sarvam AI, cloud) — verify against the evidence. LLM output is not a verdict. (static demo: AI is off)' };
+  if (p === '/api/ai/speak') throw __limitation('speech synthesis');
+  if (p === '/api/ai/listen') throw __limitation('speech transcription');
   throw __limitation('this endpoint');
 }
 async function apiPost(path, body) {
@@ -584,6 +668,7 @@ async function apiPost(path, body) {
     if (k === 'bell') return __clone(__D.robustness_bell);
     throw __limitation('probing arbitrary circuits');
   }
+  if (path === '/api/ai/speak' || path === '/api/ai/listen') throw __limitation('cloud voice features (run locally with SARVAM_API_KEY)');
   if (path === '/api/ai/triage') {
     const k = __kind(body.qasm);
     if (k === 'ancilla') return { ...__clone(__D.ai_triage_ancilla), note: '(static demo: reply was precomputed by the real engine + Sarvam AI on the bundled fixture)' };
