@@ -16,7 +16,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Generate CycloneDX SBOM (JSON + XML)
-        run: scripts/generate_sbom.sh dist-sbom
+        run: bash scripts/generate_sbom.sh dist-sbom
       - name: Create or update GitHub Release and attach SBOM
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

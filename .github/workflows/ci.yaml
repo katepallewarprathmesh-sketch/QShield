@@ -77,7 +77,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Generate CycloneDX SBOM (JSON + XML)
-        run: scripts/generate_sbom.sh dist-sbom
+        run: bash scripts/generate_sbom.sh dist-sbom
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@v4
         with:
