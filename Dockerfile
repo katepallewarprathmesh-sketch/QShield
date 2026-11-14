@@ -8,7 +8,8 @@ WORKDIR /app
 # unitary compare works; ZX needs `pip install '.[formal]'`).
 COPY pyproject.toml LICENSE README.md ./
 COPY src ./src
-COPY tests/fixtures ./tests/fixtures   # lets Policy Studio score on the bundled corpus
+# keep the bundled corpus so Policy Studio works inside the image
+COPY tests/fixtures ./tests/fixtures
 
 RUN pip install --no-cache-dir . && useradd -m app
 ENV QSHIELD_FIXTURES_DIR=/app/tests/fixtures
