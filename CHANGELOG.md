@@ -14,6 +14,9 @@ All notable changes to QSHIELD. Historical spec annotations live in
 - **Workbench AI tab** — all three AI features in the UI (opt-in, cloud, advisory): AI Triage with live Sarvam 105B reply (finding summaries only, never raw circuit); Speak (Bulbul TTS, 9 languages) and Listen (Saaras STT, browser mic) cards; Sarvam-Translate audit reports in 22 languages shown side-by-side with the English source. Key stays server-side (never reaches the browser); `/api/ai/status|triage|speak|listen|report`. Static demo ships precomputed real outputs (ancilla fixture) and disables cloud calls honestly.
 
 ### Added
+- **Dependency & secret hygiene** (supply-chain hardening) — GitHub Actions pinned to full commit SHAs (dependabot keeps them fresh); `dependabot.yml` with weekly pip + github-actions updates (grouped); `requirements-dev-lock.txt`, a sorted, fully-pinned known-good dev snapshot; new CI `audit` job fails on known vulnerabilities in the runtime closure (clean as of 2026-11-14). Secret scanning and push protection were already enabled repository-wide.
+
+### Added
 - **SBOM in CI and on releases** (supply-chain hardening) — `scripts/generate_sbom.sh` builds CycloneDX 1.6 SBOMs (JSON + XML, root component `qshield`, resolved runtime deps, reproducible) in two throwaway venvs so tooling never leaks into the inventory; a CI `sbom` job uploads it as an artifact on every push; a new tag-triggered `release.yaml` creates/updates the GitHub Release for `v*` tags and attaches the SBOM + resolved requirements.
 
 ### Security
