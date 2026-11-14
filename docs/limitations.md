@@ -14,8 +14,7 @@ anything stronger. This page consolidates every limitation stated elsewhere.
 - **Not a side-channel defense** — no timing/power analysis.
 - **Not a noise-vs-attack arbiter** — on noisy hardware, ideal-Born
   validation reports `mismatch` for honest drift; treat `mismatch` as an
-  anomaly to investigate, never an automatic block (see
-  `docs/case_studies/quantum_cloud_audit.md`).
+  anomaly to investigate, never an automatic block.
 
 ## Detection limits (measured)
 
