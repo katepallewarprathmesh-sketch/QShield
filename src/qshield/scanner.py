@@ -270,6 +270,11 @@ class Scanner:
             if time.monotonic() - start > timeout:
                 warnings.append(f"Timeout after {timeout}s; remaining circuits skipped")
                 break
+            # Surface parser-level notes (resets, classical feedback, skipped
+            # statements) — otherwise a scan of e.g. a non-unitary circuit
+            # would report a clean verdict with no hint of what was excluded.
+            for note in (circuit.metadata or {}).get("warnings", []):
+                warnings.append(f"{circuit.name}: {note}")
             if "static" in analyses:
                 findings += self._run_static(circuit, rc, matcher, warnings)
             if "dynamic" in analyses:
