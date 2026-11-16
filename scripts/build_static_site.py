@@ -236,10 +236,16 @@ def main() -> int:
     (out / "bootstrap.js").write_bytes(BOOTSTRAP.read_bytes())
     (out / "index.html").write_text(_render_index(), encoding="utf-8")
 
-    import qshield
+    # Version comes from pyproject.toml (authoritative); do not import the
+    # package here — the build environment must not need the engines deps.
+    try:
+        import tomllib
+        manifest_version = tomllib.loads((REPO / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
+    except Exception as exc:
+        raise RuntimeError(f"could not read project.version from pyproject.toml: {exc}") from exc
 
     manifest = {
-        "qshield_version": qshield.__version__,
+        "qshield_version": manifest_version,
         "pyodide_version": PYODIDE_VERSION,
         "engine": "real (Pyodide CPython, self-hosted) — no precomputed analysis responses",
         "ai": "precomputed real outputs on the ancilla fixture, labeled; live AI unavailable on static pages",
