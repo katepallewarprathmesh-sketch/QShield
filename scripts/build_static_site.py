@@ -1,47 +1,67 @@
 #!/usr/bin/env python3
-"""Build the static Workbench demo site (GitHub Pages) from the real UI.
+"""Build the GitHub Pages site — the *real* QSHIELD engine in the browser.
 
-Outputs /tmp/qshield-site/index.html — a fully browser-only page whose
-analysis responses are *precomputed outputs of the real QSHIELD engine* on the
-bundled fixtures (captured via the live backend into scripts/static_demo_canned/).
+Unlike the old static demo (precomputed responses replayed to look live), the
+page built here runs the actual engine: a pinned, self-hosted Pyodide
+(CPython 3.12, v0.27.7) runtime plus the QSHIELD wheel built from this
+checkout. Every analysis the page serves — scan, compare, robustness probe,
+policy scoring, overview, policies — executes locally in the visitor's tab.
 
-Usage: python3 scripts/build_static_site.py
+  - nothing you paste leaves the machine (no network calls after page load)
+  - served 100% from this same origin: pyodide runtime, wheels and the
+    fixture corpus are all vendored into the Pages artifact (no CDN)
+  - the 417-circuit bundled corpus ships as vendor/fixtures.zip so Policy
+    Studio scoring runs on the real corpus in-browser
+
+AI Triage stays honest: a static page cannot hold a Sarvam API key, so the AI
+endpoints return precomputed outputs of the real engine + Sarvam AI on the
+bundled ancilla fixture — always labeled as such in the UI — or a clear error
+for anything else.
+
+Download integrity: the Pyodide core files are pinned by SHA256 below; the
+package wheels are verified against the pinned pyodide-lock.json (itself one
+of the pinned core files). Builds fail closed on any mismatch.
+
+Usage:
+    python3 scripts/build_static_site.py [--out dist-site] [--offline] [--skip-wheel]
 """
 
 from __future__ import annotations
 
+import argparse
+import hashlib
 import json
+import os
+import shutil
+import subprocess
 import sys
+import zipfile
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-CANNED = REPO / "scripts" / "static_demo_canned"
-OUT = Path("/tmp/qshield-site")
-
-sys.path.insert(0, str(REPO / "src"))
-from qshield.ui.page import WORKBENCH_HTML  # noqa: E402
-
-
-def js(obj) -> str:
-    return json.dumps(obj, ensure_ascii=False).replace("</", "<\\/")
-
-
-canned = {
-    "overview": json.loads((CANNED / "overview.json").read_text()),
-    "policies": json.loads((CANNED / "policies.json").read_text()),
-    "scan_ancilla": json.loads((CANNED / "scan_ancilla.json").read_text()),
-    "scan_bell": json.loads((CANNED / "scan_bell.json").read_text()),
-    "compare_eq": json.loads((CANNED / "compare_eq.json").read_text()),
-    "compare_diff": json.loads((CANNED / "compare_diff.json").read_text()),
-    "robustness_ancilla": json.loads((CANNED / "robustness_ancilla.json").read_text()),
-    "robustness_bell": json.loads((CANNED / "robustness_bell.json").read_text()),
-    "policy_full": json.loads((CANNED / "policy_full.json").read_text()),
-    "policy_60": json.loads((CANNED / "policy_60.json").read_text()),
-    "example": (CANNED / "ancilla_leakage.qasm").read_text(),
-    "ai_triage_ancilla": json.loads((CANNED / "ai_triage_ancilla.json").read_text()),
-    "ai_report_ancilla_hi": json.loads((CANNED / "ai_report_ancilla_hi-IN.json").read_text()),
-    "ai_report_ancilla_mr": json.loads((CANNED / "ai_report_ancilla_mr-IN.json").read_text()),
+CANNED_AI = {
+    "triage": REPO / "scripts" / "static_demo_canned" / "ai_triage_ancilla.json",
+    "report_hi": REPO / "scripts" / "static_demo_canned" / "ai_report_ancilla_hi-IN.json",
+    "report_mr": REPO / "scripts" / "static_demo_canned" / "ai_report_ancilla_mr-IN.json",
 }
+BOOTSTRAP = REPO / "scripts" / "site" / "bootstrap.js"
+FIXTURE_CORPUS = ("clean_circuits", "malicious_circuits")
+FIXTURES_ROOT = REPO / "tests" / "fixtures"
+
+PYODIDE_VERSION = "0.27.7"  # ships CPython 3.12.7, inside qshield's tested matrix (3.10-3.13)
+PYODIDE_BASE = f"https://cdn.jsdelivr.net/pyodide/v{PYODIDE_VERSION}/full/"
+# SHA256 of the Pyodide core files, measured 2026-11-16 from the release
+# distribution. Package wheels are verified against this lock file.
+PYODIDE_CORE = {
+    "pyodide.mjs": "04c052c815abb0bf2981fa38c2dfa58e3120ee5288c956df2b2a15e301782c5f",
+    "pyodide.asm.js": "6b4c90de5b7172873f04f21884d0e9d2274e305fe32116558fe3e4fbe3618d51",
+    "pyodide.asm.wasm": "a50dd1843f805a0b7c45b61037ee0d7b26dfe85efe0e18ef95a34ad24e401f5f",
+    "python_stdlib.zip": "16611534726e5d8ac2bd8f926410b2dcb8d6f49aa24913463533b457a2115c16",
+    "pyodide-lock.json": "9c45b916001a750f4102fc287494f3eab215909c7535c626a20db80fd6333e2c",
+}
+# Packages the engine needs (its only third-party imports): numpy, jinja2
+# (+ markupsafe), pyyaml. Hashes come from the pinned lock file.
+PYODIDE_PACKAGES = ("numpy", "jinja2", "markupsafe", "pyyaml")
 
 banner_css = """
 .demo-banner { background:#131f10; border-bottom:1px solid #2c4a1e; color:#b8e986; font-size:12px; padding:9px 18px; display:flex; gap:12px; align-items:center; justify-content:center; flex-wrap:wrap; text-align:center; }
@@ -50,90 +70,178 @@ banner_css = """
 """
 
 banner = """
-<div class="demo-banner" id="demo-banner"><span><b>STATIC DEMO</b> — runs entirely in your browser on <b>precomputed output of the real QSHIELD engine</b> over the bundled fixtures. For your own circuits: <code>git clone https://github.com/katepallewarprathmesh-sketch/QShield &amp;&amp; pip install -e . &amp;&amp; qshield ui</code></span><button onclick="document.getElementById('demo-banner').remove()" aria-label="dismiss">×</button></div>
+<div class="demo-banner" id="demo-banner"><span><b>REAL ENGINE</b> — the real QSHIELD engine runs in your browser (CPython via Pyodide, served from this same site). Nothing you paste leaves this tab. <span class="banner-note">loading… first load fetches ~18 MB once, cached afterwards</span> · on this static page the AI tab shows precomputed real outputs (labeled) — live AI runs locally. Full local experience: <code>git clone https://github.com/katepallewarprathmesh-sketch/QShield &amp;&amp; pip install -e . &amp;&amp; qshield ui</code></span><button onclick="document.getElementById('demo-banner').remove()" aria-label="dismiss">&times;</button></div>
 """
 
-shim = """
-<script>
-// ---- Static-demo shim: replaces the live API with precomputed engine output ----
-const __D = %s;
-function __norm(s) {
-  return (s || '').replace(/\\/\\*[^]*?\\*\\//g, '').replace(/\\/\\/[^\\n]*/g, '').replace(/\\s+/g, ' ').trim();
-}
-const __BELL = __norm('OPENQASM 2.0; include "qelib1.inc"; qreg q[2]; creg c[2]; h q[0]; cx q[0],q[1]; measure q -> c;');
-const __XBELL = __norm('OPENQASM 2.0; include "qelib1.inc"; qreg q[2]; creg c[2]; x q[0]; h q[0]; cx q[0],q[1]; measure q -> c;');
-const __ANC = __norm('OPENQASM 2.0; include "qelib1.inc"; qreg q[3]; creg c[3]; cx q[0], q[2]; h q[0]; cx q[0], q[1]; measure q -> c;');
-function __kind(src) {
-  const n = __norm(src);
-  if (n === __ANC) return 'ancilla';
-  if (n === __BELL) return 'bell';
-  if (n === __XBELL) return 'xbell';
-  return null;
-}
-const __clone = (o) => JSON.parse(JSON.stringify(o));
-function __limitation(what) {
-  return new Error('Static demo: ' + what + ' is only available for the bundled examples here. Full analysis runs locally — git clone https://github.com/katepallewarprathmesh-sketch/QShield && pip install -e . && qshield ui');
-}
-async function api(path) {
-  const p = String(path).split('?')[0];
-  if (p === '/api/overview') return __clone(__D.overview);
-  if (p === '/api/policies') return __clone(__D.policies);
-  if (p === '/api/example') return { qasm: __D.example };
-  if (p === '/api/ai/status') return { configured: false, disclaimer: 'AI-advisory (Sarvam AI, cloud) — verify against the evidence. LLM output is not a verdict. (static demo: AI is off)' };
-  if (p === '/api/ai/speak') throw __limitation('speech synthesis');
-  if (p === '/api/ai/listen') throw __limitation('speech transcription');
-  throw __limitation('this endpoint');
-}
-async function apiPost(path, body) {
-  if (path === '/api/scan') {
-    const k = __kind(body.qasm);
-    if (k === 'ancilla') return __clone(__D.scan_ancilla);
-    if (k === 'bell') return __clone(__D.scan_bell);
-    throw __limitation('scanning arbitrary circuits');
-  }
-  if (path === '/api/compare') {
-    const ka = __kind(body.a), kb = __kind(body.b);
-    if (ka && kb) {
-      if (ka === kb) return __clone(__D.compare_eq);
-      return __clone(__D.compare_diff);
-    }
-    throw __limitation('comparing arbitrary circuit pairs');
-  }
-  if (path === '/api/robustness') {
-    const k = __kind(body.qasm);
-    if (k === 'ancilla') return __clone(__D.robustness_ancilla);
-    if (k === 'bell') return __clone(__D.robustness_bell);
-    throw __limitation('probing arbitrary circuits');
-  }
-  if (path === '/api/ai/report') {
-    const k = __kind(body.qasm);
-    if (k === 'ancilla' && body.to === 'hi-IN') return { ...__clone(__D.ai_report_ancilla_hi), note: '(static demo: precomputed by the real engine + Sarvam-Translate on the bundled fixture)' };
-    if (k === 'ancilla' && body.to === 'mr-IN') return { ...__clone(__D.ai_report_ancilla_mr), note: '(static demo: precomputed by the real engine + Sarvam-Translate on the bundled fixture)' };
-    throw __limitation('localized reports for arbitrary circuits/languages');
-  }
-  if (path === '/api/ai/speak' || path === '/api/ai/listen') throw __limitation('cloud voice features (run locally with SARVAM_API_KEY)');
-  if (path === '/api/ai/triage') {
-    const k = __kind(body.qasm);
-    if (k === 'ancilla') return { ...__clone(__D.ai_triage_ancilla), note: '(static demo: reply was precomputed by the real engine + Sarvam AI on the bundled fixture)' };
-    throw __limitation('AI triage of arbitrary circuits');
-  }
-  if (path === '/api/policy-eval') {
-    const src = body.sample ? __D.policy_60 : __D.policy_full;
-    const sel = new Set(body.ids || []);
-    const per_policy = src.per_policy.filter((r) => sel.has(r.id));
-    return { per_policy, any_policy: src.any_policy, corpus: src.corpus,
-      note: (src.note || 'Fixture-corpus rates — not field rates.') + ' (static demo: precomputed for the full builtin pack)' };
-  }
-  throw __limitation('this endpoint');
-}
-</script>
-""" % js(canned)
 
-html = WORKBENCH_HTML
-assert html.count("</style>") == 1 and html.count("<body>") == 1 and html.count("</body>") == 1
-html = html.replace("</style>", banner_css + "</style>", 1)
-html = html.replace("<body>", "<body>\n" + banner, 1)
-html = html.replace("</body>", shim + "</body>", 1)
-OUT.mkdir(parents=True, exist_ok=True)
-(OUT / "index.html").write_text(html)
-print(f"built {OUT/'index.html'} ({len(html)} bytes)")
+def _sha256(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def _download(url: str) -> bytes:
+    import urllib.request
+
+    with urllib.request.urlopen(url, timeout=600) as response:  # noqa: S310 — URL is our pinned https PYODIDE_BASE constant
+        return response.read()
+
+
+def _vendor_pyodide(vendor: Path, *, offline: bool, fresh: bool) -> list[Path]:
+    target = vendor / "pyodide"
+    target.mkdir(parents=True, exist_ok=True)
+    assets: list[Path] = []
+
+    if offline:
+        missing = [name for name in PYODIDE_CORE if not (target / name).exists()]
+        if missing:
+            raise RuntimeError(f"--offline but missing core files in {target}: {missing}")
+        for name in PYODIDE_CORE:
+            assets.append(target / name)
+    else:
+        for name, expected in PYODIDE_CORE.items():
+            if not fresh and (target / name).exists() and _sha256((target / name).read_bytes()) == expected:
+                assets.append(target / name)
+                continue
+            data = _download(PYODIDE_BASE + name)
+            got = _sha256(data)
+            if got != expected:
+                raise RuntimeError(f"sha256 mismatch for {name}: {got} != {expected} — refusing to build")
+            (target / name).write_bytes(data)
+            assets.append(target / name)
+
+    lock = json.loads((target / "pyodide-lock.json").read_text())
+    for name in PYODIDE_PACKAGES:
+        info = lock["packages"].get(name)
+        if info is None:
+            raise RuntimeError(f"package {name!r} not found in pyodide-lock.json")
+        fname, expected = info["file_name"], info["sha256"]
+        if offline:
+            candidate = target / fname
+            if not candidate.exists():
+                raise RuntimeError(f"--offline but missing package wheel: {fname}")
+            assets.append(candidate)
+            continue
+        if not fresh and (target / fname).exists() and _sha256((target / fname).read_bytes()) == expected:
+            assets.append(target / fname)
+            continue
+        data = _download(PYODIDE_BASE + fname)
+        got = _sha256(data)
+        if got != expected:
+            raise RuntimeError(f"sha256 mismatch for {fname}: {got} != {expected} — refusing to build")
+        (target / fname).write_bytes(data)
+        assets.append(target / fname)
+    return assets
+
+
+def _build_wheel(vendor: Path, *, skip: bool) -> Path:
+    existing = list(vendor.glob("qshield-*.whl"))
+    if skip and existing:
+        return existing[0]
+    for stale in existing:
+        stale.unlink()
+    cmd = [sys.executable, "-m", "pip", "wheel", "--no-deps", "--wheel-dir", str(vendor), str(REPO)]
+    print("+", " ".join(cmd))
+    subprocess.run(cmd, check=True)  # noqa: S603 — fixed argv, no shell, sys.executable
+    wheels = list(vendor.glob("qshield-*.whl"))
+    if len(wheels) != 1:
+        raise RuntimeError(f"expected exactly one qshield wheel, found {wheels}")
+    target = vendor / "qshield.whl"
+    wheels[0].rename(target)
+    return target
+
+
+def _zip_fixtures(vendor: Path) -> Path:
+    out = vendor / "fixtures.zip"
+    if out.exists():
+        out.unlink()
+    written = 0
+    with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as zf:
+        for corpus in FIXTURE_CORPUS:
+            for dirpath, _dirs, files in os.walk(FIXTURES_ROOT / corpus):
+                for fname in sorted(files):
+                    if not fname.endswith(".qasm"):
+                        continue
+                    full = Path(dirpath) / fname
+                    arc = f"{corpus}/{full.relative_to(FIXTURES_ROOT / corpus)}"
+                    info = zipfile.ZipInfo(arc, date_time=(1980, 1, 1, 0, 0, 0))
+                    info.external_attr = 0o644 << 16
+                    zf.writestr(info, full.read_bytes(), zipfile.ZIP_DEFLATED)
+                    written += 1
+    if written != 417:
+        raise RuntimeError(f"expected 417 fixture .qasm files, archived {written}")
+    return out
+
+
+def _canned_ai_json() -> str:
+    canned = {key: json.loads(path.read_text()) for key, path in CANNED_AI.items()}
+    return json.dumps(canned, ensure_ascii=False).replace("</", "<\\/")
+
+
+def _render_index() -> str:
+    sys.path.insert(0, str(REPO / "src"))
+    from qshield.ui.page import WORKBENCH_HTML
+
+    html = WORKBENCH_HTML
+    for needle in ("</style>", "<body>", "</body>"):
+        if html.count(needle) != 1:
+            raise RuntimeError(f"WORKBENCH_HTML anchor {needle!r} not unique/found")
+    html = html.replace("</style>", banner_css + "</style>", 1)
+    html = html.replace("<body>", "<body>\n" + banner, 1)
+    inject = (
+        f"<script>window.__QSHIELD_AI_CANNED__ = {_canned_ai_json()};</script>\n"
+        '<script src="./bootstrap.js"></script>\n'
+    )
+    # Inject BEFORE the page's inline script so window.fetch is already
+    # intercepted when the page fires its initial /api/* calls.
+    marker = "<script>\n\"use strict\";"
+    if html.count(marker) != 1:
+        raise RuntimeError("main inline script marker not unique/found in WORKBENCH_HTML")
+    return html.replace(marker, inject + marker, 1)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--out", type=Path, default=REPO / "dist-site", help="output directory")
+    parser.add_argument("--offline", action="store_true", help="reuse vendored downloads in --out (no network)")
+    parser.add_argument("--skip-wheel", action="store_true", help="reuse the existing vendored qshield wheel")
+    parser.add_argument("--incremental", action="store_true", help="keep already-verified downloads (default repacks)")
+    args = parser.parse_args()
+
+    out: Path = args.out
+    vendor = out / "vendor"
+    if out.exists() and not args.offline:
+        shutil.rmtree(out)
+    out.mkdir(parents=True, exist_ok=True)
+
+    assets = _vendor_pyodide(vendor, offline=args.offline, fresh=not args.incremental)
+    wheel = _build_wheel(vendor, skip=args.skip_wheel)
+    fixtures = _zip_fixtures(vendor)
+    (out / "bootstrap.js").write_bytes(BOOTSTRAP.read_bytes())
+    (out / "index.html").write_text(_render_index(), encoding="utf-8")
+
+    import qshield
+
+    manifest = {
+        "qshield_version": qshield.__version__,
+        "pyodide_version": PYODIDE_VERSION,
+        "engine": "real (Pyodide CPython, self-hosted) — no precomputed analysis responses",
+        "ai": "precomputed real outputs on the ancilla fixture, labeled; live AI unavailable on static pages",
+        "files": [],
+    }
+    lines: list[str] = []
+    for fpath in sorted(out.rglob("*")):
+        if not fpath.is_file() or fpath.name in ("manifest.json", "SHA256SUMS"):
+            continue
+        digest = _sha256(fpath.read_bytes())
+        lines.append(f"{digest}  {fpath.relative_to(out)}")
+        manifest["files"].append({"path": str(fpath.relative_to(out)), "sha256": digest, "bytes": fpath.stat().st_size})
+    (out / "SHA256SUMS").write_text("\n".join(lines) + "\n")
+    (out / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+
+    total = sum(f.stat().st_size for f in out.rglob("*") if f.is_file())
+    print(f"built {out} — {len(assets)} vendored pyodide assets, wheel={wheel.name}, "
+          f"fixtures={fixtures.stat().st_size}B, total ≈ {total / 1e6:.1f} MB")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
