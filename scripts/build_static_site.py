@@ -29,6 +29,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 import os
@@ -176,11 +177,28 @@ def _canned_ai_json() -> str:
     return json.dumps(canned, ensure_ascii=False).replace("</", "<\\/")
 
 
-def _render_index() -> str:
-    sys.path.insert(0, str(REPO / "src"))
-    from qshield.ui.page import WORKBENCH_HTML
+def _load_workbench_html() -> str:
+    """Extract WORKBENCH_HTML from src/qshield/ui/page.py without importing it.
 
-    html = WORKBENCH_HTML
+    The page module lives next to heavy engine modules that import numpy at
+    module scope; the static build must not require the engine deps to be
+    importable in the build environment, so parse the constant with `ast`
+    instead. Fails closed on anything it does not understand.
+    """
+    src = (REPO / "src" / "qshield" / "ui" / "page.py").read_text(encoding="utf-8")
+    tree = ast.parse(src)
+    for node in tree.body:
+        if not isinstance(node, ast.Assign):
+            continue
+        if any(isinstance(t, ast.Name) and t.id == "WORKBENCH_HTML" for t in node.targets):
+            if isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
+                return node.value.value
+            raise RuntimeError("WORKBENCH_HTML is not a plain string constant")
+    raise RuntimeError("WORKBENCH_HTML not found in page.py")
+
+
+def _render_index() -> str:
+    html = _load_workbench_html()
     for needle in ("</style>", "<body>", "</body>"):
         if html.count(needle) != 1:
             raise RuntimeError(f"WORKBENCH_HTML anchor {needle!r} not unique/found")
