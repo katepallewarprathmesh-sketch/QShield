@@ -39,7 +39,7 @@ dependencies = [
 qiskit = ["qiskit>=1.0", "qiskit-aer>=0.13"]
 cirq = ["cirq-core>=1.3"]
 pennylane = ["pennylane>=0.33"]
-plugins = ["wasmtime>=25,<40"]
+plugins = ["wasmtime>=44,<51"]
 all-frameworks = ["qshield[qiskit,cirq,pennylane]"]
 
 # Formal verification

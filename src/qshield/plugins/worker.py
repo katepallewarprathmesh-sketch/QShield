@@ -59,37 +59,29 @@ def execute(
     if "_start" not in {item.name for item in module.exports}:
         raise PluginExecutionError("WASI plugin must export _start")
 
-    stdout = bytearray()
-    stderr = bytearray()
-    output_overflow = False
-    stderr_overflow = False
-
-    def capture_stdout(chunk: bytes) -> int:
-        nonlocal output_overflow
-        if len(stdout) + len(chunk) > limits.output_bytes:
-            output_overflow = True
-            return 0
-        stdout.extend(chunk)
-        return len(chunk)
-
-    def capture_stderr(chunk: bytes) -> int:
-        nonlocal stderr_overflow
-        if len(stderr) + len(chunk) > limits.output_bytes:
-            stderr_overflow = True
-            return 0
-        stderr.extend(chunk)
-        return len(chunk)
-
     wasi = wasmtime.WasiConfig()
     wasi.argv = [manifest.plugin_id]
     wasi.env = []
     with tempfile.TemporaryDirectory(prefix="qshield-wasi-") as temp_dir:
         input_path = Path(temp_dir) / "input.json"
+        stdout_path = Path(temp_dir) / "stdout.json"
+        stderr_path = Path(temp_dir) / "stderr.log"
         input_path.write_bytes(input_bytes)
         wasi.stdin_file = str(input_path)
-        wasi.stdout_custom = capture_stdout
-        wasi.stderr_custom = capture_stderr
+        # File-backed output avoids invoking Python callbacks from Wasmtime's
+        # Tokio worker threads. The isolated worker's file-size limit caps both
+        # files while keeping result capture bounded.
+        wasi.stdout_file = str(stdout_path)
+        wasi.stderr_file = str(stderr_path)
         try:
+            try:
+                import resource
+            except ImportError:  # pragma: no cover - resource is Unix-only
+                raise PluginExecutionError(
+                    "bounded plugin output is unavailable on this platform"
+                ) from None
+            output_limit = limits.output_bytes + 1
+            resource.setrlimit(resource.RLIMIT_FSIZE, (output_limit, output_limit))
             store = wasmtime.Store(engine)
             store.set_limits(
                 memory_size=limits.memory_bytes,
@@ -113,10 +105,10 @@ def execute(
             finally:
                 timer.cancel()
         except Exception as exc:
-            if output_overflow or stderr_overflow:
-                raise PluginLimitError(f"plugin output exceeded {limits.output_bytes} bytes") from exc
             message = str(exc)
             lowered = message.lower()
+            if "file too large" in lowered or "file too big" in lowered:
+                raise PluginLimitError(f"plugin output exceeded {limits.output_bytes} bytes") from exc
             if "fuel" in lowered or "epoch deadline" in lowered or "wasm trap: interrupt" in lowered:
                 raise PluginLimitError(f"plugin exceeded its fuel/time limit: {message}") from exc
             if "memory" in lowered or "resource limit" in lowered:
@@ -125,13 +117,15 @@ def execute(
         finally:
             wasi.close()
 
-    if output_overflow or stderr_overflow:
-        raise PluginLimitError(f"plugin output exceeded {limits.output_bytes} bytes")
-    if stderr:
-        diagnostic = bytes(stderr).decode("utf-8", errors="replace").strip()
-        if diagnostic:
-            raise PluginExecutionError(f"plugin wrote to stderr: {diagnostic[:2_000]}")
-    return bytes(stdout)
+        stdout = stdout_path.read_bytes() if stdout_path.exists() else b""
+        stderr = stderr_path.read_bytes() if stderr_path.exists() else b""
+        if len(stdout) > limits.output_bytes or len(stderr) > limits.output_bytes:
+            raise PluginLimitError(f"plugin output exceeded {limits.output_bytes} bytes")
+        if stderr:
+            diagnostic = stderr.decode("utf-8", errors="replace").strip()
+            if diagnostic:
+                raise PluginExecutionError(f"plugin wrote to stderr: {diagnostic[:2_000]}")
+        return stdout
 
 
 def main() -> int:
