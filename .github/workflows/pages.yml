@@ -56,6 +56,7 @@ jobs:
           grep -q 'bootstrap.js' dist-site/index.html
           test -f dist-site/vendor/qshield.whl
           test -f dist-site/vendor/fixtures.zip
+          grep -q '"corpus_available": __srv._fixture_corpus_available()' scripts/site/bootstrap.js
           test "$(find dist-site/vendor/pyodide -type f | wc -l)" -ge 9
           ! grep -qi 'static demo' dist-site/index.html
           python scripts/check_public_docs_boundary.py --site dist-site
