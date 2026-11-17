@@ -3,6 +3,21 @@
 All notable changes to QSHIELD. Historical spec annotations live in
 `docs/spec/QSHIELD.md`; this file records released versions.
 
+## [1.3.0] — Workbench security and UX
+
+### Added
+- Non-loopback Workbench binds now require the explicit `--allow-remote` flag and print a warning that the server has no built-in authentication. Docker opts in inside the container; README guidance keeps host publishing on loopback.
+- Policy Studio reports when the fixture corpus is available and gives install-path guidance when it is missing.
+- Finding search/severity filters and improved keyboard-accessible tab navigation.
+
+### Changed
+- Workbench responses now use a per-response CSP nonce for scripts and security headers. Compare UI wording accurately describes dense-unitary distance rather than claiming proof.
+- Simplified the Workbench by removing trust-boundary and AI cloud disclosure boxes and related copy.
+
+### Fixed
+- Runtime proxy closes upstream HTTP error responses after reading them.
+- Corrected the QASM3 test's regex escape warning.
+
 ## [1.2.0] — 2026-11-16 · Real-engine Pages site + CI hardening
 
 ### Added

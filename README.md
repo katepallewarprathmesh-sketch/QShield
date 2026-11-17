@@ -35,7 +35,7 @@ pip install 'qshield[qiskit,cirq]'     # + framework parsers (qiskit-aer used by
 pip install 'qshield[formal]'          # + ZX-calculus verification (PyZX, Z3)
 ```
 
-Docker: `docker pull ghcr.io/katepallewarprathmesh-sketch/qshield:1.2.0` (or build from source: `docker build -t qshield .`). Run it with `docker run --rm -p 127.0.0.1:8765:8765 qshield` to keep the unauthenticated Workbench available only on host loopback. The current source Dockerfile opts into a non-loopback bind inside the container; the published 1.2.0 image predates that guard, so keep its host port mapping on loopback too. Do not publish the Workbench beyond localhost without network restrictions and an authenticated TLS proxy. For source installs, a non-loopback bind requires `qshield ui --host 0.0.0.0 --allow-remote` and prints a security warning.
+Docker: `docker pull ghcr.io/katepallewarprathmesh-sketch/qshield:1.3.0` (or build from source: `docker build -t qshield .`). Run it with `docker run --rm -p 127.0.0.1:8765:8765 qshield` to keep the unauthenticated Workbench available only on host loopback. The container binds internally with an explicit non-loopback opt-in; keep the host port mapping on loopback. Do not publish the Workbench beyond localhost without network restrictions and an authenticated TLS proxy. For source installs, a non-loopback bind requires `qshield ui --host 0.0.0.0 --allow-remote` and prints a security warning.
 
 From source: `git clone https://github.com/katepallewarprathmesh-sketch/QShield.git && cd QShield && pip install -e '.[dev]'`
 
@@ -103,7 +103,7 @@ Advisory only, never a verdict — the offline core never touches the network; `
 
 ## Status & license
 
-**v1.2.0** — software-only. See `CHANGELOG.md` for release notes.
+**v1.3.0** — software-only. See `CHANGELOG.md` for release notes.
 Apache 2.0 — see [LICENSE](LICENSE). Contributions (signatures, analyzers, corpus circuits) welcome.
 
 ## Development
