@@ -66,6 +66,36 @@ results = qshield.scan("circuit.qasm")          # quick static scan
 print(results.is_clean, results.summary.total)
 ```
 
+### Pre-commit hook
+
+Install `pre-commit`, then add QSHIELD to `.pre-commit-config.yaml`. Pin `rev` to a QSHIELD commit or release that contains the hook (the v1.3.0 tag predates it):
+
+```yaml
+repos:
+  - repo: https://github.com/katepallewarprathmesh-sketch/QShield
+    rev: <qshield-commit-or-tag>
+    hooks:
+      - id: qshield-scan
+        # Optional: default threshold is high.
+        args: [--fail-on, medium]
+```
+
+For a source checkout with QSHIELD installed in the active environment, the equivalent local hook is:
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: qshield-scan
+        name: QSHIELD OpenQASM scan
+        entry: python -m qshield.pre_commit
+        language: system
+        types: [file]
+        files: '(?i)\.(qasm|qasm2|qasm3)$'
+```
+
+Then run `pre-commit install` and `pre-commit run --all-files`. The hook scans staged `.qasm`, `.qasm2`, and `.qasm3` files; parse errors fail closed. It runs static and supply-chain checks and blocks findings at or above `--fail-on` (default: `high`).
+
 ## Optional AI assistance (cloud, advisory)
 
 ```bash

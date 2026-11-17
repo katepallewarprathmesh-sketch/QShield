@@ -1,0 +1,9 @@
+- id: qshield-scan
+  name: QSHIELD OpenQASM scan
+  description: Scan OpenQASM files and fail on findings at or above the configured severity.
+  entry: python -m qshield.pre_commit
+  language: python
+  types: [file]
+  files: '(?i)\.(qasm|qasm2|qasm3)$'
+  require_serial: true
+  minimum_pre_commit_version: '3.0.0'
