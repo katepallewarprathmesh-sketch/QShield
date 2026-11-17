@@ -1,6 +1,9 @@
+import runpy
 from pathlib import Path
 
-from scripts.build_static_site import _render_index
+_render_index = runpy.run_path(
+    str(Path(__file__).resolve().parents[2] / "scripts" / "build_static_site.py")
+)["_render_index"]
 
 
 def test_index_can_reference_a_content_hashed_bootstrap():
