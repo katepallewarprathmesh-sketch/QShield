@@ -11,8 +11,8 @@
     },
     {
       "path": "index.html",
-      "sha256": "77cfb04d5eb00e7b200ff326e46af8250e14d107b9353aa730fad637be71c3b5",
-      "bytes": 59138
+      "sha256": "847ed99ee817cf9cea35efbbf61915b97df9deb08487a26dc4ef60ddc508556a",
+      "bytes": 56366
     },
     {
       "path": "vendor/fixtures.zip",
@@ -66,8 +66,8 @@
     },
     {
       "path": "vendor/qshield.whl",
-      "sha256": "7ab98b015496ebf0a341817ccdf7becb1fd529097ea4fb55a833e46ccd0d22da",
-      "bytes": 174013
+      "sha256": "65d774a5ff8069e97f077d36c742b92ec0b900b4ba83a6b3250180367c81a0ec",
+      "bytes": 173081
     }
   ]
 }
