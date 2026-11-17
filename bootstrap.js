@@ -173,7 +173,10 @@
         });
       }
       if (path === '/api/policies') {
-        return pyJson('{"policies": [p.to_dict() for p in __policies()]}', {});
+        return pyJson(
+          '{"policies": [p.to_dict() for p in __policies()], "corpus_available": __srv._fixture_corpus_available()}',
+          {}
+        );
       }
       if (path === '/api/example') {
         var name = parsed.searchParams.get('name') || 'ancilla_leakage';

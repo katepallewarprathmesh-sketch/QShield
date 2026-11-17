@@ -6,8 +6,8 @@
   "files": [
     {
       "path": "bootstrap.js",
-      "sha256": "bec582499905511d279a870c671eef90f49f7e54521241d6dc6e080afc2fabd3",
-      "bytes": 13019
+      "sha256": "38017af051f8ac89f792e71f3cd5c2c712c6eccf505b9cc20417de0ebdc45b59",
+      "bytes": 13104
     },
     {
       "path": "index.html",
@@ -71,7 +71,7 @@
     },
     {
       "path": "vendor/qshield.whl",
-      "sha256": "f99bce333a6099037599fff139c9f591cdb227fe266bbd4b94ee452c6e7fcfe8",
+      "sha256": "a2242e8134bc8bf0a594281a81f1fb5229a7677ea6b9b995785ce07aa09f4261",
       "bytes": 332603
     }
   ]
