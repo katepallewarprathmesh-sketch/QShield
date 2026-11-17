@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import threading
 import urllib.error
 import urllib.request
@@ -52,12 +53,30 @@ def _post_raw(url, raw: bytes):
         with urllib.request.urlopen(req, timeout=15) as r:
             return r.status, r.read().decode()
     except urllib.error.HTTPError as e:
-        return e.code, e.read().decode()
+        with e:
+            return e.code, e.read().decode()
 
 
 def test_page_serves(server):
-    status, body = _get(server + "/")
+    with urllib.request.urlopen(server + "/", timeout=15) as response:
+        status = response.status
+        body = response.read().decode()
+        headers = response.headers
     assert status == 200 and "QSHIELD" in body and "Workbench" in body
+    csp = headers["Content-Security-Policy"]
+    nonce = re.search(r'<script nonce="([^"]+)"', body)
+    assert nonce and f"script-src 'nonce-{nonce.group(1)}'" in csp
+    assert "unsafe-inline" not in csp.split("script-src", 1)[1].split(";", 1)[0]
+    assert "frame-ancestors 'none'" in csp
+    assert headers["X-Frame-Options"] == "DENY"
+    assert headers["Referrer-Policy"] == "no-referrer"
+    assert re.search(r"<[^>]+\bon[a-z]+\s*=", body, flags=re.IGNORECASE) is None
+    assert 'role="tablist"' in body and "Know your trust boundary" in body
+    assert "OFFLINE · NO NETWORK" not in body
+    with urllib.request.urlopen(server + "/", timeout=15) as second_response:
+        second_body = second_response.read().decode()
+    second_nonce = re.search(r'<script nonce="([^"]+)"', second_body)
+    assert second_nonce and second_nonce.group(1) != nonce.group(1)
 
 
 def test_overview_and_policies(server):

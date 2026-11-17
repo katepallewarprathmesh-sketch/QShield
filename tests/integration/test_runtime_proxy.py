@@ -101,7 +101,8 @@ def _post_json(url, payload, headers=None):
         with urllib.request.urlopen(req, timeout=5.0) as resp:  # noqa: S310 - test client for a local synthetic upstream
             return resp.status, dict(resp.headers), resp.read()
     except urllib.error.HTTPError as exc:
-        return exc.code, dict(exc.headers), exc.read()
+        with exc:
+            return exc.code, dict(exc.headers), exc.read()
 
 
 def _get(url):
@@ -109,7 +110,8 @@ def _get(url):
         with urllib.request.urlopen(url, timeout=5.0) as resp:  # noqa: S310 - test client for a local synthetic upstream
             return resp.status, dict(resp.headers), resp.read()
     except urllib.error.HTTPError as exc:
-        return exc.code, dict(exc.headers), exc.read()
+        with exc:
+            return exc.code, dict(exc.headers), exc.read()
 
 
 def _job_submit(circuit_qasm=BELL_MEAS, shots=200):
@@ -372,7 +374,8 @@ class TestProxyUncoveredBranches:
                     with urllib.request.urlopen(req, timeout=5.0) as resp:  # noqa: S310 - test client for a local synthetic upstream
                         assert resp.status in (200, 404, 405)
                 except urllib.error.HTTPError as exc:
-                    assert exc.code in (200, 404, 405)
+                    with exc:
+                        assert exc.code in (200, 404, 405)
             req = urllib.request.Request(f"http://127.0.0.1:{port}/jobs", method="HEAD")
             with urllib.request.urlopen(req, timeout=5.0) as resp:  # noqa: S310 - test client for a local synthetic upstream
                 assert resp.status in (200, 404, 405)

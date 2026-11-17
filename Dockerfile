@@ -1,6 +1,6 @@
 # QSHIELD Workbench — self-hostable container (offline by default).
 #   docker build -t qshield .
-#   docker run --rm -p 8765:8765 qshield        # http://localhost:8765
+#   docker run --rm -p 127.0.0.1:8765:8765 qshield  # local-only: http://127.0.0.1:8765
 FROM python:3.12-slim
 WORKDIR /app
 

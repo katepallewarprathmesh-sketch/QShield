@@ -200,9 +200,10 @@ def make_handler(config: ProxyConfig, router: AlertRouter, state: ProxyState) ->
                     resp_body = resp.read()
             except urllib.error.HTTPError as exc:
                 # upstream answered with an error status — that is a valid response
-                status_code = exc.code
-                resp_headers = dict(exc.headers.items()) if exc.headers else {}
-                resp_body = exc.read()
+                with exc:
+                    status_code = exc.code
+                    resp_headers = dict(exc.headers.items()) if exc.headers else {}
+                    resp_body = exc.read()
             except (urllib.error.URLError, TimeoutError, ConnectionError, OSError) as exc:
                 self._send_json(502, {"error": {"code": "qshield_upstream_unavailable",
                                                 "detail": str(exc)}})

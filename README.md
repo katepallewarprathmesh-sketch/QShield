@@ -35,7 +35,7 @@ pip install 'qshield[qiskit,cirq]'     # + framework parsers (qiskit-aer used by
 pip install 'qshield[formal]'          # + ZX-calculus verification (PyZX, Z3)
 ```
 
-Docker: `docker pull ghcr.io/katepallewarprathmesh-sketch/qshield:1.2.0` (or build from source: `docker build -t qshield .`).
+Docker: `docker pull ghcr.io/katepallewarprathmesh-sketch/qshield:1.2.0` (or build from source: `docker build -t qshield .`). Run it with `docker run --rm -p 127.0.0.1:8765:8765 qshield` to keep the unauthenticated Workbench bound to host loopback. Protect it with network restrictions and an authenticated TLS proxy before exposing it beyond localhost.
 
 From source: `git clone https://github.com/katepallewarprathmesh-sketch/QShield.git && cd QShield && pip install -e '.[dev]'`
 

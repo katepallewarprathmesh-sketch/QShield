@@ -2,6 +2,7 @@
 
 Security properties (by construction, not configuration):
 * binds 127.0.0.1 by default; 0.0.0.0 only behind an explicit --host flag
+* has no built-in authentication; protect it before exposing it beyond localhost
 * never executes uploaded content — QASM is parsed, never run
 * 8 MiB request body cap; JSON in / JSON out; no shell, no filesystem writes
 * zero outbound network calls — EXCEPT the opt-in `/api/ai/*` endpoints, which
@@ -12,6 +13,7 @@ from __future__ import annotations
 
 import json
 import os
+import secrets
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
@@ -88,7 +90,7 @@ def _compare(a_src: str, b_src: str, engine: str) -> dict[str, Any]:
     if ua is not None and ub is not None and ua.shape == ub.shape:
         dist = float(np.linalg.norm(ua - ub))
         payload["verdict"] = "EQUIVALENT" if dist < 1e-6 else "DIFFERENT"
-        payload["detail"] = f"Exact unitary distance ‖ΔU‖ = {dist:.3e} (proof for ≤12 qubits)"
+        payload["detail"] = f"Dense-unitary distance ‖ΔU‖ = {dist:.3e} (threshold 1e-6; ≤12 qubits)"
         return payload
     if a.num_qubits <= 12 and b.num_qubits <= 12:
         payload["verdict"] = "UNDECIDED"
@@ -126,12 +128,23 @@ class WorkbenchHandler(BaseHTTPRequestHandler):
     server_version = f"QSHIELD/{__version__}"
 
     # -- plumbing ------------------------------------------------------
-    def _send(self, code: int, body: bytes, content_type: str = "application/json") -> None:
+    def _send(
+        self,
+        code: int,
+        body: bytes,
+        content_type: str = "application/json",
+        headers: dict[str, str] | None = None,
+    ) -> None:
         self.send_response(code)
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("X-Frame-Options", "DENY")
+        self.send_header("Referrer-Policy", "no-referrer")
+        self.send_header("Permissions-Policy", "camera=(), microphone=(self)")
+        for name, value in (headers or {}).items():
+            self.send_header(name, value)
         self.end_headers()
         self.wfile.write(body)
 
@@ -159,7 +172,27 @@ class WorkbenchHandler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path, qs = parsed.path, parse_qs(parsed.query)
         if path == "/":
-            self._send(200, WORKBENCH_HTML.encode(), "text/html; charset=utf-8")
+            nonce = secrets.token_urlsafe(18)
+            page = WORKBENCH_HTML.replace("__CSP_NONCE__", nonce)
+            policy = (
+                "default-src 'none'; "
+                f"script-src 'nonce-{nonce}'; "
+                "style-src 'self' 'unsafe-inline'; "
+                "img-src 'self' data:; "
+                "connect-src 'self'; "
+                "media-src 'self' blob:; "
+                "font-src 'self'; "
+                "base-uri 'none'; "
+                "form-action 'self'; "
+                "frame-ancestors 'none'; "
+                "object-src 'none'"
+            )
+            self._send(
+                200,
+                page.encode(),
+                "text/html; charset=utf-8",
+                {"Content-Security-Policy": policy},
+            )
         elif path == "/api/overview":
             self._json(
                 200,

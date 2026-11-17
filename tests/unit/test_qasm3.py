@@ -50,7 +50,7 @@ def test_dollar_addressing_single_register():
 
 
 def test_dollar_addressing_multiple_registers_rejected():
-    with pytest.raises(QASMParseError, match="\$i"):
+    with pytest.raises(QASMParseError, match=r"\$i"):
         parse_qasm("OPENQASM 3.0;\nqubit[1] q;\nqubit[1] r;\nh $0;\n")
 
 

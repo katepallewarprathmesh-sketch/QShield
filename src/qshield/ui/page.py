@@ -96,15 +96,25 @@ textarea, select {
   width: 100%; background: #0b121d; color: var(--text); border: 1px solid var(--line); border-radius: 10px;
   font: 12.5px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; padding: 10px 12px; resize: vertical;
 }
+input[type="search"] { width:100%; min-width:180px; background:#0b121d; color:var(--text); border:1px solid var(--line); border-radius:9px; font:12px ui-monospace,Menlo,monospace; padding:9px 11px; }
 textarea { min-height: 170px; }
-textarea:focus, select:focus { outline: none; border-color: var(--acc); box-shadow: 0 0 0 3px rgba(45,212,191,.14); }
+textarea:focus, select:focus, input[type="search"]:focus { outline: none; border-color: var(--acc); box-shadow: 0 0 0 3px rgba(45,212,191,.14); }
 label.small { font-size: 10.5px; color: var(--faint); letter-spacing: .1em; text-transform: uppercase; margin: 8px 0 6px; display:block; }
 .btn { cursor: pointer; border: 0; border-radius: 9px; padding: 11px 18px; font: 700 13px system-ui; letter-spacing: .03em;
        color: #062a24; background: var(--acc); transition: .15s; }
 .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(45,212,191,.35); }
 .btn.secondary { background: transparent; color: var(--acc2); border: 1px solid var(--line2); }
 .btn.secondary:hover { border-color: var(--acc2); box-shadow: none; }
+.btn:disabled { cursor: not-allowed; opacity: .58; transform: none; box-shadow: none; }
 .row { display: flex; gap: 10px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+.hero { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; margin:4px 0 18px; }
+.hero h1 { margin:0; color:#fff; font-size:clamp(23px,3vw,32px); line-height:1.15; letter-spacing:-.03em; }
+.hero p { margin:7px 0 0; color:var(--dim); max-width:680px; font-size:13px; }
+.eyebrow { color:var(--acc)!important; font:700 10px/1.4 ui-monospace,Menlo,monospace!important; letter-spacing:.14em; text-transform:uppercase; }
+.trust-banner { display:grid; grid-template-columns:minmax(150px,.35fr) 1fr; gap:12px; margin:0 0 14px; padding:13px 15px; border:1px solid rgba(255,171,74,.35); border-left:3px solid var(--amber); border-radius:10px; background:rgba(255,171,74,.055); }
+.trust-banner b { color:#ffd09a; font-size:12px; }
+.trust-banner p { margin:0; color:#c6d0dc; font-size:12px; }
+.status-dot { width:7px; height:7px; border-radius:50%; background:var(--green); display:inline-block; margin-right:6px; }
 
 /* ===== Pills ===== */
 .pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font: 700 9.5px/1.7 ui-monospace; letter-spacing: .09em; text-transform: uppercase; border: 1px solid transparent; }
@@ -127,6 +137,8 @@ label.small { font-size: 10.5px; color: var(--faint); letter-spacing: .1em; text
 .scan-meta { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; color: var(--dim);
   font-size: 12px; margin: 2px 0 10px; font-family: ui-monospace, Menlo, monospace; }
 .scan-meta b { color: var(--text); }
+.finding-tools { display:grid; grid-template-columns:minmax(180px,1fr) minmax(150px,.35fr); gap:9px; align-items:center; margin:0 0 8px; }
+.finding-count { margin:0 0 8px; color:var(--dim); font-size:11.5px; }
 .sevbar { display: flex; height: 8px; border-radius: 99px; overflow: hidden; background: var(--panel3); margin: 0 0 14px; border: 1px solid var(--line); }
 .sevbar i { display: block; height: 100%; }
 .sevbar .s-critical { background: var(--red); } .sevbar .s-high { background: var(--amber); }
@@ -181,6 +193,8 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
   .sidenav button.active { border-bottom-color: var(--acc); background: transparent; }
   .content { padding: 16px 14px 8px; }
   .topbar { padding: 10px 14px; }
+  .hero { flex-direction:column; }
+  .trust-banner { grid-template-columns:1fr; gap:4px; }
 }
 </style>
 </head>
@@ -196,24 +210,33 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
     <div><b>QSHIELD</b><small>Quantum Supply-Chain<br/>Security Workbench</small></div>
   </div>
 
-  <div class="sidenav" id="sidenav" role="navigation" aria-label="Workbench sections"></div>
+  <div class="nav-label">Workbench</div>
+  <div class="sidenav" id="sidenav" role="tablist" aria-label="Workbench sections"></div>
   <div class="side-spacer"></div>
 
   <div class="side-foot">
-    <div class="v"><b><span class="dot"></span>v1.2.0</b><span class="pill robust">offline</span></div>
-    <small>Zero network calls. Zero hardware. Numbers measured on the bundled fixture corpus — evidence, not proofs.</small>
+    <div class="v"><b><span class="dot"></span>v1.2.0</b><span class="pill robust">local-first</span></div>
+    <small>Analysis runs on the Workbench server. Optional AI requests happen only after you choose an AI action.</small>
   </div>
 </aside>
 
 <main class="main">
   <div class="topbar">
     <div class="crumb">QSHIELD<b id="crumb-current">Overview</b></div>
-    <span class="status-pill">OFFLINE · NO NETWORK</span>
+    <span class="status-pill"><span class="status-dot"></span>SERVER-SIDE ANALYSIS · AI OPT-IN</span>
   </div>
 
   <div class="content">
 
-  <section class="tab active" id="tab-overview">
+  <section class="tab active" id="tab-overview" role="tabpanel" tabindex="0" aria-labelledby="tab-button-overview" aria-hidden="false">
+    <div class="hero">
+      <div><p class="eyebrow">QSHIELD SECURITY WORKBENCH</p><h1>Review circuit risk with evidence.</h1><p>Static analysis, equivalence checks, and policy evaluation for quantum software. Findings are signals for review, not proof that a circuit is safe or malicious.</p></div>
+      <div class="status-row"><span class="pill robust">No hardware path</span><span class="pill info">No third-party call for static scans</span></div>
+    </div>
+    <div class="trust-banner" role="note">
+      <b>Know your trust boundary</b>
+      <p>Your circuit is sent from this browser to the Workbench server you are using. Static scan and compare requests are processed there and do not call third parties. AI actions are separate and opt-in; the AI tab explains what each sends. The built-in server has no authentication—keep it on loopback or protect it with a trusted, authenticated TLS proxy before exposing it to a network.</p>
+    </div>
     <div class="grid cols-4">
       <div class="card kpi"><h3>Fixture corpus</h3><b>417</b><span>202 clean · 215 malicious QASM</span></div>
       <div class="card kpi"><h3>Detection (twin-cal.)</h3><b>0.958</b><span>TPR @ δ≥0.1 rigging · FPR 0.008</span></div>
@@ -237,7 +260,7 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
         <h3>What this is</h3>
         <p style="margin:0 0 8px">An offline workbench for auditing quantum circuits and their supply chains: static threat analysis, ZX-calculus equivalence, sandboxed-execution verdicts, policy-as-code hygiene rules, and an adversarial robustness probe — with every number measured and every limit printed.</p>
         <ul class="limit" style="margin:0; padding-left: 18px">
-          <li><b>No QPU, no device SDK, no cloud account, no network</b> — nothing in this workbench ever talks to hardware. Detection runs on files and fixtures, here.</li>
+          <li><b>No QPU or device SDK.</b> Circuit analysis runs on the Workbench server. Static scan and compare do not make third-party requests; AI features require an explicit action.</li>
           <li>Detection evidence, never proofs of honesty; measured on fixture corpora, not in the field.</li>
         </ul>
       </div>
@@ -249,15 +272,15 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
     </div>
   </section>
 
-  <section class="tab" id="tab-scan">
+  <section class="tab" id="tab-scan" role="tabpanel" tabindex="0" aria-labelledby="tab-button-scan" aria-hidden="true">
     <div class="cols-2 grid">
       <div class="card">
         <h3>Target circuit</h3>
         <label class="small" for="scan-qasm">OpenQASM 2.0 / 3.0 source</label>
         <textarea id="scan-qasm" spellcheck="false" placeholder="OPENQASM 2.0;&#10;include &quot;qelib1.inc&quot;;&#10;qreg q[3];&#10;creg c[3];&#10;h q[0]; cx q[0],q[1]; measure q -> c;"></textarea>
         <div class="row">
-          <button class="btn" onclick="runScan()">Scan circuit</button>
-          <button class="btn secondary" onclick="loadExample()">Load ancilla-leakage example</button>
+          <button class="btn" data-action="scan">Scan circuit</button>
+          <button class="btn secondary" data-action="load-example">Load ancilla-leakage example</button>
         </div>
       </div>
       <div class="card">
@@ -267,7 +290,7 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
     </div>
   </section>
 
-  <section class="tab" id="tab-compare">
+  <section class="tab" id="tab-compare" role="tabpanel" tabindex="0" aria-labelledby="tab-button-compare" aria-hidden="true">
     <div class="cols-2 grid">
       <div class="card">
         <h3>Pair under audit</h3>
@@ -288,25 +311,25 @@ h q[0];
 cx q[0],q[1];
 measure q -> c;</textarea>
         <label class="small" for="cmp-engine">Verdict engine</label>
-        <select id="cmp-engine"><option value="unitary">Exact unitary (≤12 qubits, proof)</option><option value="zx">ZX-calculus (decidable fragments, proof)</option></select>
-        <div class="row"><button class="btn" onclick="runCompare()">Compare</button></div>
+        <select id="cmp-engine"><option value="unitary">Dense unitary distance (≤12 qubits)</option><option value="zx">ZX-calculus (proof when supported)</option></select>
+        <div class="row"><button class="btn" data-action="compare">Compare</button></div>
       </div>
       <div class="card"><h3>Equivalence report</h3><div id="cmp-out" class="muted">Structural diff, then exact verification.</div></div>
     </div>
   </section>
 
-  <section class="tab" id="tab-robustness">
+  <section class="tab" id="tab-robustness" role="tabpanel" tabindex="0" aria-labelledby="tab-button-robustness" aria-hidden="true">
     <div class="card" style="margin-bottom:14px">
       <h3>Novel · Robustness Probe</h3>
       <p style="margin:0 0 6px" class="muted">Applies the five semantics-preserving attack classes from the evasion suite (camouflage, synonyms, rotation_split, dead_code, qubit_relabel) to <i>your</i> circuit, re-scans each variant, and tells you whether each finding survives. This is the question an auditor asks after a flag: <i>“and if the attacker camouflaged it?”</i></p>
       <label class="small" for="rb-qasm">Flagged circuit (.qasm)</label>
       <textarea id="rb-qasm" spellcheck="false" placeholder="Paste the circuit that already triggered a finding…"></textarea>
-      <div class="row"><button class="btn" onclick="runRobustness()">Probe finding robustness</button></div>
+      <div class="row"><button class="btn" data-action="robustness">Probe finding robustness</button></div>
     </div>
     <div class="card"><h3>Probe results</h3><div id="rb-out" class="muted">One card per base finding with per-attack survival.</div></div>
   </section>
 
-  <section class="tab" id="tab-policy">
+  <section class="tab" id="tab-policy" role="tabpanel" tabindex="0" aria-labelledby="tab-button-policy" aria-hidden="true">
     <div class="cols-2 grid">
       <div class="card">
         <h3>Novel · Policy Studio</h3>
@@ -316,16 +339,16 @@ measure q -> c;</textarea>
         <p id="pl-corpus-status" class="muted" role="status" aria-live="polite"></p>
         <label class="small" for="pl-sample">Corpus size</label>
         <select id="pl-sample" disabled><option value="60">Sample 60+60 (fast)</option><option value="0">Full corpus 202+215</option></select>
-        <div class="row"><button id="pl-run" class="btn" onclick="runPolicyEval()" disabled>Score on corpus</button></div>
+        <div class="row"><button id="pl-run" class="btn" data-action="policy-eval" disabled>Score on corpus</button></div>
       </div>
       <div class="card"><h3>Corpus scorecard</h3><div id="pl-out" class="muted">TPR = fraction of malicious fixtures flagged · FPR = fraction of clean fixtures flagged. Fixture-corpus rates — not field rates.</div></div>
     </div>
   </section>
 
-  <section class="tab" id="tab-ai">
+  <section class="tab" id="tab-ai" role="tabpanel" tabindex="0" aria-labelledby="tab-button-ai" aria-hidden="true">
     <div class="card" style="border-color:rgba(255,216,77,.4); background:linear-gradient(180deg, rgba(255,216,77,.06), var(--panel))">
       <h3 style="color:#ffe27a">⚠ Opt-in cloud feature — read before use</h3>
-      <p class="muted" style="margin:0">AI Triage sends a <b>summary of findings</b> (never the raw circuit source) to <b>Sarvam AI</b> (api.sarvam.ai) for explanation and prioritization. Output is <b>advisory — never a verdict</b> and can be wrong; a human auditor decides. Static analysis, comparison, Policy Studio and the rest of this page remain fully offline. Requires <span class="mono">SARVAM_API_KEY</span> on the machine running the Workbench server.</p>
+      <p class="muted" style="margin:0">AI actions are not used by default. When you select an action, the Workbench server sends the data described beside that feature to <b>Sarvam AI</b> (api.sarvam.ai): triage and translated reports send finding/report text, Speak sends the text you provide, and Listen sends the recorded audio. Circuit source is not sent by the triage/report routes. Output is <b>advisory — never a verdict</b>. Requires <span class="mono">SARVAM_API_KEY</span> on the Workbench server.</p>
     </div>
     <div class="cols-2 grid" style="margin-top:14px">
       <div class="card">
@@ -334,8 +357,8 @@ measure q -> c;</textarea>
         <label class="small" for="ai-qasm">Circuit under review</label>
         <textarea id="ai-qasm" spellcheck="false" placeholder="OPENQASM 2.0;&#10;include &quot;qelib1.inc&quot;;&#10;qreg q[3];&#10;cx q[0],q[2]; …"></textarea>
         <div class="row">
-          <button class="btn" onclick="runAiTriage()">Explain with AI</button>
-          <button class="btn secondary" onclick="loadAiExample()">Load ancilla-leakage example</button>
+          <button class="btn" data-action="ai-triage">Explain with AI</button>
+          <button class="btn secondary" data-action="load-ai-example">Load ancilla-leakage example</button>
         </div>
         <p class="muted" style="margin-top:10px">Findings summary is sent; your circuit text stays here. Model: sarvam-105b-conversations.</p>
       </div>
@@ -350,7 +373,7 @@ measure q -> c;</textarea>
         <label class="small" for="tts-lang">Language</label>
         <select id="tts-lang"><option value="hi-IN">Hindi (hi-IN)</option><option value="en-IN">English - India (en-IN)</option><option value="mr-IN">Marathi (mr-IN)</option><option value="ta-IN">Tamil (ta-IN)</option><option value="te-IN">Telugu (te-IN)</option><option value="bn-IN">Bengali (bn-IN)</option><option value="gu-IN">Gujarati (gu-IN)</option><option value="kn-IN">Kannada (kn-IN)</option><option value="ml-IN">Malayalam (ml-IN)</option></select>
         <div class="row">
-          <button class="btn" onclick="runTts()">Synthesize</button>
+          <button class="btn" data-action="speak">Synthesize</button>
           <label class="muted" style="font-size:11.5px; display:flex; gap:6px; align-items:center"><input type="checkbox" id="tts-auto" checked /> auto-play</label>
         </div>
         <audio id="tts-audio" controls style="width:100%; margin-top:10px; display:none"></audio>
@@ -360,9 +383,9 @@ measure q -> c;</textarea>
         <h3>Listen <span class="pill medium" style="vertical-align:2px">Saaras · cloud</span></h3>
         <p class="muted" style="margin-top:0">Record with your microphone, then transcribe. Audio leaves this machine only when you click <b>Transcribe</b> — it is sent to Sarvam AI and never stored by the Workbench.</p>
         <div class="row">
-          <button class="btn" id="rec-btn" onclick="toggleRecord()">● Record</button>
-          <button class="btn secondary" id="rec-stop" onclick="stopRecord()" disabled>■ Stop</button>
-          <button class="btn secondary" id="rec-send" onclick="sendRecording()" disabled>Transcribe</button>
+          <button class="btn" id="rec-btn" data-action="record-start">● Record</button>
+          <button class="btn secondary" id="rec-stop" data-action="record-stop" disabled>■ Stop</button>
+          <button class="btn secondary" id="rec-send" data-action="transcribe" disabled>Transcribe</button>
         </div>
         <div id="rec-status" class="muted" style="margin:10px 0 4px">idle — microphone permission is requested only when you press Record</div>
         <label class="small" for="rec-out">Transcript</label>
@@ -375,7 +398,8 @@ measure q -> c;</textarea>
         <p class="muted" style="margin-top:0">A short factual report of the scan (counts, findings, remediation) — machine-translated with Sarvam-Translate (formal mode). Translations can err; the English original is shown alongside for review.</p>
         <label class="small" for="rep-lang">Target language</label>
         <select id="rep-lang"><option value="hi-IN">Hindi (hi-IN)</option><option value="mr-IN">Marathi (mr-IN)</option><option value="ta-IN">Tamil (ta-IN)</option><option value="te-IN">Telugu (te-IN)</option><option value="bn-IN">Bengali (bn-IN)</option><option value="gu-IN">Gujarati (gu-IN)</option><option value="kn-IN">Kannada (kn-IN)</option><option value="ml-IN">Malayalam (ml-IN)</option><option value="en-IN">English - India (en-IN)</option></select>
-        <div class="row"><button class="btn" onclick="runLocalizedReport()">Render report (uses the circuit above)</button><button class="btn secondary" onclick="copyReport()">Copy translated</button></div>
+        <div class="row"><button class="btn" data-action="localized-report">Render report (uses the circuit above)</button><button class="btn secondary" data-action="copy-report">Copy translated</button></div>
+        <p id="rep-copy-status" class="muted" role="status" aria-live="polite"></p>
         <div class="grid cols-2" style="margin-top:12px; gap:12px">
           <div><label class="small">English (source)</label><div id="rep-en" class="ai-reply" style="max-height:260px">Render to see the source report.</div></div>
           <div><label class="small">Translated</label><div id="rep-out" class="ai-reply" style="max-height:260px">अनुवाद यहाँ दिखाई देगा।</div></div>
@@ -383,7 +407,7 @@ measure q -> c;</textarea>
       </div>
   </section>
 
-  <section class="tab" id="tab-about">
+  <section class="tab" id="tab-about" role="tabpanel" tabindex="0" aria-labelledby="tab-button-about" aria-hidden="true">
     <div class="card">
       <h3>About &amp; honest limits</h3>
       <ul class="limit" style="padding-left:18px; margin-top:4px">
@@ -393,18 +417,18 @@ measure q -> c;</textarea>
         <li><b>Metrics:</b> fixture-corpus numbers (202 clean / 215 malicious). Field rates unknown. Twin-calibrated dynamic results are simulator-measured.</li>
         <li><b>Formal verdicts:</b> Equivalent/NotEquivalent only on decidable ZX fragments; otherwise honest <span class="mono">Unknown</span>.</li>
         <li><b>Community signatures:</b> ships empty by design — no invented threats, no silent updates.</li>
-        <li><b>Network:</b> this page makes zero direct requests to the internet. Only the opt-in <b>AI</b> tab calls out — from the local Workbench server to api.sarvam.ai, on your click: AI Triage sends finding summaries, Speak/Listen send your text/audio respectively. Delete it and nothing else broke.</li>
+        <li><b>Network and trust boundary:</b> this browser sends analysis requests to the Workbench server. Static scan/compare do not make third-party calls. The optional AI features make requests from the server to Sarvam AI only after you activate them; review the AI tab for the data sent. The built-in server has no authentication, so do not expose it to untrusted networks without a protected TLS/authentication layer.</li>
       </ul>
       <p class="muted">QSHIELD Workbench · Apache-2.0</p>
     </div>
   </section>
 
   </div><!-- /content -->
-  <footer>QSHIELD Workbench — offline quantum supply-chain security audit. Evidence, not proofs. Numbers measured on bundled fixtures.</footer>
+  <footer>QSHIELD Workbench — local-first quantum software security review. Evidence, not proofs. Metrics are fixture-corpus measurements, not field rates.</footer>
 </main>
 </div><!-- /app -->
 
-<script>
+<script nonce="__CSP_NONCE__">
 "use strict";
 const TABS = [
   ["overview", "Overview", '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg>'],
@@ -429,19 +453,44 @@ async function apiPost(path, body) {
   return api(path, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
 }
 function activate(id, label) {
-  $$('.sidenav button').forEach(x => x.classList.toggle('active', x.dataset.tab === id));
-  $$('section.tab').forEach(s => s.classList.toggle('active', s.id === 'tab-' + id));
+  $$('.sidenav button').forEach(x => {
+    const active = x.dataset.tab === id;
+    x.classList.toggle('active', active);
+    x.setAttribute('aria-selected', String(active));
+    x.tabIndex = active ? 0 : -1;
+  });
+  $$('section.tab').forEach(s => {
+    const active = s.id === 'tab-' + id;
+    s.classList.toggle('active', active);
+    s.setAttribute('aria-hidden', String(!active));
+  });
   $('#crumb-current').textContent = label;
 }
 function buildTabs() {
   const nav = $('#sidenav');
-  const lbl = document.createElement('div'); lbl.className = 'nav-label'; lbl.textContent = 'Workbench'; nav.appendChild(lbl);
   TABS.forEach(([id, label, icon], i) => {
     const b = document.createElement('button');
     b.innerHTML = icon + '<span>' + esc(label) + '</span>';
-    b.dataset.tab = id; b.setAttribute('aria-label', label);
+    b.id = 'tab-button-' + id;
+    b.dataset.tab = id;
+    b.setAttribute('role', 'tab');
+    b.setAttribute('aria-label', label);
+    b.setAttribute('aria-controls', 'tab-' + id);
+    b.setAttribute('aria-selected', String(i === 0));
+    b.tabIndex = i === 0 ? 0 : -1;
     if (i === 0) b.classList.add('active');
-    b.onclick = () => activate(id, label);
+    b.addEventListener('click', () => activate(id, label));
+    b.addEventListener('keydown', event => {
+      const current = TABS.findIndex(([tab]) => tab === id);
+      const next = event.key === 'ArrowRight' ? (current + 1) % TABS.length
+        : event.key === 'ArrowLeft' ? (current + TABS.length - 1) % TABS.length
+        : event.key === 'Home' ? 0 : event.key === 'End' ? TABS.length - 1 : -1;
+      if (next < 0) return;
+      event.preventDefault();
+      const [nextId, nextLabel] = TABS[next];
+      activate(nextId, nextLabel);
+      $('#tab-button-' + nextId).focus();
+    });
     nav.appendChild(b);
   });
 }
@@ -494,8 +543,26 @@ async function runScan() {
       return;
     }
     out.innerHTML = meta + severitySummary(fs) +
-      '<div class="tablewrap"><table><thead><tr><th>Severity</th><th>ID</th><th>Threat</th><th>Finding</th><th>Gates</th><th>Conf</th></tr></thead><tbody>' +
-      fs.map(findingRow).join('') + '</tbody></table></div>';
+      '<div class="finding-tools"><input id="scan-search" type="search" aria-label="Search findings" placeholder="Search title, ID, threat, or remediation"><select id="scan-severity" aria-label="Filter findings by severity"><option value="">All severities</option><option>critical</option><option>high</option><option>medium</option><option>low</option><option>info</option></select></div>' +
+      '<p id="scan-match-count" class="finding-count" role="status" aria-live="polite"></p><div id="scan-table"></div>';
+    const renderFiltered = () => {
+      const query = $('#scan-search').value.trim().toLowerCase();
+      const severity = $('#scan-severity').value;
+      const visible = fs.filter(f => {
+        if (severity && f.severity !== severity) return false;
+        const searchable = [f.finding_id, f.threat_type, f.title, f.policy_name, f.description, f.message, f.remediation]
+          .filter(Boolean).join(' ').toLowerCase();
+        return !query || searchable.includes(query);
+      });
+      $('#scan-match-count').textContent = `Showing ${visible.length} of ${fs.length} finding(s).`;
+      $('#scan-table').innerHTML = visible.length
+        ? '<div class="tablewrap"><table><thead><tr><th>Severity</th><th>ID</th><th>Threat</th><th>Finding</th><th>Gates</th><th>Conf</th></tr></thead><tbody>' +
+          visible.map(findingRow).join('') + '</tbody></table></div>'
+        : '<div class="find info"><h4><span class="pill info">info</span>No matching findings</h4><p>Adjust or clear the search and severity filters.</p></div>';
+    };
+    $('#scan-search').addEventListener('input', renderFiltered);
+    $('#scan-severity').addEventListener('change', renderFiltered);
+    renderFiltered();
   } catch (e) { out.innerHTML = `<div class="err">${esc(e.message)}</div>`; }
 }
 async function runCompare() {
@@ -543,7 +610,6 @@ async function loadPolicies() {
   } catch (e) { $('#pl-list').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
 }
 async function runPolicyEval() {
-  if ($('#pl-run').disabled) return;
   const out = $('#pl-out'); spin(out);
   const ids = $$('.pl-check').filter(c => c.checked).map(c => c.value);
   const sample = Number($('#pl-sample').value) || null;
@@ -561,8 +627,8 @@ async function aiStatus() {
   try {
     const d = await api('/api/ai/status');
     el.innerHTML = d.configured
-      ? '<span class="pill robust">AI configured</span> <span class="muted">Sarvam AI reachable on demand · finding summaries only</span>'
-      : '<span class="pill fragile">AI not configured</span> <span class="muted">set SARVAM_API_KEY on the Workbench server (.env) — everything else works offline</span>';
+      ? '<span class="pill robust">AI configured</span> <span class="muted">No cloud request is made until you select an AI action.</span>'
+      : '<span class="pill fragile">AI not configured</span> <span class="muted">Set SARVAM_API_KEY on the Workbench server to enable AI actions. Local analysis remains available.</span>';
   } catch (e) { el.textContent = 'AI status unavailable'; }
 }
 async function loadAiExample() {
@@ -575,7 +641,7 @@ async function runAiTriage() {
     lastAiReply = d.reply;
     out.innerHTML = '<div class="ai-reply">' + esc(d.reply) + '</div>' +
       '<p class="muted" style="margin-top:10px; border-top:1px solid var(--line); padding-top:10px">' + esc(d.findings_sent) + ' finding(s) summary sent · ' + esc(d.disclaimer) + '</p>' +
-      '<button class="btn secondary" onclick="speakLastReply()">🔊 Speak this reply</button>';
+      '<button class="btn secondary" data-action="speak-reply">🔊 Speak this reply</button>';
   } catch (e) { out.innerHTML = '<div class="err">' + esc(e.message) + '</div>'; }
 }
 let lastAiReply = '';
@@ -592,7 +658,7 @@ async function speakText(text) {
     outEl.textContent = 'done — audio stays in your browser';
   } catch (e) { outEl.innerHTML = '<div class="err">' + esc(e.message) + '</div>'; }
 }
-function runTts() { const t = $('#tts-text').value.trim(); if (t) speakText(t); }
+async function runTts() { const t = $('#tts-text').value.trim(); if (t) await speakText(t); }
 function speakLastReply() { if (!lastAiReply) return; $('#tts-text').value = lastAiReply.slice(0, 1500); speakText(lastAiReply); }
 async function toggleRecord() {
   try {
@@ -642,8 +708,52 @@ async function runLocalizedReport() {
 }
 async function copyReport() {
   const out = $('#rep-out').textContent || '';
-  try { await navigator.clipboard.writeText(out); $('#rep-out').style.outline = '2px solid var(--acc)'; setTimeout(() => { $('#rep-out').style.outline = 'none'; }, 800); } catch (e) { /* clipboard unavailable */ }
+  const status = $('#rep-copy-status');
+  try {
+    await navigator.clipboard.writeText(out);
+    status.textContent = 'Translated report copied to clipboard.';
+    $('#rep-out').style.outline = '2px solid var(--acc)';
+    setTimeout(() => { $('#rep-out').style.outline = 'none'; }, 800);
+  } catch (e) {
+    status.textContent = 'Could not copy report: ' + e.message;
+  }
 }
+const UI_ACTIONS = {
+  scan: runScan,
+  'load-example': loadExample,
+  compare: runCompare,
+  robustness: runRobustness,
+  'policy-eval': runPolicyEval,
+  'ai-triage': runAiTriage,
+  'load-ai-example': loadAiExample,
+  speak: runTts,
+  'record-start': toggleRecord,
+  'record-stop': stopRecord,
+  transcribe: sendRecording,
+  'localized-report': runLocalizedReport,
+  'copy-report': copyReport,
+  'speak-reply': speakLastReply,
+};
+document.addEventListener('click', async event => {
+  const target = event.target;
+  if (!(target instanceof Element)) return;
+  const button = target.closest('button[data-action]');
+  if (!button || button.disabled) return;
+  const action = UI_ACTIONS[button.dataset.action];
+  if (!action) return;
+  if (button.dataset.action === 'record-start' || button.dataset.action === 'record-stop') {
+    action();
+    return;
+  }
+  button.disabled = true;
+  button.setAttribute('aria-busy', 'true');
+  try {
+    await action();
+  } finally {
+    button.disabled = false;
+    button.removeAttribute('aria-busy');
+  }
+});
 buildTabs(); loadPolicies(); aiStatus();
 </script>
 </body>
