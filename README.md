@@ -42,6 +42,13 @@ From source: `git clone https://github.com/katepallewarprathmesh-sketch/QShield.
 
 Requires Python ≥ 3.10.
 
+For releases produced after the provenance workflow change, verify a downloaded wheel or sdist
+against GitHub's signed build provenance before installing (requires GitHub CLI with `gh attestation`):
+
+```bash
+gh attestation verify "$WHEEL_OR_SDIST" --repo katepallewarprathmesh-sketch/QShield
+```
+
 The Workbench's Policy Studio includes the bundled fixture corpus in wheel and Docker
 installs (202 clean + 215 malicious circuits). For a custom corpus, point
 `QSHIELD_FIXTURES_DIR` at a directory containing `clean_circuits/` and
