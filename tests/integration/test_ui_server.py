@@ -81,7 +81,11 @@ def test_page_serves(server):
     assert headers["X-Frame-Options"] == "DENY"
     assert headers["Referrer-Policy"] == "no-referrer"
     assert re.search(r"<[^>]+\bon[a-z]+\s*=", body, flags=re.IGNORECASE) is None
-    assert 'role="tablist"' in body and "Know your trust boundary" in body
+    assert 'role="tablist"' in body
+    assert "trust-banner" not in body
+    assert "Know your trust boundary" not in body
+    assert "Opt-in cloud feature" not in body
+    assert "Findings summary is sent" not in body
     assert "OFFLINE · NO NETWORK" not in body
     with urllib.request.urlopen(server + "/", timeout=15) as second_response:
         second_body = second_response.read().decode()

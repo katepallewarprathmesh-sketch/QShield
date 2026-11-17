@@ -111,9 +111,6 @@ label.small { font-size: 10.5px; color: var(--faint); letter-spacing: .1em; text
 .hero h1 { margin:0; color:#fff; font-size:clamp(23px,3vw,32px); line-height:1.15; letter-spacing:-.03em; }
 .hero p { margin:7px 0 0; color:var(--dim); max-width:680px; font-size:13px; }
 .eyebrow { color:var(--acc)!important; font:700 10px/1.4 ui-monospace,Menlo,monospace!important; letter-spacing:.14em; text-transform:uppercase; }
-.trust-banner { display:grid; grid-template-columns:minmax(150px,.35fr) 1fr; gap:12px; margin:0 0 14px; padding:13px 15px; border:1px solid rgba(255,171,74,.35); border-left:3px solid var(--amber); border-radius:10px; background:rgba(255,171,74,.055); }
-.trust-banner b { color:#ffd09a; font-size:12px; }
-.trust-banner p { margin:0; color:#c6d0dc; font-size:12px; }
 .status-dot { width:7px; height:7px; border-radius:50%; background:var(--green); display:inline-block; margin-right:6px; }
 
 /* ===== Pills ===== */
@@ -194,7 +191,6 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
   .content { padding: 16px 14px 8px; }
   .topbar { padding: 10px 14px; }
   .hero { flex-direction:column; }
-  .trust-banner { grid-template-columns:1fr; gap:4px; }
 }
 </style>
 </head>
@@ -216,14 +212,14 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
 
   <div class="side-foot">
     <div class="v"><b><span class="dot"></span>v1.2.0</b><span class="pill robust">local-first</span></div>
-    <small>Analysis runs on the Workbench server. Optional AI requests happen only after you choose an AI action.</small>
+    <small>Local-first quantum software security review.</small>
   </div>
 </aside>
 
 <main class="main">
   <div class="topbar">
     <div class="crumb">QSHIELD<b id="crumb-current">Overview</b></div>
-    <span class="status-pill"><span class="status-dot"></span>SERVER-SIDE ANALYSIS · AI OPT-IN</span>
+    <span class="status-pill"><span class="status-dot"></span>SERVER-SIDE ANALYSIS</span>
   </div>
 
   <div class="content">
@@ -231,11 +227,7 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
   <section class="tab active" id="tab-overview" role="tabpanel" tabindex="0" aria-labelledby="tab-button-overview" aria-hidden="false">
     <div class="hero">
       <div><p class="eyebrow">QSHIELD SECURITY WORKBENCH</p><h1>Review circuit risk with evidence.</h1><p>Static analysis, equivalence checks, and policy evaluation for quantum software. Findings are signals for review, not proof that a circuit is safe or malicious.</p></div>
-      <div class="status-row"><span class="pill robust">No hardware path</span><span class="pill info">No third-party call for static scans</span></div>
-    </div>
-    <div class="trust-banner" role="note">
-      <b>Know your trust boundary</b>
-      <p>Your circuit is sent from this browser to the Workbench server you are using. Static scan and compare requests are processed there and do not call third parties. AI actions are separate and opt-in; the AI tab explains what each sends. The built-in server has no authentication—keep it on loopback or protect it with a trusted, authenticated TLS proxy before exposing it to a network.</p>
+      <div class="status-row"><span class="pill robust">No hardware path</span></div>
     </div>
     <div class="grid cols-4">
       <div class="card kpi"><h3>Fixture corpus</h3><b>417</b><span>202 clean · 215 malicious QASM</span></div>
@@ -260,7 +252,7 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
         <h3>What this is</h3>
         <p style="margin:0 0 8px">An offline workbench for auditing quantum circuits and their supply chains: static threat analysis, ZX-calculus equivalence, sandboxed-execution verdicts, policy-as-code hygiene rules, and an adversarial robustness probe — with every number measured and every limit printed.</p>
         <ul class="limit" style="margin:0; padding-left: 18px">
-          <li><b>No QPU or device SDK.</b> Circuit analysis runs on the Workbench server. Static scan and compare do not make third-party requests; AI features require an explicit action.</li>
+          <li><b>No QPU or device SDK.</b> Circuit analysis runs on the Workbench server.</li>
           <li>Detection evidence, never proofs of honesty; measured on fixture corpora, not in the field.</li>
         </ul>
       </div>
@@ -346,10 +338,6 @@ measure q -> c;</textarea>
   </section>
 
   <section class="tab" id="tab-ai" role="tabpanel" tabindex="0" aria-labelledby="tab-button-ai" aria-hidden="true">
-    <div class="card" style="border-color:rgba(255,216,77,.4); background:linear-gradient(180deg, rgba(255,216,77,.06), var(--panel))">
-      <h3 style="color:#ffe27a">⚠ Opt-in cloud feature — read before use</h3>
-      <p class="muted" style="margin:0">AI actions are not used by default. When you select an action, the Workbench server sends the data described beside that feature to <b>Sarvam AI</b> (api.sarvam.ai): triage and translated reports send finding/report text, Speak sends the text you provide, and Listen sends the recorded audio. Circuit source is not sent by the triage/report routes. Output is <b>advisory — never a verdict</b>. Requires <span class="mono">SARVAM_API_KEY</span> on the Workbench server.</p>
-    </div>
     <div class="cols-2 grid" style="margin-top:14px">
       <div class="card">
         <h3>AI Triage <span class="pill medium" style="vertical-align:2px">cloud · advisory</span></h3>
@@ -360,7 +348,7 @@ measure q -> c;</textarea>
           <button class="btn" data-action="ai-triage">Explain with AI</button>
           <button class="btn secondary" data-action="load-ai-example">Load ancilla-leakage example</button>
         </div>
-        <p class="muted" style="margin-top:10px">Findings summary is sent; your circuit text stays here. Model: sarvam-105b-conversations.</p>
+        <p class="muted" style="margin-top:10px">Model: sarvam-105b-conversations.</p>
       </div>
       <div class="card"><h3>AI reply</h3><div id="ai-out" class="muted">The triage reply will appear here — plain English, per-finding disposition, and an overall BLOCK / REVIEW / TRACK recommendation. Advisory only.</div></div>
     </div>
@@ -381,13 +369,13 @@ measure q -> c;</textarea>
       </div>
       <div class="card">
         <h3>Listen <span class="pill medium" style="vertical-align:2px">Saaras · cloud</span></h3>
-        <p class="muted" style="margin-top:0">Record with your microphone, then transcribe. Audio leaves this machine only when you click <b>Transcribe</b> — it is sent to Sarvam AI and never stored by the Workbench.</p>
+        <p class="muted" style="margin-top:0">Record with your microphone, then request a transcript.</p>
         <div class="row">
           <button class="btn" id="rec-btn" data-action="record-start">● Record</button>
           <button class="btn secondary" id="rec-stop" data-action="record-stop" disabled>■ Stop</button>
           <button class="btn secondary" id="rec-send" data-action="transcribe" disabled>Transcribe</button>
         </div>
-        <div id="rec-status" class="muted" style="margin:10px 0 4px">idle — microphone permission is requested only when you press Record</div>
+        <div id="rec-status" class="muted" style="margin:10px 0 4px">idle</div>
         <label class="small" for="rec-out">Transcript</label>
         <textarea id="rec-out" style="min-height:110px" placeholder="Transcript appears here…" readonly></textarea>
       </div>
@@ -417,7 +405,6 @@ measure q -> c;</textarea>
         <li><b>Metrics:</b> fixture-corpus numbers (202 clean / 215 malicious). Field rates unknown. Twin-calibrated dynamic results are simulator-measured.</li>
         <li><b>Formal verdicts:</b> Equivalent/NotEquivalent only on decidable ZX fragments; otherwise honest <span class="mono">Unknown</span>.</li>
         <li><b>Community signatures:</b> ships empty by design — no invented threats, no silent updates.</li>
-        <li><b>Network and trust boundary:</b> this browser sends analysis requests to the Workbench server. Static scan/compare do not make third-party calls. The optional AI features make requests from the server to Sarvam AI only after you activate them; review the AI tab for the data sent. The built-in server has no authentication, so do not expose it to untrusted networks without a protected TLS/authentication layer.</li>
       </ul>
       <p class="muted">QSHIELD Workbench · Apache-2.0</p>
     </div>
@@ -627,8 +614,8 @@ async function aiStatus() {
   try {
     const d = await api('/api/ai/status');
     el.innerHTML = d.configured
-      ? '<span class="pill robust">AI configured</span> <span class="muted">No cloud request is made until you select an AI action.</span>'
-      : '<span class="pill fragile">AI not configured</span> <span class="muted">Set SARVAM_API_KEY on the Workbench server to enable AI actions. Local analysis remains available.</span>';
+      ? '<span class="pill robust">AI configured</span>'
+      : '<span class="pill fragile">AI not configured</span> <span class="muted">Set SARVAM_API_KEY on the Workbench server to enable AI actions.</span>';
   } catch (e) { el.textContent = 'AI status unavailable'; }
 }
 async function loadAiExample() {
@@ -640,7 +627,7 @@ async function runAiTriage() {
     const d = await apiPost('/api/ai/triage', { qasm: $('#ai-qasm').value });
     lastAiReply = d.reply;
     out.innerHTML = '<div class="ai-reply">' + esc(d.reply) + '</div>' +
-      '<p class="muted" style="margin-top:10px; border-top:1px solid var(--line); padding-top:10px">' + esc(d.findings_sent) + ' finding(s) summary sent · ' + esc(d.disclaimer) + '</p>' +
+      '<p class="muted" style="margin-top:10px; border-top:1px solid var(--line); padding-top:10px">' + esc(d.disclaimer) + '</p>' +
       '<button class="btn secondary" data-action="speak-reply">🔊 Speak this reply</button>';
   } catch (e) { out.innerHTML = '<div class="err">' + esc(e.message) + '</div>'; }
 }
@@ -693,7 +680,7 @@ async function sendRecording() {
     const b64 = await blobToB64(recBlob);
     const d = await apiPost('/api/ai/listen', { audio_b64: b64, mode: 'transcribe' });
     $('#rec-out').value = d.transcript;
-    $('#rec-status').textContent = 'done — audio was sent to Sarvam AI for transcription only';
+    $('#rec-status').textContent = 'transcription complete';
   } catch (e) { $('#rec-status').innerHTML = '<div class="err">' + esc(e.message) + '</div>'; }
 }
 async function runLocalizedReport() {
