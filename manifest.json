@@ -15,6 +15,11 @@
       "bytes": 56366
     },
     {
+      "path": "threat-model.html",
+      "sha256": "91fc96401dff172b65a95f0403dbedbf4719ea376ac55d29090643248f9b521e",
+      "bytes": 5745
+    },
+    {
       "path": "vendor/fixtures.zip",
       "sha256": "5e7ff5f0b13035479df2d33195aa8bcb54d682529dc303d1e01b9568b657a726",
       "bytes": 118382
@@ -66,8 +71,8 @@
     },
     {
       "path": "vendor/qshield.whl",
-      "sha256": "d220d7086780ceac6085d9eb0b39422d994bd4e7de120d80dd6ce0a4cc69a60b",
-      "bytes": 173044
+      "sha256": "63e6e67bf5e2a43156b13f78ba561245f883a76b645c7f1e937ab65d7d0745fd",
+      "bytes": 173108
     }
   ]
 }

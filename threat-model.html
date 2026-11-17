@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>QSHIELD Threat Model</title>
+  <style>
+    :root { color-scheme: light dark; --bg:#0b0f16; --panel:#121a28; --line:#28364d; --text:#e6edf7; --muted:#a4b2c7; --accent:#47d8c3; --amber:#ffc176; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    main { max-width:920px; margin:0 auto; padding:36px 22px 64px; }
+    header { border-bottom:1px solid var(--line); padding-bottom:22px; margin-bottom:24px; }
+    h1 { line-height:1.15; margin:0 0 10px; font-size:clamp(2rem,5vw,3rem); }
+    h2 { margin:32px 0 10px; font-size:1.35rem; }
+    h3 { margin:20px 0 6px; font-size:1rem; }
+    p, li { color:var(--muted); }
+    a { color:var(--accent); }
+    code { color:#d5e7ff; background:#182337; border-radius:4px; padding:1px 5px; }
+    .eyebrow { color:var(--accent); text-transform:uppercase; letter-spacing:.14em; font:700 .75rem/1.4 ui-monospace,monospace; }
+    .summary { font-size:1.12rem; max-width:760px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin:14px 0; }
+    .scope { display:grid; grid-template-columns:110px 1fr; gap:12px; }
+    .scope b { color:var(--amber); }
+    .meta { font-size:.9rem; }
+    @media(max-width:620px) { main { padding:24px 16px 48px; } .scope { grid-template-columns:1fr; gap:0; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">QSHIELD · Public security model · v1.3.0</p>
+    <h1>Threat model</h1>
+    <p class="summary">QSHIELD provides evidence about quantum-software integrity. It checks files and workflows for known suspicious patterns; it does not prove that a circuit, compiler, provider, or result is safe.</p>
+    <p class="meta">Software-only scope. No QPU, device SDK, or hardware validation is part of this release.</p>
+  </header>
+
+  <h2>Assets and trust boundaries</h2>
+  <div class="card">
+    <ul>
+      <li><b>Circuit integrity:</b> source, gate structure, parameters, and expected behavior.</li>
+      <li><b>Supply-chain integrity:</b> dependency declarations, installed package metadata, and analysis configuration.</li>
+      <li><b>Analysis environment:</b> the QSHIELD process, its dependencies, local files, and CI configuration.</li>
+      <li><b>External services:</b> quantum providers, package registries, and optional AI services are outside QSHIELD's control.</li>
+    </ul>
+    <p>With the local Workbench, the browser sends circuit input to the Workbench server. The optional AI features are separate cloud operations; AI triage is designed to send finding summaries rather than raw circuit source. Do not treat a client-side scan or policy result as provider-side enforcement.</p>
+  </div>
+
+  <h2>Threats in scope</h2>
+  <div class="card scope"><b>T1 · Gate tampering</b><span>Inserted, substituted, or perturbed gates may alter a circuit. QSHIELD can flag known structural patterns and compare circuits with supported exact or formal methods. It cannot detect every semantically harmful modification.</span></div>
+  <div class="card scope"><b>T2 · Information leakage</b><span>Ancilla use, measurement changes, or suspicious structure can expose information. Available checks cover selected known cases; they are not a general side-channel detector or a guarantee of confidentiality.</span></div>
+  <div class="card scope"><b>T3 · Supply-chain compromise</b><span>Dependency auditing can identify selected risky pins, typosquatting indicators, and known advisories. A clean audit does not establish package authenticity. Full signed provenance and attestation workflows are not yet implemented.</span></div>
+  <div class="card scope"><b>T4 · IP exposure</b><span>QSHIELD can provide local analysis and integrity evidence, but it cannot stop a provider, compromised host, or other recipient from copying or misusing submitted intellectual property.</span></div>
+
+  <h2>Assumptions and mitigations</h2>
+  <ul>
+    <li>Inputs are untrusted. Parsers apply size, complexity, and time limits; malformed or out-of-scope inputs should fail explicitly.</li>
+    <li>Findings are evidence for human review. An empty finding list means only that no implemented check matched.</li>
+    <li>Results may be inconclusive when a method, optional dependency, or resource limit prevents a check.</li>
+    <li>Keep the unauthenticated Workbench on loopback. Non-loopback binds require <code>--allow-remote</code>; remote deployments need network restrictions and an authenticated TLS proxy.</li>
+    <li>Keep the core analysis local and offline where possible. Enable cloud AI only when its data handling is appropriate for the circuit and findings.</li>
+  </ul>
+
+  <h2>Out of scope and limits</h2>
+  <ul>
+    <li>Proving a circuit or backend honest, detecting all adaptive attacks, or guaranteeing that a clean scan is safe.</li>
+    <li>Protecting a compromised operating system, developer workstation, CI secret, or quantum provider.</li>
+    <li>General side-channel defense, real-hardware validation, and claims about field detection rates.</li>
+    <li>Signed circuit provenance, a control plane, and enterprise high-availability gate operations; these remain planned work.</li>
+  </ul>
+
+  <p>Metrics currently reported by QSHIELD are fixture-corpus measurements, not field rates. For vulnerability reporting, see <a href="https://github.com/katepallewarprathmesh-sketch/QShield/blob/main/SECURITY.md">SECURITY.md</a>. Return to the <a href="./">Workbench</a>.</p>
+</main>
+</body>
+</html>
