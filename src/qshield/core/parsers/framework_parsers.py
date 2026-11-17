@@ -281,6 +281,97 @@ _PENNYLANE_NAME_MAP = {
 }
 
 
+def parse_braket(circuit: Any, name: str | None = None) -> CircuitIR:
+    """Parse an Amazon Braket ``Circuit`` into CircuitIR.
+
+    Qubit labels are normalized to dense zero-based indices and retained in
+    metadata. Unsupported operators raise rather than being approximated.
+    """
+    try:
+        from braket.circuits import Circuit  # noqa: F401
+    except ImportError as exc:  # pragma: no cover - optional dependency
+        raise RuntimeError(
+            "amazon-braket-sdk is not installed. Install with: pip install 'qshield[braket]'"
+        ) from exc
+
+    if not hasattr(circuit, "instructions"):
+        raise TypeError("parse_braket expects an Amazon Braket Circuit with instructions")
+
+    name = name or getattr(circuit, "name", None) or "braket_circuit"
+    instructions = list(circuit.instructions)
+    qubit_labels: set[int] = set()
+    for instruction in instructions:
+        for target in _braket_targets(instruction):
+            qubit_labels.add(_braket_qubit_label(target))
+    ordered_labels = sorted(qubit_labels)
+    qubit_map = {label: index for index, label in enumerate(ordered_labels)}
+    ops: list[tuple[str, list[float], list[int]]] = []
+    measurements: list[tuple[int, int]] = []
+    next_classical = 0
+
+    gate_names = {
+        "i": "id", "identity": "id", "h": "h", "x": "x", "y": "y", "z": "z",
+        "s": "s", "si": "sdg", "sdg": "sdg", "t": "t", "ti": "tdg", "tdg": "tdg",
+        "v": "sx", "vi": "sxdg", "rx": "rx", "ry": "ry", "rz": "rz",
+        "phaseshift": "p", "cnot": "cx", "cx": "cx", "cy": "cy", "cz": "cz",
+        "swap": "swap", "iswap": "iswap", "cphaseshift": "cp",
+        "xx": "rxx", "yy": "ryy", "zz": "rzz", "ccnot": "ccx", "toffoli": "ccx",
+    }
+    structural_ops = {"startverbatimbox", "endverbatimbox"}
+
+    for instruction in instructions:
+        operator = instruction.operator
+        operator_name = str(getattr(operator, "name", type(operator).__name__))
+        normalized = "".join(char for char in operator_name.lower() if char.isalnum())
+        targets = [_braket_qubit_label(target) for target in _braket_targets(instruction)]
+        if normalized in structural_ops:
+            continue
+        if normalized == "measure":
+            for target in targets:
+                measurements.append((qubit_map[target], next_classical))
+                next_classical += 1
+            continue
+        canonical = gate_names.get(normalized)
+        if canonical is None:
+            raise ValueError(
+                f"unsupported Amazon Braket operator {operator_name!r}; refusing to approximate it"
+            )
+        parameters = [_float_or_nan(value) for value in getattr(operator, "parameters", [])]
+        ops.append((canonical, parameters, [qubit_map[target] for target in targets]))
+
+    return _build_ir(
+        name=name,
+        source_framework="braket",
+        num_qubits=len(ordered_labels),
+        num_clbits=next_classical,
+        ops=ops,
+        measurements=measurements,
+        metadata={"source": "amazon-braket", "qubit_labels": ordered_labels},
+        source_repr=repr(circuit),
+    )
+
+
+def _braket_targets(instruction: Any) -> list[Any]:
+    target = getattr(instruction, "target", ())
+    try:
+        return list(target)
+    except TypeError:
+        return [target]
+
+
+def _braket_qubit_label(qubit: Any) -> int:
+    label = getattr(qubit, "index", qubit)
+    try:
+        return int(label)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"unsupported Amazon Braket qubit label {qubit!r}") from exc
+
+
+# ----------------------------------------------------------------------
+# PennyLane
+# ----------------------------------------------------------------------
+
+
 def parse_pennylane(tape_or_qnode: Any, name: str | None = None) -> CircuitIR:
     """Parse a PennyLane ``QuantumScript`` (or compatible) into CircuitIR.
 

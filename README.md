@@ -32,6 +32,7 @@ inspection, and measurement is destructive. QSHIELD is purpose-built for this te
 ```bash
 pip install qshield                     # core (OpenQASM parser, static analysis, CLI)
 pip install 'qshield[qiskit,cirq]'     # + framework parsers (qiskit-aer used by --full)
+pip install 'qshield[braket]'           # + Amazon Braket Circuit parser
 pip install 'qshield[formal]'          # + ZX-calculus verification (PyZX, Z3)
 ```
 
@@ -64,6 +65,18 @@ import qshield
 
 results = qshield.scan("circuit.qasm")          # quick static scan
 print(results.is_clean, results.summary.total)
+```
+
+Amazon Braket circuits can be converted explicitly or via `parse_any` after installing
+`qshield[braket]`. Supported standard gates map into the shared IR; unsupported operators
+raise an error rather than being silently approximated. Braket qubit labels are normalized
+to dense indices and retained in IR metadata.
+
+```python
+from braket.circuits import Circuit
+from qshield.core.parsers import parse_any
+
+circuit_ir = parse_any(Circuit().h(4).cnot(4, 6).rz(6, 0.5))
 ```
 
 ### Pre-commit hook
