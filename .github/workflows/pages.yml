@@ -52,8 +52,8 @@ jobs:
       - name: Sanity-check built site
         run: |
           test -f dist-site/index.html
-          test -f dist-site/bootstrap.js
-          grep -q 'bootstrap.js' dist-site/index.html
+          test "$(find dist-site -maxdepth 1 -type f -name 'bootstrap.*.js' | wc -l)" -eq 1
+          grep -Eq 'bootstrap\.[0-9a-f]{12}\.js' dist-site/index.html
           test -f dist-site/vendor/qshield.whl
           test -f dist-site/vendor/fixtures.zip
           grep -q '"corpus_available": __srv._fixture_corpus_available()' scripts/site/bootstrap.js

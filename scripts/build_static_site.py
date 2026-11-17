@@ -198,7 +198,7 @@ def _load_workbench_html() -> str:
     raise RuntimeError("WORKBENCH_HTML not found in page.py")
 
 
-def _render_index() -> str:
+def _render_index(bootstrap_src: str = "bootstrap.js") -> str:
     html = _load_workbench_html()
     for needle in ("</style>", "<body>", "</body>"):
         if html.count(needle) != 1:
@@ -207,7 +207,7 @@ def _render_index() -> str:
     html = html.replace("<body>", "<body>\n" + banner, 1)
     inject = (
         f"<script>window.__QSHIELD_AI_CANNED__ = {_canned_ai_json()};</script>\n"
-        '<script src="./bootstrap.js"></script>\n'
+        f'<script src="./{bootstrap_src}"></script>\n'
     )
     # Inject BEFORE the page's inline script so window.fetch is already
     # intercepted when the page fires its initial /api/* calls.
@@ -246,8 +246,10 @@ def main() -> int:
     assets = _vendor_pyodide(vendor, offline=args.offline, fresh=not args.incremental)
     wheel = _build_wheel(vendor, skip=args.skip_wheel)
     fixtures = _zip_fixtures(vendor)
-    (out / "bootstrap.js").write_bytes(BOOTSTRAP.read_bytes())
-    (out / "index.html").write_text(_render_index(), encoding="utf-8")
+    bootstrap_bytes = BOOTSTRAP.read_bytes()
+    bootstrap_name = f"bootstrap.{_sha256(bootstrap_bytes)[:12]}.js"
+    (out / bootstrap_name).write_bytes(bootstrap_bytes)
+    (out / "index.html").write_text(_render_index(bootstrap_name), encoding="utf-8")
 
     # Version comes from pyproject.toml (authoritative); do not import the
     # package here — the build environment must not need the engines deps.
