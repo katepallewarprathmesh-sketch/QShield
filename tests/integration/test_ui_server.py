@@ -64,8 +64,18 @@ def test_overview_and_policies(server):
     status, body = _get(server + "/api/overview")
     assert status == 200 and json.loads(body)["corpus"]["malicious"] == 215
     status, body = _get(server + "/api/policies")
-    policies = json.loads(body)["policies"]
+    data = json.loads(body)
+    policies = data["policies"]
     assert len(policies) >= 6 and all("id" in p for p in policies)
+    assert data["corpus_available"] is True
+
+
+def test_policy_endpoint_reports_missing_fixture_corpus(server, monkeypatch, tmp_path):
+    import qshield.ui.server as ui_server
+
+    monkeypatch.setattr(ui_server, "FIXTURE_ROOT", tmp_path / "missing")
+    status, body = _get(server + "/api/policies")
+    assert status == 200 and json.loads(body)["corpus_available"] is False
 
 
 def test_scan_endpoint_bell_is_clean_ish(server):

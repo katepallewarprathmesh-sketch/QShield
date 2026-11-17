@@ -310,12 +310,13 @@ measure q -> c;</textarea>
     <div class="cols-2 grid">
       <div class="card">
         <h3>Novel · Policy Studio</h3>
-        <p class="muted" style="margin-top:0">Your own lint-style security policies as reviewable code. Toggle the builtin pack, then score it on the bundled 417-circuit fixture corpus — see what each policy catches and what it costs in false positives. Heuristic hygiene rules, not threat detectors.</p>
+        <p class="muted" style="margin-top:0">Your own lint-style security policies as reviewable code. Toggle the builtin pack, then score it on the fixture corpus when available — see what each policy catches and what it costs in false positives. Heuristic hygiene rules, not threat detectors.</p>
         <label class="small">Builtin pack (FOR YOUR ORG)</label>
         <div id="pl-list">loading…</div>
+        <p id="pl-corpus-status" class="muted" role="status" aria-live="polite"></p>
         <label class="small" for="pl-sample">Corpus size</label>
-        <select id="pl-sample"><option value="60">Sample 60+60 (fast)</option><option value="0">Full corpus 202+215</option></select>
-        <div class="row"><button class="btn" onclick="runPolicyEval()">Score on corpus</button></div>
+        <select id="pl-sample" disabled><option value="60">Sample 60+60 (fast)</option><option value="0">Full corpus 202+215</option></select>
+        <div class="row"><button id="pl-run" class="btn" onclick="runPolicyEval()" disabled>Score on corpus</button></div>
       </div>
       <div class="card"><h3>Corpus scorecard</h3><div id="pl-out" class="muted">TPR = fraction of malicious fixtures flagged · FPR = fraction of clean fixtures flagged. Fixture-corpus rates — not field rates.</div></div>
     </div>
@@ -532,9 +533,17 @@ async function loadPolicies() {
         <span style="font-size:12.5px">${esc(p.name)}</span><br/>
         <span class="muted" style="font-size:11.5px">${esc(p.description)}</span></span>
       </label>`).join('');
+    if (d.corpus_available) {
+      $('#pl-corpus-status').textContent = 'Fixture corpus available: 202 clean + 215 malicious circuits.';
+      $('#pl-sample').disabled = false;
+      $('#pl-run').disabled = false;
+    } else {
+      $('#pl-corpus-status').innerHTML = 'Scoring unavailable: the PyPI wheel does not include fixtures. Use a source checkout or Docker image, or set <code>QSHIELD_FIXTURES_DIR</code> to a directory containing <code>clean_circuits/</code> and <code>malicious_circuits/</code>.';
+    }
   } catch (e) { $('#pl-list').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
 }
 async function runPolicyEval() {
+  if ($('#pl-run').disabled) return;
   const out = $('#pl-out'); spin(out);
   const ids = $$('.pl-check').filter(c => c.checked).map(c => c.value);
   const sample = Number($('#pl-sample').value) || null;

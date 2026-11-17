@@ -32,6 +32,10 @@ def _repo_fixtures_dir(kind: str) -> Path:
     return FIXTURE_ROOT / kind
 
 
+def _fixture_corpus_available() -> bool:
+    return all(_repo_fixtures_dir(kind).is_dir() for kind in ("clean_circuits", "malicious_circuits"))
+
+
 def _stats(ir: CircuitIR) -> dict[str, int]:
     return {"qubits": ir.num_qubits, "gates": len(ir.gates), "depth": ir.get_depth()}
 
@@ -102,7 +106,7 @@ def _policy_eval(ids: list[str], sample: int | None) -> dict[str, Any]:
         raise PolicyError(f"unknown policy ids: {', '.join(unknown)}")
     specs = [registry[i] for i in ids]
     clean, malicious = _repo_fixtures_dir("clean_circuits"), _repo_fixtures_dir("malicious_circuits")
-    if not clean.exists() or not malicious.exists():
+    if not _fixture_corpus_available():
         raise PolicyError(
             "fixture corpus not found — Policy Studio scoring works from a source checkout "
             "(tests/fixtures), not from an installed wheel"
@@ -176,7 +180,13 @@ class WorkbenchHandler(BaseHTTPRequestHandler):
 
             self._json(200, {"configured": qai.configured(), "disclaimer": qai.disclaimer()})
         elif path == "/api/policies":
-            self._json(200, {"policies": [p.to_dict() for p in builtin_policies()]})
+            self._json(
+                200,
+                {
+                    "policies": [p.to_dict() for p in builtin_policies()],
+                    "corpus_available": _fixture_corpus_available(),
+                },
+            )
         elif path == "/api/example":
             name = (qs.get("name") or ["ancilla_leakage"])[0]
             try:
