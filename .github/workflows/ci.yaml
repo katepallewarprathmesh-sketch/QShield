@@ -106,7 +106,7 @@ jobs:
           python-version: "3.12"
       - name: Install pre-commit
         run: python -m pip install pre-commit
-      - name: Exercise published hook in a sample repository
+      - name: Exercise hook in a sample repository
         run: |
           set -euo pipefail
           pre-commit try-repo . qshield-scan --verbose --files tests/fixtures/clean_circuits/bell_state.qasm

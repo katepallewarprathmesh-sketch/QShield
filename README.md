@@ -73,7 +73,7 @@ Install `pre-commit`, then add QSHIELD to `.pre-commit-config.yaml`. Pin `rev` t
 ```yaml
 repos:
   - repo: https://github.com/katepallewarprathmesh-sketch/QShield
-    rev: <qshield-commit-or-tag>
+    rev: 4ce54275c9344dc5939ad5a2adbbcf9571596260
     hooks:
       - id: qshield-scan
         # Optional: default threshold is high.
