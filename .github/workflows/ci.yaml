@@ -153,5 +153,19 @@ jobs:
         run: |
           python scripts/check_public_docs_boundary.py
           python -m build
+          python -m pip install dist/*.whl
+          cd "$RUNNER_TEMP"
+          python - <<'PY'
+          from pathlib import Path
+          from qshield.ui.server import FIXTURE_ROOT, _fixture_corpus_available, _policy_eval
+
+          assert _fixture_corpus_available(), FIXTURE_ROOT
+          assert len(list((FIXTURE_ROOT / "clean_circuits").glob("*.qasm"))) == 202
+          assert len(list((FIXTURE_ROOT / "malicious_circuits").glob("*.qasm"))) == 215
+          result = _policy_eval(["POL-001"], sample=1)
+          assert result["corpus"]["clean"] == result["corpus"]["malicious"] == 1
+          print(f"wheel fixture corpus scoring OK: {FIXTURE_ROOT}")
+          PY
+          cd "$GITHUB_WORKSPACE"
           python scripts/check_public_docs_boundary.py --dist dist
 

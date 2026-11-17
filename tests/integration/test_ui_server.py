@@ -111,8 +111,30 @@ def test_policy_endpoint_reports_missing_fixture_corpus(server, monkeypatch, tmp
     assert status == 200 and json.loads(body)["corpus_available"] is False
     code, body = _post_raw(server + "/api/policy-eval", json.dumps({"ids": ["POL-001"]}).encode())
     assert code == 400
-    assert "source checkout and the Docker image" in body
+    assert "fixture corpus unavailable" in body
     assert "QSHIELD_FIXTURES_DIR" in body
+
+
+def test_default_fixture_root_falls_back_to_packaged_corpus(monkeypatch, tmp_path):
+    import qshield.ui.server as ui_server
+
+    packaged = ui_server._PACKAGED_FIXTURE_ROOT
+    monkeypatch.delenv("QSHIELD_FIXTURES_DIR", raising=False)
+    monkeypatch.setattr(ui_server, "_REPO_FIXTURE_ROOT", tmp_path / "no-repo-fixtures")
+    assert ui_server._default_fixture_root() == packaged
+    for kind, expected_count in (("clean_circuits", 202), ("malicious_circuits", 215)):
+        source_files = {path.name: path.read_bytes() for path in (REPO / "tests" / "fixtures" / kind).glob("*.qasm")}
+        packaged_files = {path.name: path.read_bytes() for path in (packaged / kind).glob("*.qasm")}
+        assert len(packaged_files) == expected_count
+        assert packaged_files == source_files
+
+
+def test_fixture_root_environment_override(monkeypatch, tmp_path):
+    import qshield.ui.server as ui_server
+
+    custom = tmp_path / "my-corpus"
+    monkeypatch.setenv("QSHIELD_FIXTURES_DIR", str(custom))
+    assert ui_server._default_fixture_root() == custom
 
 
 def test_scan_endpoint_bell_is_clean_ish(server):

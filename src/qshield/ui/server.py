@@ -28,7 +28,24 @@ from qshield.ui.page import WORKBENCH_HTML
 
 MAX_BODY = 8 * 1024 * 1024
 
-FIXTURE_ROOT = Path(os.environ.get("QSHIELD_FIXTURES_DIR") or Path(__file__).resolve().parents[3] / "tests" / "fixtures")
+_REPO_FIXTURE_ROOT = Path(__file__).resolve().parents[3] / "tests" / "fixtures"
+_PACKAGED_FIXTURE_ROOT = Path(__file__).resolve().parents[1] / "fixtures"
+
+
+def _has_fixture_corpus(root: Path) -> bool:
+    return all((root / kind).is_dir() for kind in ("clean_circuits", "malicious_circuits"))
+
+
+def _default_fixture_root() -> Path:
+    override = os.environ.get("QSHIELD_FIXTURES_DIR")
+    if override:
+        return Path(override).expanduser()
+    if _has_fixture_corpus(_REPO_FIXTURE_ROOT):
+        return _REPO_FIXTURE_ROOT
+    return _PACKAGED_FIXTURE_ROOT
+
+
+FIXTURE_ROOT = _default_fixture_root()
 
 
 def _repo_fixtures_dir(kind: str) -> Path:
@@ -36,7 +53,7 @@ def _repo_fixtures_dir(kind: str) -> Path:
 
 
 def _fixture_corpus_available() -> bool:
-    return all(_repo_fixtures_dir(kind).is_dir() for kind in ("clean_circuits", "malicious_circuits"))
+    return _has_fixture_corpus(FIXTURE_ROOT)
 
 
 def _stats(ir: CircuitIR) -> dict[str, int]:
@@ -111,9 +128,9 @@ def _policy_eval(ids: list[str], sample: int | None) -> dict[str, Any]:
     clean, malicious = _repo_fixtures_dir("clean_circuits"), _repo_fixtures_dir("malicious_circuits")
     if not _fixture_corpus_available():
         raise PolicyError(
-            "fixture corpus not found — Policy Studio scoring needs clean_circuits/ and "
-            "malicious_circuits/; these are included in a source checkout and the Docker image, "
-            "but not the PyPI wheel. Set QSHIELD_FIXTURES_DIR to the directory containing them."
+            "fixture corpus unavailable — expected bundled clean_circuits/ and malicious_circuits/ "
+            "or a QSHIELD_FIXTURES_DIR override pointing to those directories. Reinstall QSHIELD "
+            "or set QSHIELD_FIXTURES_DIR to a valid fixture corpus."
         )
     engine = PolicyEngine(specs)
     return evaluate_corpus(engine, clean, malicious, sample=sample)

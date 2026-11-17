@@ -42,10 +42,10 @@ From source: `git clone https://github.com/katepallewarprathmesh-sketch/QShield.
 
 Requires Python ≥ 3.10.
 
-The Workbench's Policy Studio requires the fixture corpus, which is available in a source
-checkout and the Docker image but is not included in the PyPI wheel. For a wheel install,
-point `QSHIELD_FIXTURES_DIR` at a directory containing `clean_circuits/` and
-`malicious_circuits/` to enable corpus scoring; scan and compare work without it.
+The Workbench's Policy Studio includes the bundled fixture corpus in wheel and Docker
+installs (202 clean + 215 malicious circuits). For a custom corpus, point
+`QSHIELD_FIXTURES_DIR` at a directory containing `clean_circuits/` and
+`malicious_circuits/`; scan and compare work independently of corpus scoring.
 
 ## Quickstart
 

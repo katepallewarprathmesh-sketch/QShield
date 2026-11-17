@@ -588,11 +588,11 @@ async function loadPolicies() {
         <span class="muted" style="font-size:11.5px">${esc(p.description)}</span></span>
       </label>`).join('');
     if (d.corpus_available) {
-      $('#pl-corpus-status').textContent = 'Fixture corpus available: 202 clean + 215 malicious circuits.';
+      $('#pl-corpus-status').textContent = 'Bundled fixture corpus available: 202 clean + 215 malicious circuits.';
       $('#pl-sample').disabled = false;
       $('#pl-run').disabled = false;
     } else {
-      $('#pl-corpus-status').innerHTML = 'Scoring unavailable: the PyPI wheel does not include fixtures. Use a source checkout or Docker image, or set <code>QSHIELD_FIXTURES_DIR</code> to a directory containing <code>clean_circuits/</code> and <code>malicious_circuits/</code>.';
+      $('#pl-corpus-status').innerHTML = 'Scoring unavailable: the fixture corpus could not be found in this installation. Reinstall QSHIELD or set <code>QSHIELD_FIXTURES_DIR</code> to a directory containing <code>clean_circuits/</code> and <code>malicious_circuits/</code>.';
     }
   } catch (e) { $('#pl-list').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
 }
