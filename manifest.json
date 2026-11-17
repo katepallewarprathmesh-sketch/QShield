@@ -5,14 +5,14 @@
   "ai": "precomputed real outputs on the ancilla fixture, labeled; live AI unavailable on static pages",
   "files": [
     {
-      "path": "bootstrap.js",
+      "path": "bootstrap.38017af051f8.js",
       "sha256": "38017af051f8ac89f792e71f3cd5c2c712c6eccf505b9cc20417de0ebdc45b59",
       "bytes": 13104
     },
     {
       "path": "index.html",
-      "sha256": "53e63d06eb96079191426858a96753db5ccea82bf834de1fb2419858a60a5384",
-      "bytes": 56371
+      "sha256": "98b794dc9a6e6e12802c2f6bb556301b7ba655f4fc9c713d7568084f5e53a4c0",
+      "bytes": 56384
     },
     {
       "path": "threat-model.html",
@@ -71,7 +71,7 @@
     },
     {
       "path": "vendor/qshield.whl",
-      "sha256": "a2242e8134bc8bf0a594281a81f1fb5229a7677ea6b9b995785ce07aa09f4261",
+      "sha256": "54baf6702278fdf2254deecc3d3a474a4af4a425ea396a821c2f30402e9083f9",
       "bytes": 332603
     }
   ]
