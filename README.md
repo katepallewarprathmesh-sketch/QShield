@@ -96,6 +96,20 @@ repos:
 
 Then run `pre-commit install` and `pre-commit run --all-files`. The hook scans staged `.qasm`, `.qasm2`, and `.qasm3` files; parse errors fail closed. It runs static and supply-chain checks and blocks findings at or above `--fail-on` (default: `high`).
 
+## Optional detector plugins (WebAssembly/WASI)
+
+The plugin API is implemented on `main` but is not included in the v1.3.0 release. In a source checkout, install the optional `.[plugins]` extra; plugin execution is explicit and separate from the default scan pipeline. Call `WasmPluginRunner().run(plugin_dir, circuit_ir)`. Plugins use the versioned JSON contract in `qshield/plugins/*schema.json`; the host verifies the module hash and tags findings with the manifest identity. WASI receives no preopened directories or environment variables, and the runner limits memory, fuel, wall time, input, and output. Only WASI Preview 1 imports are accepted; socket-capable imports are explicitly denied. The manifest hash is integrity checking, not publisher authentication; only run plugins you choose to trust. Plugin findings remain separate evidence and do not silently change core scan results or gate decisions.
+
+A Rust example and build steps are in [`examples/plugins/identity-pair`](examples/plugins/identity-pair/README.md).
+
+```python
+from qshield.core.parsers import parse_file
+from qshield.plugins import WasmPluginRunner
+
+circuit = parse_file("circuit.qasm")
+result = WasmPluginRunner().run("path/to/plugin-directory", circuit)
+```
+
 ## Optional AI assistance (cloud, advisory)
 
 ```bash

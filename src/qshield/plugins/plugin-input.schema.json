@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qshield.dev/schemas/plugin-input-1.json",
+  "title": "QSHIELD Detector Plugin Input v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["api_version", "circuit"],
+  "properties": {
+    "api_version": { "const": "1" },
+    "circuit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["circuit_id", "name", "num_qubits", "num_classical_bits", "gates", "measurements", "ancilla_qubits", "source_framework", "source_hash"],
+      "properties": {
+        "circuit_id": { "type": "string" },
+        "name": { "type": "string" },
+        "num_qubits": { "type": "integer", "minimum": 0 },
+        "num_classical_bits": { "type": "integer", "minimum": 0 },
+        "gates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["gate_id", "gate_name", "gate_type", "qubits", "parameters", "source_location"],
+            "properties": {
+              "gate_id": { "type": "string" },
+              "gate_name": { "type": "string" },
+              "gate_type": { "enum": ["standard", "parameterized", "custom", "unknown"] },
+              "qubits": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
+              "parameters": { "type": "array", "items": { "type": ["number", "null"] } },
+              "source_location": { "type": ["string", "null"] }
+            }
+          }
+        },
+        "measurements": { "type": "array", "items": { "type": "array", "prefixItems": [{"type":"integer"},{"type":"integer"}], "minItems": 2, "maxItems": 2 } },
+        "ancilla_qubits": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
+        "source_framework": { "type": "string" },
+        "source_hash": { "type": "string" }
+      }
+    }
+  }
+}

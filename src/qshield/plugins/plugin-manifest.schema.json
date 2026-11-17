@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qshield.dev/schemas/plugin-manifest-1.json",
+  "title": "QSHIELD Detector Plugin Manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifest_version", "plugin_id", "version", "api_version", "module", "sha256"],
+  "properties": {
+    "manifest_version": { "const": 1 },
+    "plugin_id": { "type": "string", "pattern": "^[a-z0-9](?:[a-z0-9._-]{0,62}[a-z0-9])?$", "maxLength": 64 },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$" },
+    "api_version": { "const": "1" },
+    "module": { "type": "string", "pattern": "^[^/\\\\]+\\.wasm$" },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}
