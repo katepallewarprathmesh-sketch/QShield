@@ -210,7 +210,7 @@ def _render_index() -> str:
     )
     # Inject BEFORE the page's inline script so window.fetch is already
     # intercepted when the page fires its initial /api/* calls.
-    marker = "<script>\n\"use strict\";"
+    marker = '<script nonce="__CSP_NONCE__">\n"use strict";'
     if html.count(marker) != 1:
         raise RuntimeError("main inline script marker not unique/found in WORKBENCH_HTML")
     return html.replace(marker, inject + marker, 1)
