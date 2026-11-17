@@ -1,10 +1,15 @@
 from __future__ import annotations
 
+import importlib.util
 from pathlib import Path
 
 import pytest
 
-import scripts.build_static_site as site_builder
+_SCRIPT = Path(__file__).resolve().parents[2] / "scripts" / "build_static_site.py"
+_SPEC = importlib.util.spec_from_file_location("qshield_build_static_site", _SCRIPT)
+assert _SPEC is not None and _SPEC.loader is not None
+site_builder = importlib.util.module_from_spec(_SPEC)
+_SPEC.loader.exec_module(site_builder)
 
 
 def test_builder_renders_public_threat_model_version(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):

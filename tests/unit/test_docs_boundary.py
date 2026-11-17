@@ -1,18 +1,22 @@
 from __future__ import annotations
 
+import importlib.util
 import tarfile
 import zipfile
 from pathlib import Path
 
 import pytest
 
-from scripts.check_public_docs_boundary import (
-    BoundaryError,
-    _is_docs_path,
-    check_distributions,
-    check_public_site,
-    check_source_tree,
-)
+_SCRIPT = Path(__file__).resolve().parents[2] / "scripts" / "check_public_docs_boundary.py"
+_SPEC = importlib.util.spec_from_file_location("qshield_docs_boundary", _SCRIPT)
+assert _SPEC is not None and _SPEC.loader is not None
+_BOUNDARY = importlib.util.module_from_spec(_SPEC)
+_SPEC.loader.exec_module(_BOUNDARY)
+BoundaryError = _BOUNDARY.BoundaryError
+_is_docs_path = _BOUNDARY._is_docs_path
+check_distributions = _BOUNDARY.check_distributions
+check_public_site = _BOUNDARY.check_public_site
+check_source_tree = _BOUNDARY.check_source_tree
 
 
 def test_docs_path_detection_is_segment_based():
