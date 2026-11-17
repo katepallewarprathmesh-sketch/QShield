@@ -15,7 +15,7 @@
 | `qshield verify` | Unitary check of a circuit against an expected matrix (≤12 qubits) |
 | `qshield audit-deps` | Quantum supply-chain audit of a `requirements.txt` (typosquatting, vulnerable pins) |
 | `qshield sig` | Manage the built-in threat signature pack (offline, sha256-verified) |
-| `qshield ui` | **Workbench** — local web UI: scan, compare, Policy Studio (your policies scored against the bundled fixture corpus), Robustness Probe (does a finding survive semantics-preserving camouflage?) |
+| `qshield ui` | **Workbench** — local web UI: scan, compare, Policy Studio (score policies against the fixture corpus when available), Robustness Probe (does a finding survive semantics-preserving camouflage?) |
 | Reports | SARIF (GitHub Security tab) · JSON · HTML · PDF |
 
 Everything runs offline: no hardware, no cloud, no accounts, no network calls.
@@ -40,6 +40,11 @@ Docker: `docker pull ghcr.io/katepallewarprathmesh-sketch/qshield:1.2.0` (or bui
 From source: `git clone https://github.com/katepallewarprathmesh-sketch/QShield.git && cd QShield && pip install -e '.[dev]'`
 
 Requires Python ≥ 3.10.
+
+The Workbench's Policy Studio requires the fixture corpus, which is available in a source
+checkout and the Docker image but is not included in the PyPI wheel. For a wheel install,
+point `QSHIELD_FIXTURES_DIR` at a directory containing `clean_circuits/` and
+`malicious_circuits/` to enable corpus scoring; scan and compare work without it.
 
 ## Quickstart
 
