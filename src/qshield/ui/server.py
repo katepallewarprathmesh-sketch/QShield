@@ -1,7 +1,7 @@
 """QSHIELD Workbench server — stdlib ThreadingHTTPServer, JSON-only API.
 
 Security properties (by construction, not configuration):
-* binds 127.0.0.1 by default; 0.0.0.0 only behind an explicit --host flag
+* binds 127.0.0.1 by default; non-loopback binds require --allow-remote
 * has no built-in authentication; protect it before exposing it beyond localhost
 * never executes uploaded content — QASM is parsed, never run
 * 8 MiB request body cap; JSON in / JSON out; no shell, no filesystem writes
@@ -11,6 +11,7 @@ Security properties (by construction, not configuration):
 
 from __future__ import annotations
 
+import ipaddress
 import json
 import os
 import secrets
@@ -110,8 +111,9 @@ def _policy_eval(ids: list[str], sample: int | None) -> dict[str, Any]:
     clean, malicious = _repo_fixtures_dir("clean_circuits"), _repo_fixtures_dir("malicious_circuits")
     if not _fixture_corpus_available():
         raise PolicyError(
-            "fixture corpus not found — Policy Studio scoring works from a source checkout "
-            "(tests/fixtures), not from an installed wheel"
+            "fixture corpus not found — Policy Studio scoring needs clean_circuits/ and "
+            "malicious_circuits/; these are included in a source checkout and the Docker image, "
+            "but not the PyPI wheel. Set QSHIELD_FIXTURES_DIR to the directory containing them."
         )
     engine = PolicyEngine(specs)
     return evaluate_corpus(engine, clean, malicious, sample=sample)
@@ -342,12 +344,29 @@ class WorkbenchHandler(BaseHTTPRequestHandler):
                 self._json(500, {"error": f"{type(exc).__name__}: {exc}"})
 
 
-def run_workbench(host: str = "127.0.0.1", port: int = 8765) -> None:
+def _is_loopback_host(host: str) -> bool:
+    """Return True only for literal loopback IPs and the localhost name."""
+    if host.lower().rstrip(".") == "localhost":
+        return True
+    try:
+        return ipaddress.ip_address(host.split("%", 1)[0]).is_loopback
+    except ValueError:
+        return False
+
+
+def run_workbench(host: str = "127.0.0.1", port: int = 8765, *, allow_remote: bool = False) -> None:
     """Serve the Workbench (blocking). Ctrl+C to stop."""
+    if not _is_loopback_host(host) and not allow_remote:
+        raise ValueError(
+            "refusing a non-loopback bind without --allow-remote; the Workbench has no built-in "
+            "authentication and must be protected by a trusted TLS/authentication proxy"
+        )
     server = ThreadingHTTPServer((host, port), WorkbenchHandler)
     server.daemon_threads = True
     shown_host = "localhost" if host == "127.0.0.1" else host
     print(f"QSHIELD Workbench {__version__} — http://{shown_host}:{server.server_address[1]}")
+    if allow_remote and not _is_loopback_host(host):
+        print("WARNING: remote bind enabled; unauthenticated. Restrict network access and use a trusted TLS/authentication proxy.")
     print("Offline · read-only · no telemetry · Ctrl+C to stop")
     try:
         server.serve_forever()

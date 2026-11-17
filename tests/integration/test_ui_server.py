@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from qshield.ui.server import WorkbenchHandler
+from qshield.ui.server import WorkbenchHandler, _is_loopback_host, run_workbench
 
 REPO = Path(__file__).resolve().parents[2]
 ANCILLA = REPO / "tests" / "fixtures" / "malicious_circuits" / "ancilla_leakage.qasm"
@@ -32,6 +32,16 @@ def server():
     yield f"http://127.0.0.1:{srv.server_address[1]}"
     srv.shutdown()
     srv.server_close()
+
+
+def test_remote_bind_requires_explicit_opt_in():
+    assert _is_loopback_host("127.0.0.1")
+    assert _is_loopback_host("::1")
+    assert _is_loopback_host("localhost")
+    assert not _is_loopback_host("0.0.0.0")  # noqa: S104 - asserting the remote-bind guard
+    assert not _is_loopback_host("192.168.1.20")
+    with pytest.raises(ValueError, match="--allow-remote"):
+        run_workbench(host="0.0.0.0", port=0)  # noqa: S104 - must be rejected before binding
 
 
 def _get(url):
@@ -95,6 +105,10 @@ def test_policy_endpoint_reports_missing_fixture_corpus(server, monkeypatch, tmp
     monkeypatch.setattr(ui_server, "FIXTURE_ROOT", tmp_path / "missing")
     status, body = _get(server + "/api/policies")
     assert status == 200 and json.loads(body)["corpus_available"] is False
+    code, body = _post_raw(server + "/api/policy-eval", json.dumps({"ids": ["POL-001"]}).encode())
+    assert code == 400
+    assert "source checkout and the Docker image" in body
+    assert "QSHIELD_FIXTURES_DIR" in body
 
 
 def test_scan_endpoint_bell_is_clean_ish(server):

@@ -891,13 +891,21 @@ def runtime_check(
 
 @app.command()
 def ui(
-    host: str = typer.Option("127.0.0.1", "--host", help="Bind address (127.0.0.1 offline default; 0.0.0.0 only behind explicit flag)"),
+    host: str = typer.Option("127.0.0.1", "--host", help="Bind address (loopback by default)"),
     port: int = typer.Option(8765, "--port", "-p", help="Port to bind"),
+    allow_remote: bool = typer.Option(
+        False,
+        "--allow-remote",
+        help="Confirm a non-loopback bind; the Workbench has no built-in authentication",
+    ),
 ) -> None:
-    """Launch the QSHIELD Workbench — offline, local, no-hardware web UI."""
+    """Launch the QSHIELD Workbench — local by default, no-hardware web UI."""
     from qshield.ui import run_workbench
 
-    run_workbench(host=host, port=port)
+    try:
+        run_workbench(host=host, port=port, allow_remote=allow_remote)
+    except ValueError as exc:
+        raise typer.BadParameter(str(exc), param_hint="--allow-remote") from exc
 
 
 @app.command()

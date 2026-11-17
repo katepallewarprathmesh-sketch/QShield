@@ -1,6 +1,6 @@
 # QSHIELD Workbench — self-hostable container (offline by default).
 #   docker build -t qshield .
-#   docker run --rm -p 127.0.0.1:8765:8765 qshield  # local-only: http://127.0.0.1:8765
+#   docker run --rm -p 127.0.0.1:8765:8765 qshield  # host-loopback only: http://127.0.0.1:8765; do not publish publicly without an auth/TLS proxy
 FROM python:3.12-slim
 WORKDIR /app
 
@@ -15,4 +15,4 @@ RUN pip install --no-cache-dir . && useradd -m app
 ENV QSHIELD_FIXTURES_DIR=/app/tests/fixtures
 USER app
 EXPOSE 8765
-CMD ["qshield", "ui", "--host", "0.0.0.0", "--port", "8765"]
+CMD ["qshield", "ui", "--host", "0.0.0.0", "--port", "8765", "--allow-remote"]
