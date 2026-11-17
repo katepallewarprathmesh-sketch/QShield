@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qshield"
-version = "1.1.1"
+version = "1.2.0"
 description = "Quantum Software Supply Chain Security Framework"
 readme = "README.md"
 license = { text = "Apache-2.0" }
 requires-python = ">=3.10"
 authors = [
-    { name = "QSHIELD Contributors", email = "qshield@example.org" }
+    { name = "QSHIELD Contributors", email = "284222233+katepallewarprathmesh-sketch@users.noreply.github.com" }
 ]
 keywords = ["quantum", "security", "supply-chain", "static-analysis", "backdoor", "trojan"]
 classifiers = [
@@ -66,8 +66,11 @@ dev = [
 qshield = "qshield.cli.main:app"
 
 [project.urls]
-Homepage = "https://github.com/qshield/qshield"
-Documentation = "https://qshield.readthedocs.io"
+Homepage = "https://github.com/katepallewarprathmesh-sketch/QShield"
+Repository = "https://github.com/katepallewarprathmesh-sketch/QShield"
+Issues = "https://github.com/katepallewarprathmesh-sketch/QShield/issues"
+Changelog = "https://github.com/katepallewarprathmesh-sketch/QShield/blob/main/CHANGELOG.md"
+Documentation = "https://katepallewarprathmesh-sketch.github.io/QShield/"
 
 [tool.setuptools.packages.find]
 where = ["src"]

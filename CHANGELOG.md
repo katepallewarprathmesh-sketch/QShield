@@ -3,7 +3,7 @@
 All notable changes to QSHIELD. Historical spec annotations live in
 `docs/spec/QSHIELD.md`; this file records released versions.
 
-## [Unreleased]
+## [1.2.0] — 2026-11-16 · Real-engine Pages site + CI hardening
 
 ### Added
 - **CI hardening (Phase 1 of the global-scale implementation plan)** — Docker image now build-verified in CI with a non-root assertion and a bundled-fixture scan smoke (`T2.1` expected); Workbench policy fixture root is overridable via `QSHIELD_FIXTURES_DIR`; CI matrix is now Python 3.10–3.13 × Qiskit 1.4.x and 2.x; optional-extra tests (`qiskit`-backed differential tester, `pyzx` formal path) carry explicit skip reasons instead of failing in minimal environments. Docker image contains no AI features enabled and needs no network.

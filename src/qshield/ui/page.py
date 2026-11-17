@@ -200,7 +200,7 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
   <div class="side-spacer"></div>
 
   <div class="side-foot">
-    <div class="v"><b><span class="dot"></span>v1.1.1</b><span class="pill robust">offline</span></div>
+    <div class="v"><b><span class="dot"></span>v1.2.0</b><span class="pill robust">offline</span></div>
     <small>Zero network calls. Zero hardware. Numbers measured on the bundled fixture corpus — evidence, not proofs.</small>
   </div>
 </aside>

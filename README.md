@@ -30,11 +30,14 @@ inspection, and measurement is destructive. QSHIELD is purpose-built for this te
 ## Install
 
 ```bash
-pip install -e .                       # core (OpenQASM parser, static analysis, CLI)
-pip install -e '.[qiskit,cirq]'        # + framework parsers (qiskit-aer used by --full)
-pip install -e '.[formal]'             # + ZX-calculus verification (PyZX, Z3)
-pip install -e '.[dev]'                # + test/lint tooling
+pip install qshield                     # core (OpenQASM parser, static analysis, CLI)
+pip install 'qshield[qiskit,cirq]'     # + framework parsers (qiskit-aer used by --full)
+pip install 'qshield[formal]'          # + ZX-calculus verification (PyZX, Z3)
 ```
+
+Docker: `docker pull ghcr.io/katepallewarprathmesh-sketch/qshield:1.2.0` (or build from source: `docker build -t qshield .`).
+
+From source: `git clone https://github.com/katepallewarprathmesh-sketch/QShield.git && cd QShield && pip install -e '.[dev]'`
 
 Requires Python ≥ 3.10.
 
@@ -91,11 +94,11 @@ Advisory only, never a verdict — the offline core never touches the network; `
   matrix verification where feasible.
 - The community signature pack ships **empty by design** (candidates that measured
   TPR ≈ FPR were rejected).
-- **Not published to PyPI / marketplaces.** Apache-2.0; source build only.
+- **Published to PyPI** and as a GHCR image; Apache-2.0. Detection rates above are fixture-corpus measurements, not field rates.
 
 ## Status & license
 
-**v1.1.1** — software-only. See `CHANGELOG.md` for release notes.
+**v1.2.0** — software-only. See `CHANGELOG.md` for release notes.
 Apache 2.0 — see [LICENSE](LICENSE). Contributions (signatures, analyzers, corpus circuits) welcome.
 
 ## Development
