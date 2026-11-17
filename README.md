@@ -93,6 +93,8 @@ Advisory only, never a verdict — the offline core never touches the network; `
 
 ## Honest limits
 
+For assumptions, trust boundaries, and non-goals, see the [public QSHIELD threat model](https://katepallewarprathmesh-sketch.github.io/QShield/threat-model.html).
+
 - Detection is **evidence, never proof** that a circuit is honest. Measured on the bundled
   synthetic fixture corpus (202 clean / 215 malicious) — **fixture-corpus rates, not field rates**.
 - Randomized equivalence catches large deviations, not angles ≲ 1e-3 rad; use `--formal` or dense

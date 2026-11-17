@@ -58,6 +58,7 @@ jobs:
           test -f dist-site/vendor/fixtures.zip
           test "$(find dist-site/vendor/pyodide -type f | wc -l)" -ge 9
           ! grep -qi 'static demo' dist-site/index.html
+          python scripts/check_public_docs_boundary.py --site dist-site
           echo "site sanity checks OK"
 
       - name: Deploy to gh-pages (fast-forward, history preserved)

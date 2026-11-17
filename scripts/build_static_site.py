@@ -46,6 +46,7 @@ CANNED_AI = {
     "report_mr": REPO / "scripts" / "static_demo_canned" / "ai_report_ancilla_mr-IN.json",
 }
 BOOTSTRAP = REPO / "scripts" / "site" / "bootstrap.js"
+THREAT_MODEL_PAGE = REPO / "scripts" / "site" / "threat-model.html"
 FIXTURE_CORPUS = ("clean_circuits", "malicious_circuits")
 FIXTURES_ROOT = REPO / "tests" / "fixtures"
 
@@ -216,6 +217,18 @@ def _render_index() -> str:
     return html.replace(marker, inject + marker, 1)
 
 
+def _write_public_threat_model(out: Path, version: str) -> Path:
+    if not THREAT_MODEL_PAGE.is_file():
+        raise RuntimeError(f"public threat model page not found: {THREAT_MODEL_PAGE}")
+    html = THREAT_MODEL_PAGE.read_text(encoding="utf-8").replace("__QSHIELD_VERSION__", version)
+    if "__QSHIELD_VERSION__" in html:
+        raise RuntimeError("public threat model page has an unresolved version token")
+    out.mkdir(parents=True, exist_ok=True)
+    target = out / "threat-model.html"
+    target.write_text(html, encoding="utf-8")
+    return target
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--out", type=Path, default=REPO / "dist-site", help="output directory")
@@ -243,6 +256,8 @@ def main() -> int:
         manifest_version = tomllib.loads((REPO / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
     except Exception as exc:
         raise RuntimeError(f"could not read project.version from pyproject.toml: {exc}") from exc
+
+    _write_public_threat_model(out, manifest_version)
 
     manifest = {
         "qshield_version": manifest_version,
