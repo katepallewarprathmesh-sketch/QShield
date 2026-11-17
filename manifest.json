@@ -71,8 +71,8 @@
     },
     {
       "path": "vendor/qshield.whl",
-      "sha256": "969a2ef13e5254c8deb1c7a713c81b32452b2163a60b4e76273e2052eca534c3",
-      "bytes": 184573
+      "sha256": "f9a6b47dfb1038bd204ab22f7f269999051c02dd28f716449fe4cbdf7c7abb13",
+      "bytes": 184750
     }
   ]
 }
