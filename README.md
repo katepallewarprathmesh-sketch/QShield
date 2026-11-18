@@ -149,6 +149,17 @@ repos:
 
 Then run `pre-commit install` and `pre-commit run --all-files`. The hook scans staged `.qasm`, `.qasm2`, and `.qasm3` files; parse errors fail closed. It runs static and supply-chain checks and blocks findings at or above `--fail-on` (default: `high`).
 
+## Runtime gate policy and overload behavior
+
+The runtime proxy supports `--policy observe|enforce` for findings and `--failure-mode open|closed` when a circuit cannot be checked. By default, `observe` uses `open` and `enforce` uses `closed`; set the mode explicitly for production. `--max-workers` and `--request-queue-size` bound concurrency and pending connections. On overload, `closed` returns an explicit 503 block; `open` forwards the request without inspection and logs coverage as skipped. Gate-decision audit events include the policy version, decision, circuit digest(s), and coverage, independent of the alert severity threshold. Set `--policy-version` to the identifier used by your deployment.
+
+The proxy binds to loopback by default and does not implement client authentication or TLS termination. For remote deployments, place it behind a trusted TLS-terminating, authenticated reverse proxy or service mesh; do not expose the plain HTTP listener directly to an untrusted network.
+
+```bash
+qshield runtime proxy --upstream https://provider.example/api \
+  --policy enforce --failure-mode closed --policy-version release-2026-11
+```
+
 ## Optional detector plugins (WebAssembly/WASI)
 
 The plugin API is included in v1.4.0 behind the optional `.[plugins]` extra; plugin execution is explicit and separate from the default scan pipeline. Call `WasmPluginRunner().run(plugin_dir, circuit_ir)`. Plugins use the versioned JSON contract in `qshield/plugins/*schema.json`; the host verifies the module hash and tags findings with the manifest identity. WASI receives no preopened directories or environment variables, and the runner limits memory, fuel, wall time, input, and output. Only WASI Preview 1 imports are accepted; socket-capable imports are explicitly denied. The manifest hash is integrity checking, not publisher authentication; only run plugins you choose to trust. Plugin findings remain separate evidence and do not silently change core scan results or gate decisions.

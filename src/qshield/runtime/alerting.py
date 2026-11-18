@@ -106,6 +106,20 @@ class AlertRouter:
                 errors.append(f"{type(sink).__name__}: {exc}")
         return errors
 
+    def emit_audit(self, event: Alert) -> list[str]:
+        """Deliver to configured local audit sinks, regardless of alert threshold."""
+        errors: list[str] = []
+        for sink in self.sinks:
+            # Decision audits are per-request and must not synchronously turn
+            # an optional network webhook into the proxy's critical path.
+            if isinstance(sink, WebhookSink):
+                continue
+            try:
+                sink.emit(event)
+            except Exception as exc:  # audit sinks must never break the request path
+                errors.append(f"{type(sink).__name__}: {exc}")
+        return errors
+
     def emit_all(self, alerts: list[Alert]) -> list[str]:
         errors: list[str] = []
         for alert in alerts:

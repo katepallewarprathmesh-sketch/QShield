@@ -2,6 +2,7 @@
 
 import json
 import threading
+import time
 import urllib.error
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -23,6 +24,7 @@ class FakeQuantumCloud(BaseHTTPRequestHandler):
 
     protocol_version = "HTTP/1.1"
     calls: ClassVar[list] = []
+    slow_started: ClassVar[threading.Event] = threading.Event()
 
     def log_message(self, *a):
         return
@@ -68,12 +70,18 @@ class FakeQuantumCloud(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self) -> None:
-        if self.path == "/jobs/job-00042":
+        if self.path == "/slow":
+            FakeQuantumCloud.slow_started.set()
+            time.sleep(0.4)
+            self._json(200, {"status": "slow-ok"})
+        elif self.path == "/jobs/job-00042":
             self._json(200, {"id": "job-00042", "shots": 200,
                              "counts": {"00": 100, "11": 100}})          # consistent with Bell
         elif self.path == "/jobs/job-rigged":
             self._json(200, {"id": "job-rigged", "shots": 200,
                              "counts": {"01": 100, "10": 100}})          # zero-prob for Bell
+        elif self.path == "/large":
+            self._json(200, {"data": "x" * 128})
         elif self.path == "/fail":
             self._json(500, {"error": "boom"})
         else:
@@ -87,6 +95,7 @@ def upstream():
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     FakeQuantumCloud.calls = []
+    FakeQuantumCloud.slow_started.clear()
     yield f"http://127.0.0.1:{server.server_address[1]}"
     server.shutdown()
     server.server_close()
@@ -212,6 +221,20 @@ class TestProxyPlumbing:
         finally:
             proxy.stop()
 
+    def test_upstream_response_size_is_bounded(self, upstream):
+        proxy = QShieldProxy(
+            ProxyConfig(upstream=upstream, max_response_bytes=32),
+            AlertRouter(sinks=[], min_severity="critical"),
+            host="127.0.0.1", port=0,
+        ).start()
+        try:
+            status, headers, body = _get(f"http://127.0.0.1:{proxy.port}/large")
+            assert status == 502
+            assert headers["X-QShield-Decision"] == "upstream-unavailable"
+            assert json.loads(body)["error"]["code"] == "qshield_upstream_response_too_large"
+        finally:
+            proxy.stop()
+
     def test_upstream_error_status_is_relayed(self, upstream):
         proxy = QShieldProxy(ProxyConfig(upstream=upstream, policy="observe"),
                              AlertRouter(sinks=[], min_severity="critical"),
@@ -247,6 +270,97 @@ class TestProxyPlumbing:
             assert status == 400
             assert json.loads(body)["error"]["code"] == "qshield_unverifiable"
         finally:
+            proxy.stop()
+
+    def test_failure_mode_open_overrides_enforce_for_parse_failure(self, upstream, tmp_path):
+        alert_file = tmp_path / "audit.jsonl"
+        router = AlertRouter(sinks=[JsonLinesSink(alert_file)], min_severity="critical")
+        proxy = QShieldProxy(
+            ProxyConfig(upstream=upstream, policy="enforce", failure_mode="open", policy_version="release-7"),
+            router,
+            host="127.0.0.1", port=0,
+        ).start()
+        try:
+            bad = "OPENQASM 2.0; qreg q[1]; this is not valid qasm {{{"
+            status, headers, _ = _post_json(
+                f"http://127.0.0.1:{proxy.port}/jobs",
+                {"params": {"circuits": [bad], "shots": 10}},
+            )
+            assert status == 200
+            assert headers["X-QShield-Decision"] == "allow-with-alert"
+            events = [json.loads(line) for line in alert_file.read_text().splitlines()]
+            gate_event = next(event for event in events if event["category"] == "gate.decision")
+            assert gate_event["details"]["failure_mode"] == "open"
+            assert gate_event["details"]["policy_version"] == "release-7"
+            assert gate_event["details"]["coverage"]["status"] == "inconclusive"
+        finally:
+            proxy.stop()
+
+    def test_failure_mode_closed_blocks_analysis_exception(self, upstream, monkeypatch):
+        import qshield.runtime.proxy as proxy_module
+
+        def fail(*args, **kwargs):
+            raise RuntimeError("simulated analyzer failure")
+
+        monkeypatch.setattr(proxy_module, "inspect_circuit", fail)
+        proxy = QShieldProxy(
+            ProxyConfig(upstream=upstream, policy="observe", failure_mode="closed"),
+            AlertRouter(sinks=[], min_severity="critical"),
+            host="127.0.0.1", port=0,
+        ).start()
+        try:
+            status, headers, body = _post_json(
+                f"http://127.0.0.1:{proxy.port}/jobs", _job_submit(),
+            )
+            assert status == 503
+            assert headers["X-QShield-Decision"] == "block"
+            assert json.loads(body)["error"]["code"] == "qshield_analysis_unavailable"
+            assert FakeQuantumCloud.calls == []
+        finally:
+            proxy.stop()
+
+    def test_bounded_workers_fail_closed_with_explicit_overload_decision(self, upstream, tmp_path):
+        audit_file = tmp_path / "audit.jsonl"
+        proxy = QShieldProxy(
+            ProxyConfig(upstream=upstream, max_workers=1, failure_mode="closed", policy_version="gate-12"),
+            AlertRouter(sinks=[JsonLinesSink(audit_file)], min_severity="critical"),
+            host="127.0.0.1", port=0,
+        ).start()
+        first_response = []
+        first = threading.Thread(target=lambda: first_response.append(_get(f"http://127.0.0.1:{proxy.port}/slow")))
+        try:
+            first.start()
+            assert FakeQuantumCloud.slow_started.wait(timeout=2.0)
+            status, headers, body = _get(f"http://127.0.0.1:{proxy.port}/jobs")
+            assert status == 503
+            assert headers["X-QShield-Decision"] == "block"
+            assert json.loads(body)["error"]["code"] == "qshield_overloaded"
+            assert proxy.stats_snapshot()["overloaded"] == 1
+            events = [json.loads(line) for line in audit_file.read_text().splitlines()]
+            event = next(item for item in events if item["category"] == "gate.decision")
+            assert event["details"]["policy_version"] == "gate-12"
+            assert event["details"]["coverage"]["status"] == "skipped"
+        finally:
+            first.join(timeout=3.0)
+            proxy.stop()
+
+    def test_bounded_workers_fail_open_forwards_without_inspection(self, upstream):
+        proxy = QShieldProxy(
+            ProxyConfig(upstream=upstream, max_workers=1, failure_mode="open"),
+            AlertRouter(sinks=[], min_severity="critical"),
+            host="127.0.0.1", port=0,
+        ).start()
+        first = threading.Thread(target=lambda: _get(f"http://127.0.0.1:{proxy.port}/slow"))
+        try:
+            first.start()
+            assert FakeQuantumCloud.slow_started.wait(timeout=2.0)
+            status, headers, body = _get(f"http://127.0.0.1:{proxy.port}/jobs")
+            assert status == 404
+            assert headers["X-QShield-Decision"] == "allow-with-alert"
+            assert json.loads(body)["error"] == "not found"
+            assert proxy.stats_snapshot()["overloaded"] == 1
+        finally:
+            first.join(timeout=3.0)
             proxy.stop()
 
     def test_stats_endpoint_accounting(self, upstream):

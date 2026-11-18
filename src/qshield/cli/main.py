@@ -981,7 +981,11 @@ def runtime_proxy(
     port: int = typer.Option(8080, "--port"),
     policy: str = typer.Option("observe", "--policy", help="observe (forward+alert) | enforce (403 on violation)"),
     min_severity: str = typer.Option("high", "--min-severity", help="enforce: block threshold for static findings"),
-    alert_min_severity: str = typer.Option("medium", "--alert-min-severity", help="minimum severity routed to sinks"),
+    failure_mode: str | None = typer.Option(None, "--failure-mode", help="open|closed when a circuit cannot be checked (defaults: observe=open, enforce=closed)"),
+    policy_version: str = typer.Option("local-unversioned", "--policy-version", help="identifier recorded with gate decisions"),
+    max_workers: int = typer.Option(32, "--max-workers", min=1, max=1024, help="maximum concurrent proxy handlers"),
+    request_queue_size: int = typer.Option(128, "--request-queue-size", min=1, max=65535, help="bounded pending connection backlog"),
+    alert_min_severity: str = typer.Option("medium", "--alert-min-severity", help="minimum severity routed to alert sinks"),
     alert_file: Path | None = typer.Option(None, "--alert-file", help="JSON-lines alert log (default: stderr)"),
     webhook: str | None = typer.Option(None, "--webhook", help="also POST alerts to this URL"),
     no_validate: bool = typer.Option(False, "--no-validate", help="disable counts-vs-ideal result validation"),
@@ -993,14 +997,23 @@ def runtime_proxy(
     if policy not in ("observe", "enforce"):
         console.print("[red]--policy must be 'observe' or 'enforce'[/red]")
         raise typer.Exit(code=2)
-    config = ProxyConfig(upstream=upstream, policy=policy, min_severity=min_severity,
-                         alert_min_severity=alert_min_severity,
-                         validate_results=not no_validate, run_static=not no_static)
+    try:
+        config = ProxyConfig(
+            upstream=upstream, policy=policy, min_severity=min_severity,
+            failure_mode=failure_mode, policy_version=policy_version,
+            max_workers=max_workers, request_queue_size=request_queue_size,
+            alert_min_severity=alert_min_severity,
+            validate_results=not no_validate, run_static=not no_static,
+        )
+    except ValueError as exc:
+        raise typer.BadParameter(str(exc)) from exc
     router = build_alert_router(alert_file, webhook, alert_min_severity)
     proxy = QShieldProxy(config, router, host=host, port=port)
     console.print(f"[green]qshield runtime proxy listening on {host}:{proxy.port}[/green]")
     console.print(f"  upstream: {upstream}")
     console.print(f"  policy:   {policy}   (block ≥ {min_severity}, alert ≥ {alert_min_severity})")
+    console.print(f"  failure:  {config.failure_mode}   (policy version: {config.policy_version})")
+    console.print(f"  capacity: {max_workers} workers, queue {request_queue_size}")
     console.print(f"  alerts:   {alert_file or 'stderr'}" + (f" + {webhook}" if webhook else ""))
     console.print("  press Ctrl-C to stop")
     try:
