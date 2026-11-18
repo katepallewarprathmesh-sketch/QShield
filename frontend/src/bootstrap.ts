@@ -164,11 +164,11 @@ type HttpError = Error & { __httpStatus?: number };
             version: engine.version,
             corpus: { clean: 202, malicious: 215 },
             metrics: { tpr: 0.958, fpr: 0.008, runtime_p95_ms: 1.5, static_1000q_s: 2 },
-            limits: [
-              'Fixture-corpus metrics, not field rates',
-              'Evidence of known tampering classes — never proof of honesty',
-              'No hardware path anywhere in this workbench',
-              'This page runs the engine in your browser via Pyodide — nothing is uploaded anywhere',
+            capabilities: [
+              'Local-first circuit analysis in the browser',
+              'Evidence-led scans, comparison, robustness, and policy review',
+              'Reproducible benchmarks on the bundled fixture corpus',
+              'Optional AI assistance operates separately from core scan results',
             ],
           };
         });

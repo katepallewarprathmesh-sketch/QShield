@@ -62,7 +62,7 @@ pip install 'qshield[pytket]'            # + pytket Circuit parser
 pip install 'qshield[formal]'            # + ZX-calculus verification (PyZX, Z3)
 ```
 
-Docker: `docker pull ghcr.io/katepallewarprathmesh-sketch/qshield:1.4.0` (or build from source: `docker build -t qshield .`). Run it with `docker run --rm -p 127.0.0.1:8765:8765 qshield` to keep the unauthenticated Workbench available only on host loopback. The container binds internally with an explicit non-loopback opt-in; keep the host port mapping on loopback. Do not publish the Workbench beyond localhost without network restrictions and an authenticated TLS proxy. For source installs, a non-loopback bind requires `qshield ui --host 0.0.0.0 --allow-remote` and prints a security warning.
+Docker: `docker pull ghcr.io/katepallewarprathmesh-sketch/qshield:1.5.0` (or build from source: `docker build -t qshield .`). Run it with `docker run --rm -p 127.0.0.1:8765:8765 qshield` to keep the unauthenticated Workbench available only on host loopback. The container binds internally with an explicit non-loopback opt-in; keep the host port mapping on loopback. Do not publish the Workbench beyond localhost without network restrictions and an authenticated TLS proxy. For source installs, a non-loopback bind requires `qshield ui --host 0.0.0.0 --allow-remote` and prints a security warning.
 
 From source: `git clone https://github.com/katepallewarprathmesh-sketch/QShield.git && cd QShield && pip install -e '.[dev]'`
 
@@ -126,7 +126,7 @@ Install `pre-commit`, then add QSHIELD to `.pre-commit-config.yaml`. Pin `rev` t
 ```yaml
 repos:
   - repo: https://github.com/katepallewarprathmesh-sketch/QShield
-    rev: v1.4.0
+    rev: v1.5.0
     hooks:
       - id: qshield-scan
         # Optional: default threshold is high.
@@ -225,7 +225,7 @@ For assumptions, trust boundaries, and non-goals, see the [public QSHIELD threat
 
 ## Status & license
 
-**v1.4.0** — software-only. See `CHANGELOG.md` for release notes.
+**v1.5.0** — software-only. See `CHANGELOG.md` for release notes.
 Apache-2.0 — see [LICENSE](LICENSE). Contributions to parsers, integrations, tests, and documentation are welcome. The community signature pack is intentionally empty; signature submissions are not being solicited.
 
 ## Development

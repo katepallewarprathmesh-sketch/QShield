@@ -1,7 +1,7 @@
 # QSHIELD Offline Provenance Manifest v1
 
 **Spec ID:** `qshield-provenance-v1`  
-**Status:** Implemented in the current source tree for OpenQASM 2/3 source files; offline Ed25519 signatures. This feature is not included in the published QSHIELD 1.4.0 package yet.
+**Status:** Included in QSHIELD 1.5.0 for OpenQASM 2/3 source files; offline Ed25519 signatures are available with the optional `provenance` extra.
 
 ## Scope and limits
 

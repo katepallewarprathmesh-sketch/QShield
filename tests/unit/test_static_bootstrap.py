@@ -16,9 +16,9 @@ def test_workbench_can_reference_a_content_hashed_bootstrap():
 
 
 def test_home_page_links_to_workbench_and_has_current_version():
-    html = _render_home("1.4.0")
+    html = _render_home("1.5.0")
     assert 'href="workbench.html"' in html
-    assert "v1.4.0" in html
+    assert "v1.5.0" in html
     assert "Flexible integration" in html
     assert "Likely budget owner" not in html
     assert "no paid enterprise plan" not in html
@@ -40,10 +40,12 @@ def test_about_tab_label_is_synced_in_source_and_runtime_bundle():
 
 
 def test_static_policies_api_reports_fixture_availability():
-    bootstrap = Path(__file__).resolve().parents[2] / "scripts" / "site" / "bootstrap.js"
+    repo = Path(__file__).resolve().parents[2]
+    bootstrap = repo / "scripts" / "site" / "bootstrap.js"
     source = bootstrap.read_text(encoding="utf-8")
+    ts_source = (repo / "frontend" / "src" / "bootstrap.ts").read_text(encoding="utf-8")
 
     assert "if (path === '/api/policies')" in source
-    assert "capabilities: [" in source
-    assert "limits: [" not in source
+    assert "capabilities: [" in source and "capabilities: [" in ts_source
+    assert "limits: [" not in source and "limits: [" not in ts_source
     assert '"corpus_available": __srv._fixture_corpus_available()' in source

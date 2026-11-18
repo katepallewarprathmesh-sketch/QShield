@@ -3,6 +3,25 @@
 All notable changes to QSHIELD. Historical spec annotations live in
 `docs/spec/QSHIELD.md`; this file records released versions.
 
+## [1.5.0] — Runtime security & circuit assurance
+
+### Added
+- **Runtime proxy transport security** — optional TLS 1.2+ termination and mutual TLS client-certificate verification.
+- **Scoped proxy authentication** — bearer tokens with read, submit, manage, and admin scopes; secure JSON token-file loading and a packaged schema.
+- **Offline provenance manifests** — source and canonical-circuit digests with optional Ed25519 signing and verification.
+- **Analysis coverage and transpilation-aware comparisons** — report per-run coverage and compare circuits with transformation context.
+- **pytket importer** — parse supported pytket circuits into the shared circuit representation.
+
+### Changed
+- **Runtime gate hardening** — explicit open/closed failure modes, bounded workers and request backlog, overload behavior, response limits, and policy-versioned decision audits.
+- **Remote-bind protections** — non-loopback runtime listeners require TLS and client authentication, or explicit trusted-front-proxy delegation.
+- **Workbench and site copy** — the navigation and section heading now say “About”; About and landing-page copy focus on capabilities.
+- Release metadata, package data, and documentation updated for v1.5.0.
+
+### Security
+- Client-auth bearer tokens are compared in constant time, excluded from audit details, and not forwarded upstream when proxy token authentication is enabled.
+- Token files are opened without following symlinks where supported, and checked for regular-file type, size, and restrictive POSIX permissions.
+
 ## [1.4.0] — Browser Workbench & quantum supply-chain integrations
 
 ### Added
