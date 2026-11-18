@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/katepallewarprathmesh-sketch/QShield/blob/main/src/qshield/provenance/transform-report-v1.schema.json",
+  "title": "QSHIELD Transpilation-aware Report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["spec_version", "created_utc", "canonicalization_spec", "overall_status", "original", "transforms", "limitations"],
+  "properties": {
+    "spec_version": {"const": "qshield-transform-report-v1"},
+    "created_utc": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "canonicalization_spec": {"const": "qshield-circuit-c14n-v1"},
+    "overall_status": {"enum": ["equivalent", "not_equivalent", "inconclusive"]},
+    "original": {"$ref": "#/$defs/identity"},
+    "transforms": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["pass", "before", "after", "comparison"],
+        "properties": {
+          "pass": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$"},
+          "before": {"$ref": "#/$defs/identity"},
+          "after": {"$ref": "#/$defs/identity"},
+          "comparison": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["status", "method", "scope", "message"],
+            "properties": {
+              "status": {"enum": ["equivalent", "not_equivalent", "inconclusive"]},
+              "method": {"type": "string", "minLength": 1},
+              "scope": {"type": "string"},
+              "message": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format", "source_sha256", "circuit_sha256"],
+      "properties": {
+        "format": {"type": "string", "pattern": "^openqasm-[0-9]+(\\.[0-9]+)?$"},
+        "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "circuit_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

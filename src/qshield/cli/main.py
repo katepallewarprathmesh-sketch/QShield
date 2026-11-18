@@ -558,6 +558,53 @@ def provenance_verify(
     if circuit is not None:
         console.print("[green]Source and canonical circuit digests match[/green]")
 
+
+@provenance_app.command("transform-report")
+def provenance_transform_report(
+    original: Path = typer.Argument(..., exists=True, dir_okay=False, help="Pre-transpilation OpenQASM circuit"),
+    stage: list[str] = typer.Option([], "--stage", help="Pass output as LABEL=FILE; repeat in pipeline order"),
+    tolerance: float = typer.Option(1e-6, "--tolerance", help="Frobenius tolerance for bounded exact-unitary comparison"),
+    formal: bool = typer.Option(False, "--formal", help="Try ZX-calculus before exact-unitary fallback"),
+    output: Path | None = typer.Option(None, "--output", "-o", help="Write JSON report here (default: stdout)"),
+) -> None:
+    """Compare supplied pre/post-transpilation stages with explicit inconclusive results."""
+    import json
+
+    from qshield.provenance.transforms import TransformReportError, build_transform_report
+
+    parsed_stages: list[tuple[str, Path]] = []
+    for value in stage:
+        if "=" not in value:
+            console.print(f"[red]Invalid --stage {value!r}; expected LABEL=FILE[/red]")
+            raise typer.Exit(code=2)
+        label, path_text = value.split("=", 1)
+        if not label or not path_text:
+            console.print(f"[red]Invalid --stage {value!r}; expected LABEL=FILE[/red]")
+            raise typer.Exit(code=2)
+        parsed_stages.append((label, Path(path_text)))
+
+    try:
+        report = build_transform_report(original, parsed_stages, tolerance=tolerance, prefer_formal=formal)
+        rendered = json.dumps(report, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
+        if output is None:
+            typer.echo(rendered, nl=False)
+        else:
+            output.parent.mkdir(parents=True, exist_ok=True)
+            output.write_text(rendered, encoding="utf-8")
+            console.print(f"[green]Wrote transformation report:[/green] {output}")
+    except (OSError, TransformReportError) as exc:
+        console.print(f"[red]Could not build transformation report:[/red] {exc}")
+        raise typer.Exit(code=2) from exc
+
+    status = report["overall_status"]
+    if status == "not_equivalent":
+        console.print("[red]Transformation report: NOT EQUIVALENT[/red]")
+        raise typer.Exit(code=1)
+    if status == "inconclusive":
+        console.print("[yellow]Transformation report: INCONCLUSIVE (not a pass)[/yellow]")
+        raise typer.Exit(code=2)
+    console.print("[green]Transformation report: EQUIVALENT[/green]")
+
 # ==================================================================
 # ai (OPTIONAL, cloud — Sarvam AI; advisory only, not the offline core)
 # ==================================================================
