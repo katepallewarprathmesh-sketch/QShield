@@ -112,6 +112,7 @@ def test_serves_compiled_workbench_asset(server):
     assert "MAX_LOCAL_QASM_BYTES" in script
     assert "new TextDecoder('utf-8', { fatal: true })" in script
     assert "file.arrayBuffer()" in script
+    assert "Analysis warning" in script
     assert "addEventListener" in script
     with urllib.request.urlopen(server + "/", timeout=15) as response:
         page = response.read().decode()
@@ -192,6 +193,15 @@ def test_scan_accepts_user_supplied_qasm3(server):
     assert status == 200
     data = json.loads(body)
     assert data["stats"] == {"qubits": 3, "gates": 2, "depth": 2}
+
+
+def test_scan_warns_when_user_circuit_contains_unmodeled_gate(server):
+    custom_qasm = "OPENQASM 2.0;\nqreg q[1];\nuser_defined_external_gate q[0];\n"
+    status, body = _post(server + "/api/scan", {"qasm": custom_qasm})
+    assert status == 200
+    data = json.loads(body)
+    assert any("unmodeled gate" in warning.lower() for warning in data["warnings"])
+    assert any("user_defined_external_gate" in warning for warning in data["warnings"])
 
 
 def test_scan_malformed_user_qasm_is_client_error(server):

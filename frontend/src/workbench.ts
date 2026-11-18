@@ -133,11 +133,13 @@ async function runScan() {
     const d = await apiPost('/api/scan', { qasm: $('#scan-qasm').value });
     const fs = (d.findings || []).slice().sort((a,b) => (sevOrder[a.severity] ?? 9) - (sevOrder[b.severity] ?? 9));
     const meta = `<div class="scan-meta"><span><b>${d.stats.gates}</b> gates</span><span><b>${d.stats.depth}</b> depth</span><span><b>${d.stats.qubits}</b> qubits</span><span><b>${fs.length}</b> finding(s)</span></div>`;
+    const warnings = (d.warnings || []).map(w => `<div class="find medium"><h4><span class="pill medium">review</span>Analysis warning</h4><p>${esc(w)}</p></div>`).join('');
+    const warningPanel = warnings ? `<div class="analysis-warnings"><h4>Review before interpreting results</h4>${warnings}</div>` : '';
     if (!fs.length) {
-      out.innerHTML = meta + '<div class="find info"><h4><span class="pill info">info</span>No findings</h4><p>Static + signature analysis found nothing in this circuit. Absence of evidence — not proof of cleanliness.</p></div>';
+      out.innerHTML = meta + warningPanel + '<div class="find info"><h4><span class="pill info">info</span>No findings</h4><p>Static + signature analysis found nothing in this circuit. Absence of evidence — not proof of cleanliness.</p></div>';
       return;
     }
-    out.innerHTML = meta + severitySummary(fs) +
+    out.innerHTML = meta + warningPanel + severitySummary(fs) +
       '<div class="finding-tools"><input id="scan-search" type="search" aria-label="Search findings" placeholder="Search title, ID, threat, or remediation"><select id="scan-severity" aria-label="Filter findings by severity"><option value="">All severities</option><option>critical</option><option>high</option><option>medium</option><option>low</option><option>info</option></select></div>' +
       '<p id="scan-match-count" class="finding-count" role="status" aria-live="polite"></p><div id="scan-table"></div>';
     const renderFiltered = () => {

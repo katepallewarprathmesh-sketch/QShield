@@ -72,6 +72,14 @@ def _scan_qasm(qasm: str) -> dict[str, Any]:
     results = scanner.run(analyses=["static"])
     findings = list(results.findings)
     warnings = list(results.warnings)
+    # The parser preserves unknown gates in the IR for review, but static checks
+    # cannot infer their semantics. Never make that look like a fully analyzed circuit.
+    unmodeled = sorted({g.gate_name for g in ir.gates if g.unitary is None})
+    if unmodeled:
+        warnings.append(
+            "Unmodeled gate(s) retained without known unitary semantics: "
+            f"{', '.join(unmodeled)}. Findings may be incomplete for these operations."
+        )
     findings.sort(key=lambda f: (f.severity_rank, f.confidence), reverse=True)
     return {
         "findings": [f.to_dict() for f in findings],

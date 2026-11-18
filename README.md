@@ -101,7 +101,7 @@ qshield audit-deps --requirements requirements.txt       # quantum supply-chain 
 qshield ui                                      # Workbench at http://127.0.0.1:8765
 ```
 
-In the Workbench **Scan** tab, choose a local `.qasm`, `.qasm2`, or `.qasm3` file (up to 1 MiB), or paste source into the editor. The file is read by the browser and analyzed only after you choose **Scan**. OpenQASM 2.0 and the supported OpenQASM 3.0 subset are accepted; unsupported syntax returns a parse error instead of being treated as a clean result. Scan findings are evidence, not a guarantee that every malicious circuit will be detected.
+In the Workbench **Scan** tab, choose a local `.qasm`, `.qasm2`, or `.qasm3` file (up to 1 MiB), or paste source into the editor. The file is read by the browser and analyzed only after you choose **Scan**. OpenQASM 2.0 and the supported OpenQASM 3.0 subset are accepted. Malformed syntax returns a parse error; preserved but unmodeled gates are called out with a warning because findings may be incomplete for those operations. Scan findings are evidence, not a guarantee that every malicious circuit will be detected.
 
 Python API:
 
