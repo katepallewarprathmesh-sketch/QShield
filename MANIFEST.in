@@ -3,6 +3,7 @@ include LICENSE
 recursive-include examples *
 recursive-include benchmarks *
 recursive-include tests *
+recursive-include specs *.md *.json
 include frontend/package.json
 include frontend/package-lock.json
 include frontend/tsconfig*.json

@@ -1,5 +1,10 @@
 """Core data structures, gate database, parsers and configuration."""
 
+from qshield.core.canonicalization import (
+    CANONICALIZATION_SPEC,
+    canonical_circuit_hash_v1,
+    canonical_circuit_payload,
+)
 from qshield.core.circuit_ir import (
     DEFAULT_TOLERANCE,
     MAX_EXACT_QUBITS,
@@ -15,6 +20,7 @@ from qshield.core.parsers import parse_any, parse_file, parse_qasm
 from qshield.core.qasm_emitter import QASMEmitError, emit_qasm
 
 __all__ = [
+    "CANONICALIZATION_SPEC",
     "DEFAULT_TOLERANCE",
     "GATE_DB",
     "MAX_EXACT_QUBITS",
@@ -26,6 +32,8 @@ __all__ = [
     "QASMEmitError",
     "QShieldConfig",
     "ThreatLevel",
+    "canonical_circuit_hash_v1",
+    "canonical_circuit_payload",
     "embed_gate_matrix",
     "emit_qasm",
     "load_config",

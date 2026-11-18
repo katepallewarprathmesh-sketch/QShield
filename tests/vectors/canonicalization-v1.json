@@ -1,0 +1,11 @@
+{
+  "spec": "qshield-circuit-c14n-v1",
+  "cases": [
+    {
+      "name": "bell-measurement-qasm2",
+      "source": "OPENQASM 2.0;\nqreg q[2];\ncreg c[2];\nh q[0];\ncx q[0], q[1];\nmeasure q -> c;\n",
+      "canonical_utf8_json": "{\"gates\":[{\"name\":\"h\",\"parameters\":[],\"qubits\":[0]},{\"name\":\"cx\",\"parameters\":[],\"qubits\":[0,1]}],\"measurements\":[[0,0],[1,1]],\"num_classical_bits\":2,\"num_qubits\":2,\"spec\":\"qshield-circuit-c14n-v1\"}",
+      "sha256": "0050f791d69d1eb1cda063e2543ad8359350b268aef64e6354fcd5ab98727a2f"
+    }
+  ]
+}

@@ -450,6 +450,114 @@ app.add_typer(sig_app, name="sig")
 runtime_app = typer.Typer(help="Runtime cloud-API monitor (interceptor proxy, M4.1)")
 app.add_typer(runtime_app, name="runtime")
 
+provenance_app = typer.Typer(help="Create and verify offline circuit provenance manifests")
+app.add_typer(provenance_app, name="provenance")
+
+
+@provenance_app.command("keygen")
+def provenance_keygen(
+    private_key: Path = typer.Option(..., "--private-key", help="Output PEM private-key path (created securely; never overwritten)"),
+    public_key: Path = typer.Option(..., "--public-key", help="Output PEM public-key path (never overwritten)"),
+    no_passphrase: bool = typer.Option(False, "--no-passphrase", help="Write an unencrypted private key (not recommended)"),
+) -> None:
+    """Generate an Ed25519 keypair for offline provenance signing."""
+    from qshield.provenance import ProvenanceError, generate_keypair
+
+    passphrase = None
+    if not no_passphrase:
+        entered = typer.prompt("Private-key passphrase", hide_input=True, confirmation_prompt=True)
+        if not entered:
+            console.print("[red]Passphrase must not be empty; use --no-passphrase explicitly to opt out.[/red]")
+            raise typer.Exit(code=2)
+        passphrase = entered.encode("utf-8")
+    try:
+        key_id = generate_keypair(private_key, public_key, passphrase=passphrase)
+    except ProvenanceError as exc:
+        console.print(f"[red]{exc}[/red]")
+        raise typer.Exit(code=2) from exc
+    if no_passphrase:
+        console.print("[yellow]Warning: private key is unencrypted; protect it from disclosure.[/yellow]")
+    console.print(f"[green]Created Ed25519 keypair[/green] (key_id={key_id})")
+    console.print(f"Private key: {private_key}")
+    console.print(f"Public key:  {public_key}")
+
+
+@provenance_app.command("create")
+def provenance_create(
+    circuit: Path = typer.Argument(..., exists=True, dir_okay=False, help="OpenQASM 2/3 source file"),
+    output: Path | None = typer.Option(None, "--output", "-o", help="Write manifest here (default: stdout)"),
+) -> None:
+    """Create an unsigned provenance manifest for an OpenQASM circuit."""
+    import json
+
+    from qshield.provenance import ProvenanceError, create_manifest, write_manifest
+
+    try:
+        manifest = create_manifest(circuit)
+        if output is None:
+            typer.echo(json.dumps(manifest, ensure_ascii=False, sort_keys=True, indent=2))
+        else:
+            write_manifest(output, manifest)
+            console.print(f"[green]Wrote unsigned provenance manifest:[/green] {output}")
+    except (OSError, ProvenanceError) as exc:
+        console.print(f"[red]{exc}[/red]")
+        raise typer.Exit(code=2) from exc
+
+
+@provenance_app.command("sign")
+def provenance_sign(
+    manifest_path: Path = typer.Argument(..., exists=True, dir_okay=False, help="Unsigned provenance JSON file"),
+    private_key: Path = typer.Option(..., "--private-key", help="Ed25519 PEM private key"),
+    output: Path | None = typer.Option(None, "--output", "-o", help="Output path (default: replace manifest in place)"),
+) -> None:
+    """Sign a provenance manifest offline with an Ed25519 private key."""
+    from qshield.provenance import (
+        PrivateKeyPassphraseRequired,
+        ProvenanceError,
+        load_manifest,
+        sign_manifest,
+        write_manifest,
+    )
+
+    try:
+        manifest = load_manifest(manifest_path)
+        key_pem = private_key.read_bytes()
+        try:
+            signed = sign_manifest(manifest, key_pem)
+        except PrivateKeyPassphraseRequired:
+            entered = typer.prompt("Private-key passphrase", hide_input=True)
+            signed = sign_manifest(manifest, key_pem, passphrase=entered.encode("utf-8"))
+        target = output or manifest_path
+        in_place = target.resolve() == manifest_path.resolve()
+        write_manifest(target, signed, overwrite=in_place)
+        console.print(f"[green]Signed provenance manifest:[/green] {target}")
+        console.print(f"Signer: {signed['signature']['key_id']}")
+    except (OSError, ProvenanceError) as exc:
+        console.print(f"[red]{exc}[/red]")
+        raise typer.Exit(code=2) from exc
+
+
+@provenance_app.command("verify")
+def provenance_verify(
+    manifest_path: Path = typer.Argument(..., exists=True, dir_okay=False, help="Signed provenance JSON file"),
+    public_key: Path = typer.Option(..., "--public-key", help="Trusted Ed25519 PEM public key"),
+    circuit: Path | None = typer.Option(None, "--circuit", exists=True, dir_okay=False, help="Also check a local source file against the manifest"),
+) -> None:
+    """Verify an offline provenance signature and optionally its source circuit."""
+    from qshield.provenance import ProvenanceError, load_manifest, verify_manifest
+
+    try:
+        manifest = load_manifest(manifest_path)
+        result = verify_manifest(manifest, public_key.read_bytes(), circuit_path=circuit)
+    except (OSError, ProvenanceError) as exc:
+        console.print(f"[red]Verification failed:[/red] {exc}")
+        raise typer.Exit(code=1) from exc
+    console.print("[green]Signature valid (Ed25519)[/green]")
+    console.print(f"Signer: {result.key_id}")
+    console.print(f"Circuit SHA-256: {result.circuit_sha256}")
+    if circuit is not None:
+        console.print("[green]Source and canonical circuit digests match[/green]")
+
 # ==================================================================
 # ai (OPTIONAL, cloud — Sarvam AI; advisory only, not the offline core)
 # ==================================================================
