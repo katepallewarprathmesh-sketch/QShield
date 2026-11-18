@@ -40,9 +40,10 @@ qiskit = ["qiskit>=1.0", "qiskit-aer>=0.13"]
 cirq = ["cirq-core>=1.3"]
 pennylane = ["pennylane>=0.33"]
 braket = ["amazon-braket-sdk>=1.80,<2"]
+pytket = ["pytket>=1.30"]
 plugins = ["wasmtime>=44,<51"]
 provenance = ["cryptography>=42"]
-all-frameworks = ["qshield[qiskit,cirq,pennylane,braket]"]
+all-frameworks = ["qshield[qiskit,cirq,pennylane,braket,pytket]"]
 
 # Formal verification
 formal = [

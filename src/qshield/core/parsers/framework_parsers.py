@@ -368,6 +368,140 @@ def _braket_qubit_label(qubit: Any) -> int:
 
 
 # ----------------------------------------------------------------------
+# pytket
+# ----------------------------------------------------------------------
+
+_PYTKET_NAME_MAP = {
+    "noop": "id", "i": "id", "x": "x", "y": "y", "z": "z", "h": "h",
+    "s": "s", "sdg": "sdg", "t": "t", "tdg": "tdg", "v": "rx", "vdg": "rx",
+    "sx": "sx", "sxdg": "sxdg", "rx": "rx", "ry": "ry", "rz": "rz",
+    "u1": "u1", "u2": "u2", "u3": "u3", "u": "u3",
+    "cx": "cx", "cnot": "cx", "cy": "cy", "cz": "cz", "ch": "ch", "swap": "swap",
+    "crx": "crx", "cry": "cry", "crz": "crz", "cu1": "cu1", "cu3": "cu3",
+    "cphase": "cp", "cp": "cp", "xxphase": "rxx", "yyphase": "ryy", "zzphase": "rzz",
+    "fsim": "fsim", "sycamore": "sycamore",
+    "ccx": "ccx", "ccnot": "ccx", "toffoli": "ccx", "ccz": "ccz",
+    "c3x": "c3x", "c3z": "c3z", "c4x": "c4x", "c4z": "c4z",
+    "cs": "cs", "csdg": "csdg", "csx": "csx", "csxdg": "csxdg",
+    "iswap": "iswap", "iswapdg": "iswapdg", "sqrtiswap": "sqrt_iswap",
+    "rzx": "rzx",
+}
+
+
+def parse_pytket(circuit: Any, name: str | None = None) -> CircuitIR:
+    """Parse a pytket ``Circuit`` into CircuitIR without executing it.
+
+    pytket rotation parameters use half-turns (multiples of pi), so numeric
+    parameters are converted to radians. Measurements are preserved; reset
+    and global-phase operations are omitted with explicit parser warnings.
+    Unsupported/classically conditioned operations fail closed.
+    """
+    try:
+        from pytket.circuit import Circuit  # noqa: F401
+    except ImportError as exc:  # pragma: no cover - optional dependency
+        raise RuntimeError(
+            "pytket is not installed. Install with: pip install 'qshield[pytket]'"
+        ) from exc
+
+    if not hasattr(circuit, "get_commands") or not hasattr(circuit, "qubits"):
+        raise TypeError("parse_pytket expects a pytket Circuit with qubits and get_commands()")
+
+    name = name or getattr(circuit, "name", None) or "pytket_circuit"
+    qubits = list(circuit.qubits)
+    bits = list(getattr(circuit, "bits", []))
+    qubit_index = {qubit: index for index, qubit in enumerate(qubits)}
+    bit_index = {bit: index for index, bit in enumerate(bits)}
+    ops: list[tuple[str, list[float], list[int]]] = []
+    measurements: list[tuple[int, int]] = []
+    warnings: list[str] = []
+    symbolic: list[str] = []
+    resets = 0
+    global_phase: list[str] = []
+
+    for command_index, command in enumerate(circuit.get_commands()):
+        op = command.op
+        op_type = getattr(op.type, "name", None) or str(op.type).rsplit(".", 1)[-1]
+        normalized = "".join(char for char in str(op_type).lower() if char.isalnum())
+        command_qubits = list(getattr(command, "qubits", []))
+        command_bits = list(getattr(command, "bits", []))
+
+        if normalized in {"barrier", "noop"}:
+            continue
+        if normalized == "measure":
+            if len(command_qubits) != 1 or len(command_bits) != 1:
+                raise ValueError(f"unsupported pytket measurement arity in command {command_index}")
+            measurements.append((qubit_index[command_qubits[0]], bit_index[command_bits[0]]))
+            continue
+        if normalized == "reset":
+            resets += 1
+            continue
+        if normalized == "phase":
+            global_phase.extend(str(param) for param in getattr(op, "params", []))
+            continue
+
+        canonical = _PYTKET_NAME_MAP.get(normalized)
+        if normalized == "cnx":
+            canonical = {4: "c3x", 5: "c4x"}.get(len(command_qubits))
+        elif normalized == "cnz":
+            canonical = {4: "c3z", 5: "c4z"}.get(len(command_qubits))
+        spec = GATE_DB.get_spec(canonical) if canonical is not None else None
+        if canonical is None or spec is None:
+            raise ValueError(
+                f"unsupported pytket operation {op_type!r} at command {command_index}; refusing to approximate"
+            )
+        if len(command_qubits) != spec.arity:
+            raise ValueError(
+                f"pytket operation {op_type!r} has arity {len(command_qubits)}, "
+                f"expected {spec.arity}; refusing to approximate"
+            )
+        raw_params = list(getattr(op, "params", []))
+        if normalized in {"v", "vdg"}:
+            if raw_params:
+                raise ValueError(f"pytket operation {op_type!r} unexpectedly has parameters")
+            # V/Vdg are exactly Rx(+/-pi/2), whereas QSHIELD's SX includes
+            # the conventional Qiskit global phase and is not matrix-identical.
+            raw_params = [0.5 if normalized == "v" else -0.5]
+        if len(raw_params) != spec.num_params:
+            raise ValueError(
+                f"pytket operation {op_type!r} has {len(raw_params)} parameters, "
+                f"expected {spec.num_params}; refusing to approximate"
+            )
+        params: list[float] = []
+        for param in raw_params:
+            value = _float_or_nan(param)
+            if math.isnan(value):
+                symbolic.append(f"command[{command_index}]: {param}")
+            params.append(value * math.pi if not math.isnan(value) else value)
+        ops.append((canonical, params, [qubit_index[qubit] for qubit in command_qubits]))
+
+    if resets:
+        warnings.append(f"pytket reset operations are not represented in CircuitIR ({resets} omitted)")
+    if global_phase:
+        warnings.append("pytket global phase is not represented in CircuitIR")
+    if symbolic:
+        warnings.append("one or more pytket symbolic gate parameters could not be converted to radians")
+
+    return _build_ir(
+        name=name,
+        source_framework="pytket",
+        num_qubits=len(qubits),
+        num_clbits=len(bits),
+        ops=ops,
+        measurements=measurements,
+        metadata={
+            "source": "pytket",
+            "qubit_labels": [str(qubit) for qubit in qubits],
+            "bit_labels": [str(bit) for bit in bits],
+            "resets": resets,
+            "global_phase_half_turns": global_phase,
+            "qshield_symbolic_params": symbolic,
+            "warnings": warnings,
+        },
+        source_repr=repr(circuit),
+    )
+
+
+# ----------------------------------------------------------------------
 # PennyLane
 # ----------------------------------------------------------------------
 

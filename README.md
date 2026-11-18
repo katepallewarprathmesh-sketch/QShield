@@ -24,7 +24,7 @@ Find suspicious circuit behavior, check equivalence, and audit dependencies—wi
 | Surface | Use it for |
 |---|---|
 | **CLI & CI** | Scan OpenQASM, compare circuits, audit dependencies, emit SARIF / JSON / HTML / PDF |
-| **Python API** | Parse and analyze circuits from Qiskit, Cirq, PennyLane, and Amazon Braket |
+| **Python API** | Parse and analyze circuits from Qiskit, Cirq, PennyLane, Amazon Braket, and pytket |
 | **Workbench** | Interactive browser-local or local-server review: scan, compare, robustness probe, and policy scoring |
 | **WASI plugins** | Add explicit, resource-limited detector extensions without changing core verdicts |
 
@@ -55,9 +55,11 @@ inspection, and measurement is destructive. QSHIELD is purpose-built for this te
 
 ```bash
 pip install qshield                     # core (OpenQASM parser, static analysis, CLI)
-pip install 'qshield[qiskit,cirq]'     # + framework parsers (qiskit-aer used by --full)
+pip install 'qshield[qiskit,cirq]'     # + Qiskit and Cirq parsers (qiskit-aer used by --full)
+pip install 'qshield[pennylane]'        # + PennyLane tape parser
 pip install 'qshield[braket]'           # + Amazon Braket Circuit parser
-pip install 'qshield[formal]'          # + ZX-calculus verification (PyZX, Z3)
+pip install 'qshield[pytket]'            # + pytket Circuit parser
+pip install 'qshield[formal]'            # + ZX-calculus verification (PyZX, Z3)
 ```
 
 Docker: `docker pull ghcr.io/katepallewarprathmesh-sketch/qshield:1.4.0` (or build from source: `docker build -t qshield .`). Run it with `docker run --rm -p 127.0.0.1:8765:8765 qshield` to keep the unauthenticated Workbench available only on host loopback. The container binds internally with an explicit non-loopback opt-in; keep the host port mapping on loopback. Do not publish the Workbench beyond localhost without network restrictions and an authenticated TLS proxy. For source installs, a non-loopback bind requires `qshield ui --host 0.0.0.0 --allow-remote` and prints a security warning.
@@ -102,6 +104,13 @@ Amazon Braket circuits can be converted explicitly or via `parse_any` after inst
 `qshield[braket]`. Supported standard gates map into the shared IR; unsupported operators
 raise an error rather than being silently approximated. Braket qubit labels are normalized
 to dense indices and retained in IR metadata.
+
+pytket circuits are accepted by `parse_any` or `parse_pytket` after installing
+`qshield[pytket]`. Numeric pytket angles (specified in multiples of pi) are converted to
+radians. Supported gate operations map into the shared IR; unsupported or classically
+conditioned operations fail closed. Measurement assignments and register labels are retained.
+Reset operations and global phase cannot be represented by the current IR and are reported
+in parser warnings rather than silently treated as represented.
 
 ```python
 from braket.circuits import Circuit

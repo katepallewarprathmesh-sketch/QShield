@@ -15,6 +15,7 @@ __all__ = [
     "parse_cirq",
     "parse_file",
     "parse_pennylane",
+    "parse_pytket",
     "parse_qasm",
     "parse_qiskit",
 ]
@@ -40,12 +41,17 @@ def parse_pennylane(*args, **kwargs):
     return _p(*args, **kwargs)
 
 
+def parse_pytket(*args, **kwargs):
+    from qshield.core.parsers.framework_parsers import parse_pytket as _p
+    return _p(*args, **kwargs)
+
+
 def parse_any(obj: Any, name: str | None = None) -> CircuitIR:
     """Best-effort conversion of a supported object into CircuitIR.
 
     Supported inputs: QASM source strings (starting with ``OPENQASM``),
-    Qiskit ``QuantumCircuit``, Cirq ``Circuit``, PennyLane tapes, and Amazon
-    Braket ``Circuit`` instances.
+    Qiskit ``QuantumCircuit``, Cirq ``Circuit``, PennyLane tapes, Amazon
+    Braket ``Circuit``, and pytket ``Circuit`` instances.
     """
     if isinstance(obj, CircuitIR):
         return obj
@@ -55,6 +61,8 @@ def parse_any(obj: Any, name: str | None = None) -> CircuitIR:
         # treat as a file path
         return parse_file(obj, name=name)
     module = type(obj).__module__.split(".")[0]
+    if module == "pytket":
+        return parse_pytket(obj, name=name)
     if module == "braket":
         return parse_braket(obj, name=name)
     if module == "qiskit":
@@ -65,7 +73,7 @@ def parse_any(obj: Any, name: str | None = None) -> CircuitIR:
         return parse_pennylane(obj, name=name)
     raise TypeError(
         f"Unsupported circuit object of type {type(obj)!r}. "
-        "Pass an OpenQASM string, a file path, or a supported Qiskit/Cirq/PennyLane/Braket circuit."
+        "Pass an OpenQASM string, a file path, or a supported Qiskit/Cirq/PennyLane/Braket/pytket circuit."
     )
 
 
