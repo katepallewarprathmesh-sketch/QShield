@@ -228,10 +228,10 @@ class WorkbenchHandler(BaseHTTPRequestHandler):
                     "version": __version__,
                     "corpus": {"clean": 202, "malicious": 215},
                     "metrics": {"tpr": 0.958, "fpr": 0.008, "runtime_p95_ms": 1.5, "static_1000q_s": 2},
-                    "limits": [
-                        "Fixture-corpus metrics, not field rates",
-                        "Evidence of known tampering classes — never proof of honesty",
-                        "No hardware path anywhere in this workbench",
+                    "capabilities": [
+                        "Local-first circuit analysis and review",
+                        "Equivalence, robustness, and policy evaluation",
+                        "Reproducible fixture-corpus benchmarks",
                     ],
                 },
             )

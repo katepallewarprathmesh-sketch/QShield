@@ -19,8 +19,11 @@ def test_home_page_links_to_workbench_and_has_current_version():
     html = _render_home("1.4.0")
     assert 'href="workbench.html"' in html
     assert "v1.4.0" in html
-    assert "Likely budget owner" in html
-    assert "no paid enterprise plan" in html
+    assert "Flexible integration" in html
+    assert "Likely budget owner" not in html
+    assert "no paid enterprise plan" not in html
+    assert "Trust &amp; transparency" in html
+    assert "Trust &amp; limits" not in html
     assert "__QSHIELD_VERSION__" not in html
 
 
@@ -29,4 +32,6 @@ def test_static_policies_api_reports_fixture_availability():
     source = bootstrap.read_text(encoding="utf-8")
 
     assert "if (path === '/api/policies')" in source
+    assert "capabilities: [" in source
+    assert "limits: [" not in source
     assert '"corpus_available": __srv._fixture_corpus_available()' in source

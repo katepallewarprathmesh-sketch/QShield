@@ -101,13 +101,21 @@ def test_serves_compiled_workbench_asset(server):
         assert response.headers.get_content_type() == "text/javascript"
         script = response.read().decode()
     assert "function buildTabs" in script
+    assert '"About"' in script
+    assert "About & limits" not in script
     assert "function loadPolicies" in script
     assert "addEventListener" in script
+    with urllib.request.urlopen(server + "/", timeout=15) as response:
+        page = response.read().decode()
+    assert "About QSHIELD" in page
+    assert "honest limits" not in page
 
 
 def test_overview_and_policies(server):
     status, body = _get(server + "/api/overview")
-    assert status == 200 and json.loads(body)["corpus"]["malicious"] == 215
+    overview = json.loads(body)
+    assert status == 200 and overview["corpus"]["malicious"] == 215
+    assert "capabilities" in overview and "limits" not in overview
     status, body = _get(server + "/api/policies")
     data = json.loads(body)
     policies = data["policies"]
