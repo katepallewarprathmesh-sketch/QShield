@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qshield"
-version = "1.3.0"
+version = "1.4.0"
 description = "Quantum Software Supply Chain Security Framework"
 readme = "README.md"
 license = { text = "Apache-2.0" }
@@ -68,7 +68,7 @@ dev = [
 qshield = "qshield.cli.main:app"
 
 [project.urls]
-Homepage = "https://github.com/katepallewarprathmesh-sketch/QShield"
+Homepage = "https://katepallewarprathmesh-sketch.github.io/QShield/"
 Repository = "https://github.com/katepallewarprathmesh-sketch/QShield"
 Issues = "https://github.com/katepallewarprathmesh-sketch/QShield/issues"
 Changelog = "https://github.com/katepallewarprathmesh-sketch/QShield/blob/main/CHANGELOG.md"

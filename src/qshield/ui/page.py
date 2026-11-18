@@ -211,7 +211,7 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
   <div class="side-spacer"></div>
 
   <div class="side-foot">
-    <div class="v"><b><span class="dot"></span>v1.3.0</b><span class="pill robust">local-first</span></div>
+    <div class="v"><b><span class="dot"></span>v1.4.0</b><span class="pill robust">local-first</span></div>
     <small>Local-first quantum software security review.</small>
   </div>
 </aside>

@@ -52,13 +52,16 @@ jobs:
       - name: Sanity-check built site
         run: |
           test -f dist-site/index.html
+          test -f dist-site/workbench.html
+          grep -q 'Open the Workbench' dist-site/index.html
+          grep -q 'href="workbench.html"' dist-site/index.html
           test "$(find dist-site -maxdepth 1 -type f -name 'bootstrap.*.js' | wc -l)" -eq 1
-          grep -Eq 'bootstrap\.[0-9a-f]{12}\.js' dist-site/index.html
+          grep -Eq 'bootstrap\.[0-9a-f]{12}\.js' dist-site/workbench.html
           test -f dist-site/vendor/qshield.whl
           test -f dist-site/vendor/fixtures.zip
           grep -q '"corpus_available": __srv._fixture_corpus_available()' scripts/site/bootstrap.js
           test "$(find dist-site/vendor/pyodide -type f | wc -l)" -ge 9
-          ! grep -qi 'static demo' dist-site/index.html
+          ! grep -qi 'static demo' dist-site/index.html dist-site/workbench.html
           python scripts/check_public_docs_boundary.py --site dist-site
           echo "site sanity checks OK"
 

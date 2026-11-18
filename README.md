@@ -1,10 +1,34 @@
-# 🛡 QSHIELD — Quantum Software Supply Chain Security Framework
+<div align="center">
 
-**Offline security checks for quantum circuits and the software that ships them** — catch backdoor gates, trojan unitaries and tampered dependencies in OpenQASM circuits before they reach a run.
+# QSHIELD
 
-> **v2.0 — software-only, by design and forever.** No QPU, no device SDK, no cloud account,
-> no hardware in any acceptance criterion. Detection, verification and scoring all run
-> offline on files. See the live interactive demo at `katepallewarprathmesh-sketch.github.io/QShield/`.
+### Security analysis for quantum circuits and the software that ships them.
+
+Find suspicious circuit behavior, check equivalence, and audit dependencies—with evidence your team can review before a circuit reaches a run.
+
+[![PyPI version](https://img.shields.io/pypi/v/qshield?color=77e3bd)](https://pypi.org/project/qshield/)
+[![Python versions](https://img.shields.io/pypi/pyversions/qshield)](https://pypi.org/project/qshield/)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-77e3bd)](LICENSE)
+
+[Live Workbench](https://katepallewarprathmesh-sketch.github.io/QShield/workbench.html)
+· [Install from PyPI](https://pypi.org/project/qshield/)
+· [Threat model](https://katepallewarprathmesh-sketch.github.io/QShield/threat-model.html)
+· [Changelog](CHANGELOG.md)
+
+</div>
+
+> **Software-only by design.** No QPU, device SDK, or hardware acceptance path. Core analysis runs offline; the browser Workbench runs the real engine locally. Findings are evidence for human review—not proof that a circuit is safe or malicious.
+
+## At a glance
+
+| Surface | Use it for |
+|---|---|
+| **CLI & CI** | Scan OpenQASM, compare circuits, audit dependencies, emit SARIF / JSON / HTML / PDF |
+| **Python API** | Parse and analyze circuits from Qiskit, Cirq, PennyLane, and Amazon Braket |
+| **Workbench** | Interactive browser-local or local-server review: scan, compare, robustness probe, and policy scoring |
+| **WASI plugins** | Add explicit, resource-limited detector extensions without changing core verdicts |
+
+**Measured scope:** 417 bundled fixtures (202 clean / 215 malicious); fixture-corpus rates, not field rates. See [limits and threat model](https://katepallewarprathmesh-sketch.github.io/QShield/threat-model.html).
 
 ## What it does
 
@@ -36,7 +60,7 @@ pip install 'qshield[braket]'           # + Amazon Braket Circuit parser
 pip install 'qshield[formal]'          # + ZX-calculus verification (PyZX, Z3)
 ```
 
-Docker: `docker pull ghcr.io/katepallewarprathmesh-sketch/qshield:1.3.0` (or build from source: `docker build -t qshield .`). Run it with `docker run --rm -p 127.0.0.1:8765:8765 qshield` to keep the unauthenticated Workbench available only on host loopback. The container binds internally with an explicit non-loopback opt-in; keep the host port mapping on loopback. Do not publish the Workbench beyond localhost without network restrictions and an authenticated TLS proxy. For source installs, a non-loopback bind requires `qshield ui --host 0.0.0.0 --allow-remote` and prints a security warning.
+Docker: `docker pull ghcr.io/katepallewarprathmesh-sketch/qshield:1.4.0` (or build from source: `docker build -t qshield .`). Run it with `docker run --rm -p 127.0.0.1:8765:8765 qshield` to keep the unauthenticated Workbench available only on host loopback. The container binds internally with an explicit non-loopback opt-in; keep the host port mapping on loopback. Do not publish the Workbench beyond localhost without network restrictions and an authenticated TLS proxy. For source installs, a non-loopback bind requires `qshield ui --host 0.0.0.0 --allow-remote` and prints a security warning.
 
 From source: `git clone https://github.com/katepallewarprathmesh-sketch/QShield.git && cd QShield && pip install -e '.[dev]'`
 
@@ -88,12 +112,12 @@ circuit_ir = parse_any(Circuit().h(4).cnot(4, 6).rz(6, 0.5))
 
 ### Pre-commit hook
 
-Install `pre-commit`, then add QSHIELD to `.pre-commit-config.yaml`. Pin `rev` to a QSHIELD commit or release that contains the hook (the v1.3.0 tag predates it):
+Install `pre-commit`, then add QSHIELD to `.pre-commit-config.yaml`. Pin `rev` to a QSHIELD commit or release that contains the hook:
 
 ```yaml
 repos:
   - repo: https://github.com/katepallewarprathmesh-sketch/QShield
-    rev: 4ce54275c9344dc5939ad5a2adbbcf9571596260
+    rev: v1.4.0
     hooks:
       - id: qshield-scan
         # Optional: default threshold is high.
@@ -118,7 +142,7 @@ Then run `pre-commit install` and `pre-commit run --all-files`. The hook scans s
 
 ## Optional detector plugins (WebAssembly/WASI)
 
-The plugin API is implemented on `main` but is not included in the v1.3.0 release. In a source checkout, install the optional `.[plugins]` extra; plugin execution is explicit and separate from the default scan pipeline. Call `WasmPluginRunner().run(plugin_dir, circuit_ir)`. Plugins use the versioned JSON contract in `qshield/plugins/*schema.json`; the host verifies the module hash and tags findings with the manifest identity. WASI receives no preopened directories or environment variables, and the runner limits memory, fuel, wall time, input, and output. Only WASI Preview 1 imports are accepted; socket-capable imports are explicitly denied. The manifest hash is integrity checking, not publisher authentication; only run plugins you choose to trust. Plugin findings remain separate evidence and do not silently change core scan results or gate decisions.
+The plugin API is included in v1.4.0 behind the optional `.[plugins]` extra; plugin execution is explicit and separate from the default scan pipeline. Call `WasmPluginRunner().run(plugin_dir, circuit_ir)`. Plugins use the versioned JSON contract in `qshield/plugins/*schema.json`; the host verifies the module hash and tags findings with the manifest identity. WASI receives no preopened directories or environment variables, and the runner limits memory, fuel, wall time, input, and output. Only WASI Preview 1 imports are accepted; socket-capable imports are explicitly denied. The manifest hash is integrity checking, not publisher authentication; only run plugins you choose to trust. Plugin findings remain separate evidence and do not silently change core scan results or gate decisions.
 
 A Rust example and build steps are in [`examples/plugins/identity-pair`](examples/plugins/identity-pair/README.md).
 
@@ -169,7 +193,7 @@ For assumptions, trust boundaries, and non-goals, see the [public QSHIELD threat
 
 ## Status & license
 
-**v1.3.0** — software-only. See `CHANGELOG.md` for release notes.
+**v1.4.0** — software-only. See `CHANGELOG.md` for release notes.
 Apache 2.0 — see [LICENSE](LICENSE). Contributions (signatures, analyzers, corpus circuits) welcome.
 
 ## Development

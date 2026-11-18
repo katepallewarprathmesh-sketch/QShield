@@ -3,6 +3,24 @@
 All notable changes to QSHIELD. Historical spec annotations live in
 `docs/spec/QSHIELD.md`; this file records released versions.
 
+## [1.4.0] — Browser Workbench & quantum supply-chain integrations
+
+### Added
+- **Amazon Braket importer** — explicitly parse supported Braket `Circuit` gates into the shared IR; unsupported operators fail rather than being approximated.
+- **Sandboxed WASI detector plugins** — versioned JSON contract, verified module identity, and memory / fuel / time / input / output limits. Plugin findings remain separate from core verdicts.
+- **QSHIELD pre-commit hook** — scan staged OpenQASM files and fail closed on parse errors or findings at the configured severity.
+- **Signed build provenance for PyPI distributions** — the release workflow attests the exact wheel and sdist before trusted publishing; verify with `gh attestation verify`.
+- **Product landing page** — a clear entry point for the real browser Workbench, install, capabilities, measured scope, and honest limits.
+
+### Changed
+- Pages now serves a product home at `/` and the real Pyodide Workbench at `/workbench.html`; both use the same-origin, content-hashed bootstrap and bundled fixture corpus.
+- Wheels include the 417-circuit fixture corpus so local Policy Studio scoring works after installation.
+- Release metadata and docs updated for v1.4.0. No new signatures were authored; the community pack remains empty by design.
+
+### Fixed
+- Static Workbench reports fixture-corpus availability correctly, and content-hashed bootstrap names avoid stale cached code.
+- Static-site test collection no longer assumes `scripts/` is an importable package.
+
 ## [1.3.0] — Workbench security and UX
 
 ### Added

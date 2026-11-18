@@ -37,9 +37,9 @@ proof-of-concept payloads, or circuit IP in it.
 
 | Version | Supported |
 |---|---|
-| 1.3.x (latest release line) | ✅ supported; security fixes land here |
+| 1.4.x (latest release line) | ✅ supported; security fixes land here |
 | `main` (untagged) | ⚠️ fixes may land here; no release/support guarantees |
-| < 1.3.0 | ❌ unsupported; upgrade before reporting a version-specific issue |
+| < 1.4.0 | ❌ unsupported; upgrade before reporting a version-specific issue |
 
 ## Scope
 
@@ -76,4 +76,4 @@ the fix ships, and never share reporter details without consent.
 
 ---
 
-*This policy is versioned with the repository and reflects the v1.3.0 supported-version policy.*
+*This policy is versioned with the repository and reflects the v1.4.0 supported-version policy.*

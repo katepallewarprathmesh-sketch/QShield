@@ -46,6 +46,7 @@ CANNED_AI = {
     "report_mr": REPO / "scripts" / "static_demo_canned" / "ai_report_ancilla_mr-IN.json",
 }
 BOOTSTRAP = REPO / "scripts" / "site" / "bootstrap.js"
+HOME_PAGE = REPO / "scripts" / "site" / "home.html"
 THREAT_MODEL_PAGE = REPO / "scripts" / "site" / "threat-model.html"
 FIXTURE_CORPUS = ("clean_circuits", "malicious_circuits")
 FIXTURES_ROOT = REPO / "tests" / "fixtures"
@@ -72,7 +73,7 @@ banner_css = """
 """
 
 banner = """
-<div class="demo-banner" id="demo-banner"><span><b>REAL ENGINE</b> — the real QSHIELD engine runs in your browser (CPython via Pyodide, served from this same site). Nothing you paste leaves this tab. <span class="banner-note">loading… first load fetches ~18 MB once, cached afterwards</span> · on this static page the AI tab shows precomputed real outputs (labeled) — live AI runs locally. Full local experience: <code>git clone https://github.com/katepallewarprathmesh-sketch/QShield &amp;&amp; pip install -e . &amp;&amp; qshield ui</code></span><button onclick="document.getElementById('demo-banner').remove()" aria-label="dismiss">&times;</button></div>
+<div class="demo-banner" id="demo-banner"><span><b>REAL ENGINE</b> — the real QSHIELD engine runs in your browser (CPython via Pyodide, served from this same site). Nothing you paste leaves this tab. <span class="banner-note">loading… first load fetches ~18 MB once, cached afterwards</span> · on this static page the AI tab shows precomputed real outputs (labeled) — live AI runs locally. Full local experience: <code>git clone https://github.com/katepallewarprathmesh-sketch/QShield &amp;&amp; pip install -e . &amp;&amp; qshield ui</code> · <a href="./">QSHIELD home</a></span><button onclick="document.getElementById('demo-banner').remove()" aria-label="dismiss">&times;</button></div>
 """
 
 
@@ -198,8 +199,8 @@ def _load_workbench_html() -> str:
     raise RuntimeError("WORKBENCH_HTML not found in page.py")
 
 
-def _render_index(bootstrap_src: str = "bootstrap.js") -> str:
-    html = _load_workbench_html()
+def _render_workbench(bootstrap_src: str = "bootstrap.js") -> str:
+    html = _load_workbench_html().replace("SERVER-SIDE ANALYSIS", "IN-BROWSER ANALYSIS")
     for needle in ("</style>", "<body>", "</body>"):
         if html.count(needle) != 1:
             raise RuntimeError(f"WORKBENCH_HTML anchor {needle!r} not unique/found")
@@ -215,6 +216,26 @@ def _render_index(bootstrap_src: str = "bootstrap.js") -> str:
     if html.count(marker) != 1:
         raise RuntimeError("main inline script marker not unique/found in WORKBENCH_HTML")
     return html.replace(marker, inject + marker, 1)
+
+
+def _render_home(version: str) -> str:
+    """Render the public product landing page with the authoritative package version."""
+    if not HOME_PAGE.is_file():
+        raise RuntimeError(f"public home page not found: {HOME_PAGE}")
+    html = HOME_PAGE.read_text(encoding="utf-8").replace("__QSHIELD_VERSION__", version)
+    if "__QSHIELD_VERSION__" in html:
+        raise RuntimeError("public home page has an unresolved version token")
+    return html
+
+
+def _project_version() -> str:
+    """Read project.version without importing the engine or optional dependencies."""
+    try:
+        import tomllib
+
+        return tomllib.loads((REPO / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
+    except Exception as exc:
+        raise RuntimeError(f"could not read project.version from pyproject.toml: {exc}") from exc
 
 
 def _write_public_threat_model(out: Path, version: str) -> Path:
@@ -246,19 +267,12 @@ def main() -> int:
     assets = _vendor_pyodide(vendor, offline=args.offline, fresh=not args.incremental)
     wheel = _build_wheel(vendor, skip=args.skip_wheel)
     fixtures = _zip_fixtures(vendor)
+    manifest_version = _project_version()
     bootstrap_bytes = BOOTSTRAP.read_bytes()
     bootstrap_name = f"bootstrap.{_sha256(bootstrap_bytes)[:12]}.js"
     (out / bootstrap_name).write_bytes(bootstrap_bytes)
-    (out / "index.html").write_text(_render_index(bootstrap_name), encoding="utf-8")
-
-    # Version comes from pyproject.toml (authoritative); do not import the
-    # package here — the build environment must not need the engines deps.
-    try:
-        import tomllib
-        manifest_version = tomllib.loads((REPO / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
-    except Exception as exc:
-        raise RuntimeError(f"could not read project.version from pyproject.toml: {exc}") from exc
-
+    (out / "index.html").write_text(_render_home(manifest_version), encoding="utf-8")
+    (out / "workbench.html").write_text(_render_workbench(bootstrap_name), encoding="utf-8")
     _write_public_threat_model(out, manifest_version)
 
     manifest = {
