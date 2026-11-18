@@ -17,6 +17,8 @@ def test_home_page_links_to_workbench_and_has_current_version():
     html = _render_home("1.4.0")
     assert 'href="workbench.html"' in html
     assert "v1.4.0" in html
+    assert "Likely budget owner" in html
+    assert "no paid enterprise plan" in html
     assert "__QSHIELD_VERSION__" not in html
 
 

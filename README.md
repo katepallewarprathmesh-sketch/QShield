@@ -30,6 +30,14 @@ Find suspicious circuit behavior, check equivalence, and audit dependencies—wi
 
 **Measured scope:** 417 bundled fixtures (202 clean / 215 malicious); fixture-corpus rates, not field rates. See [limits and threat model](https://katepallewarprathmesh-sketch.github.io/QShield/threat-model.html).
 
+## Who uses it—and who pays?
+
+- **Daily users:** quantum software engineers and researchers building circuits; platform / DevSecOps engineers adding circuit checks to CI; product-security reviewers triaging evidence.
+- **Likely budget owner (hypothesis, not validated):** a Head of Quantum Engineering at a quantum software vendor, or the Product Security / Engineering lead accountable for an organization's quantum-code pipeline.
+- **Best first fit:** teams already shipping or reviewing circuit software—not organizations with only exploratory quantum interest.
+
+QSHIELD has no published paid customer deployments. The available product is a free Apache-2.0 package and local-first Workbench; there is **no paid enterprise plan, hosted service, SLA, or support contract** today. Validate on a non-sensitive repository before making a procurement case. Use [GitHub Discussions](https://github.com/katepallewarprathmesh-sketch/QShield/discussions) for non-confidential use cases; never post customer circuits or secrets.
+
 ## What it does
 
 | Command / surface | What it gives you |
@@ -194,7 +202,7 @@ For assumptions, trust boundaries, and non-goals, see the [public QSHIELD threat
 ## Status & license
 
 **v1.4.0** — software-only. See `CHANGELOG.md` for release notes.
-Apache 2.0 — see [LICENSE](LICENSE). Contributions (signatures, analyzers, corpus circuits) welcome.
+Apache-2.0 — see [LICENSE](LICENSE). Contributions to parsers, integrations, tests, and documentation are welcome. The community signature pack is intentionally empty; signature submissions are not being solicited.
 
 ## Development
 

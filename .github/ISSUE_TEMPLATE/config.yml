@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability privately
+    url: https://github.com/katepallewarprathmesh-sketch/QShield/security/advisories/new
+    about: Use private vulnerability reporting. Do not post exploit details or sensitive circuit data in a public issue.
+  - name: Product questions and non-sensitive use cases
+    url: https://github.com/katepallewarprathmesh-sketch/QShield/discussions
+    about: Ask questions or discuss a non-confidential evaluation. Do not share customer circuits, credentials, or private data.

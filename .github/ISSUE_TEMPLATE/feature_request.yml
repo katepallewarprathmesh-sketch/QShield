@@ -1,0 +1,35 @@
+name: Feature request
+description: Suggest a user-centered improvement to QSHIELD
+title: "feature: "
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Describe a non-confidential workflow. Do not include customer circuits,
+        credentials, or sensitive business information.
+  - type: textarea
+    id: user
+    attributes:
+      label: Who is the user?
+      description: What role or team would use this?
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are they trying to solve?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: What outcome would make this useful?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Current workaround or alternative
+    validations:
+      required: false
