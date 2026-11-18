@@ -6,7 +6,7 @@
 
 Find suspicious circuit behavior, check equivalence, and audit dependencies—with evidence your team can review before a circuit reaches a run.
 
-[![PyPI version](https://img.shields.io/pypi/v/qshield?color=77e3bd)](https://pypi.org/project/qshield/)
+[![PyPI version](https://img.shields.io/pypi/v/qshield?color=77e3bd&label=PyPI)](https://pypi.org/project/qshield/)
 [![Python versions](https://img.shields.io/pypi/pyversions/qshield)](https://pypi.org/project/qshield/)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-77e3bd)](LICENSE)
 
