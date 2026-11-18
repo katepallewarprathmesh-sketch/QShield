@@ -11,8 +11,8 @@
     },
     {
       "path": "index.html",
-      "sha256": "a693140f2c7a8427f53bf5a1a8bf057ec7f37576f3528d676ada1f05f9007646",
-      "bytes": 16021
+      "sha256": "7947e6e0998387a517a75325775785d8e812877cc3e06b89c99b81f9fe4ba7f2",
+      "bytes": 17889
     },
     {
       "path": "threat-model.html",
@@ -71,8 +71,8 @@
     },
     {
       "path": "vendor/qshield.whl",
-      "sha256": "bef3cf8ed2db52ecc0d5d400a785f98ed4489e9d1a509c02d813dd95311b8841",
-      "bytes": 333022
+      "sha256": "9807a111ba925f034fd771e5d9ed6b48ba93370d20870b15ed2ec30b68487ace",
+      "bytes": 333484
     },
     {
       "path": "workbench.html",
