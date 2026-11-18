@@ -271,6 +271,11 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
         <label class="small" for="scan-qasm">OpenQASM 2.0 / 3.0 source</label>
         <textarea id="scan-qasm" spellcheck="false" placeholder="OPENQASM 2.0;&#10;include &quot;qelib1.inc&quot;;&#10;qreg q[3];&#10;creg c[3];&#10;h q[0]; cx q[0],q[1]; measure q -> c;"></textarea>
         <div class="row">
+          <label class="btn secondary" for="scan-file">Choose local QASM file</label>
+          <input id="scan-file" type="file" accept=".qasm,.qasm2,.qasm3" aria-describedby="scan-file-status" hidden />
+          <span id="scan-file-status" class="muted" role="status" aria-live="polite">No file selected. File contents stay in this browser until you scan.</span>
+        </div>
+        <div class="row">
           <button class="btn" data-action="scan">Scan circuit</button>
           <button class="btn secondary" data-action="load-example">Load ancilla-leakage example</button>
         </div>

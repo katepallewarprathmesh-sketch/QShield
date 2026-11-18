@@ -84,6 +84,10 @@ def test_page_serves(server):
     assert headers["Referrer-Policy"] == "no-referrer"
     assert re.search(r"<[^>]+\bon[a-z]+\s*=", body, flags=re.IGNORECASE) is None
     assert 'role="tablist"' in body
+    assert 'id="scan-file" type="file"' in body
+    assert 'accept=".qasm,.qasm2,.qasm3"' in body
+    assert 'id="scan-file-status"' in body
+    assert "File contents stay in this browser" in body
     assert "trust-banner" not in body
     assert "Know your trust boundary" not in body
     assert "Opt-in cloud feature" not in body
@@ -104,6 +108,10 @@ def test_serves_compiled_workbench_asset(server):
     assert '"About"' in script
     assert "About & limits" not in script
     assert "function loadPolicies" in script
+    assert "function loadCircuitFile" in script
+    assert "MAX_LOCAL_QASM_BYTES" in script
+    assert "new TextDecoder('utf-8', { fatal: true })" in script
+    assert "file.arrayBuffer()" in script
     assert "addEventListener" in script
     with urllib.request.urlopen(server + "/", timeout=15) as response:
         page = response.read().decode()
@@ -163,6 +171,34 @@ def test_scan_endpoint_bell_is_clean_ish(server):
     data = json.loads(body)
     assert data["stats"]["qubits"] == 2 and data["stats"]["gates"] >= 2  # gates exclude position-less measurements
     assert isinstance(data["findings"], list)
+
+
+def test_scan_accepts_user_supplied_qasm_not_in_bundled_examples(server):
+    custom_qasm = (
+        'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg my_register[3];\n'
+        'x my_register[2];\nh my_register[0];\ncx my_register[0], my_register[2];\n'
+    )
+    status, body = _post(server + "/api/scan", {"qasm": custom_qasm})
+    assert status == 200
+    data = json.loads(body)
+    assert data["stats"] == {"qubits": 3, "gates": 3, "depth": 2}
+    assert isinstance(data["findings"], list)
+    assert isinstance(data["warnings"], list)
+
+
+def test_scan_accepts_user_supplied_qasm3(server):
+    custom_qasm3 = "OPENQASM 3.0;\nqubit[3] my_qubits;\nh my_qubits[0];\ncx my_qubits[0], my_qubits[2];\n"
+    status, body = _post(server + "/api/scan", {"qasm": custom_qasm3})
+    assert status == 200
+    data = json.loads(body)
+    assert data["stats"] == {"qubits": 3, "gates": 2, "depth": 2}
+
+
+def test_scan_malformed_user_qasm_is_client_error(server):
+    invalid_qasm = "OPENQASM 2.0;\nqreg q[2];\nthis is not valid\n"
+    code, body = _post_raw(server + "/api/scan", json.dumps({"qasm": invalid_qasm}).encode())
+    assert code == 400
+    assert "invalid input" in body
 
 
 @pytest.mark.skipif(not ANCILLA.exists(), reason="fixture not present")

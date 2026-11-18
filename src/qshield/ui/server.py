@@ -362,6 +362,9 @@ class WorkbenchHandler(BaseHTTPRequestHandler):
                 self._json(404, {"error": "not found"})
         except PolicyError as exc:
             self._json(400, {"error": str(exc)})
+        except ValueError as exc:
+            # Parser and request validation errors are client mistakes, not server faults.
+            self._json(400, {"error": f"invalid input: {exc}"})
         except Exception as exc:  # Sarvam/AI upstream failures surface as 503; the rest as 500
             if type(exc).__name__ in ("SarvamUnavailable", "APIError", "APIConnectionError", "RateLimitError"):
                 self._json(503, {"error": f"AI upstream error: {exc}"})

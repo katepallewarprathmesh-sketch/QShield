@@ -102,6 +102,31 @@ async function loadExample() {
   try { const d = await api('/api/example?name=ancilla_leakage'); out.value = d.qasm; }
   catch (e) { out.value = 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\ncreg c[2];\nh q[0];\nmeasure q -> c;'; }
 }
+const MAX_LOCAL_QASM_BYTES = 1024 * 1024;
+async function loadCircuitFile(file: File) {
+  const status = $('#scan-file-status');
+  try {
+    const extension = file.name.toLowerCase().split('.').pop();
+    if (!['qasm', 'qasm2', 'qasm3'].includes(extension)) {
+      throw new Error('Choose an OpenQASM file (.qasm, .qasm2, or .qasm3).');
+    }
+    if (file.size > MAX_LOCAL_QASM_BYTES) {
+      throw new Error('File exceeds the 1 MiB local-import limit.');
+    }
+    let source: string;
+    try {
+      const bytes = await file.arrayBuffer();
+      source = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+    } catch {
+      throw new Error('File must contain valid UTF-8 text.');
+    }
+    if (!source.trim()) throw new Error('The selected file is empty.');
+    $('#scan-qasm').value = source;
+    status.textContent = `${file.name} loaded (${file.size.toLocaleString()} bytes). It stays in this browser until you run Scan.`;
+  } catch (e) {
+    status.textContent = `Could not load file: ${e.message || e}`;
+  }
+}
 async function runScan() {
   const out = $('#scan-out'); spin(out);
   try {
@@ -325,5 +350,11 @@ document.addEventListener('click', async event => {
     button.disabled = false;
     button.removeAttribute('aria-busy');
   }
+});
+const scanFileInput = $('#scan-file') as HTMLInputElement | null;
+scanFileInput?.addEventListener('change', () => {
+  const file = scanFileInput.files?.[0];
+  if (file) void loadCircuitFile(file);
+  scanFileInput.value = '';
 });
 buildTabs(); loadPolicies(); aiStatus();
