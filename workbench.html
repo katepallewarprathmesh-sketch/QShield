@@ -231,8 +231,8 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
 
   <section class="tab active" id="tab-overview" role="tabpanel" tabindex="0" aria-labelledby="tab-button-overview" aria-hidden="false">
     <div class="hero">
-      <div><p class="eyebrow">QSHIELD SECURITY WORKBENCH</p><h1>Review circuit risk with evidence.</h1><p>Static analysis, equivalence checks, and policy evaluation for quantum software. Findings are signals for review, not proof that a circuit is safe or malicious.</p></div>
-      <div class="status-row"><span class="pill robust">No hardware path</span></div>
+      <div><p class="eyebrow">QSHIELD SECURITY WORKBENCH</p><h1>Review circuits with evidence.</h1><p>Bring static analysis, equivalence checks, and policy evaluation together for a clear, reviewable view of quantum software.</p></div>
+      <div class="status-row"><span class="pill robust">Software-only analysis</span></div>
     </div>
     <div class="grid cols-4">
       <div class="card kpi"><h3>Fixture corpus</h3><b>417</b><span>202 clean · 215 malicious QASM</span></div>
@@ -247,7 +247,7 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
         <div class="cell"><span class="pill critical">critical</span><small>Block the build. Human audit before merge/release.</small></div>
         <div class="cell"><span class="pill high">high</span><small>Block in CI. Review and remediate; re-scan to clear.</small></div>
         <div class="cell"><span class="pill medium">medium</span><small>Warn &amp; review. Track to zero across milestones.</small></div>
-        <div class="cell"><span class="pill low">low</span><small>Track silently. Hygiene debt, not an incident.</small></div>
+        <div class="cell"><span class="pill low">low</span><small>Routine hygiene improvement.</small></div>
         <div class="cell"><span class="pill info">info</span><small>Context only. Useful in diffs and audits.</small></div>
       </div>
     </div>
@@ -255,16 +255,16 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
     <div class="grid cols-2" style="margin-top:14px">
       <div class="card">
         <h3>What this is</h3>
-        <p style="margin:0 0 8px">An offline workbench for auditing quantum circuits and their supply chains: static threat analysis, ZX-calculus equivalence, sandboxed-execution verdicts, policy-as-code hygiene rules, and an adversarial robustness probe — with every number measured and every limit printed.</p>
+        <p style="margin:0 0 8px">A local-first workspace for quantum circuit and supply-chain review, bringing together static analysis, ZX-calculus equivalence, sandboxed execution, policy-as-code, and robustness testing.</p>
         <ul class="limit" style="margin:0; padding-left: 18px">
-          <li><b>No QPU or device SDK.</b> Circuit analysis runs on the Workbench server.</li>
-          <li>Detection evidence, never proofs of honesty; measured on fixture corpora, not in the field.</li>
+          <li>Explore circuit structure, compare implementations, and review evidence in one place.</li>
+          <li>Use reproducible benchmarks and detailed findings to guide engineering decisions.</li>
         </ul>
       </div>
       <div class="card">
         <h3>Reading a finding</h3>
         <div class="find high"><h4><span class="pill high">high</span> T2.1 · Ancilla carries information about the computation</h4><p>Partial-trace analysis shows ancilla qubit(s) [1, 2] are NOT independent of the data qubits (ancilla reduced states differ by up to 1.00e+00 trace distance across 2 probe inputs). Information is leaking out of the computation. Confidence 0.85.</p></div>
-        <p class="muted">Every finding links the gate indices that triggered it, a false-positive probability, and a concrete remediation. Treat each as a lead for a human auditor, not a verdict.</p>
+        <p class="muted">Findings provide gate-location and confidence context with suggested remediation to support an informed human review.</p>
       </div>
     </div>
   </section>
@@ -402,21 +402,20 @@ measure q -> c;</textarea>
 
   <section class="tab" id="tab-about" role="tabpanel" tabindex="0" aria-labelledby="tab-button-about" aria-hidden="true">
     <div class="card">
-      <h3>About &amp; honest limits</h3>
-      <ul class="limit" style="padding-left:18px; margin-top:4px">
-        <li><b>Hardware:</b> none. Ever. Detection, verification and scoring all run offline on files. There is no QPU path in this workbench and no hardware in any acceptance criterion — by design, not by accident.</li>
-        <li><b>Papers / publishing:</b> out of scope. This is a software product, measured and documented, not a publication vehicle.</li>
-        <li><b>What it is:</b> evidence of known tampering classes and supply-chain hygiene — not a proof that a circuit or device is honest, and not runtime-blocking by default.</li>
-        <li><b>Metrics:</b> fixture-corpus numbers (202 clean / 215 malicious). Field rates unknown. Twin-calibrated dynamic results are simulator-measured.</li>
-        <li><b>Formal verdicts:</b> Equivalent/NotEquivalent only on decidable ZX fragments; otherwise honest <span class="mono">Unknown</span>.</li>
-        <li><b>Community signatures:</b> ships empty by design — no invented threats, no silent updates.</li>
-      </ul>
+      <h3>About QSHIELD</h3>
+      <p>QSHIELD is a local-first workbench for reviewing quantum circuits and the software supply chains around them.</p>
+      <div class="grid cols-2" style="margin-top:14px">
+        <div class="card"><h4>Analyze</h4><p>Explore circuit structure, threat signatures, information flow, and dependency hygiene.</p></div>
+        <div class="card"><h4>Compare</h4><p>Review circuit changes with equivalence and robustness analysis.</p></div>
+        <div class="card"><h4>Integrate</h4><p>Bring policy checks and structured reports into engineering workflows.</p></div>
+        <div class="card"><h4>Review</h4><p>Use clear findings, benchmark results, and remediation context to support decisions.</p></div>
+      </div>
       <p class="muted">QSHIELD Workbench · Apache-2.0</p>
     </div>
   </section>
 
   </div><!-- /content -->
-  <footer>QSHIELD Workbench — local-first quantum software security review. Evidence, not proofs. Metrics are fixture-corpus measurements, not field rates.</footer>
+  <footer>QSHIELD Workbench — local-first quantum software security review, with benchmark metrics measured on the bundled fixture corpus.</footer>
 </main>
 </div><!-- /app -->
 
