@@ -14,6 +14,7 @@ def render_html(
     summary: dict[str, Any],
     report: dict[str, Any],
     version: str = "0.1.0",
+    coverage: dict[str, Any] | None = None,
 ) -> str:
     template_dir = Path(__file__).resolve().parent / "templates"
     env = Environment(
@@ -22,4 +23,4 @@ def render_html(
     )
     env.filters["tojson"] = lambda v, **kw: json.dumps(v, default=str, **{"indent": 2, **kw})
     template = env.get_template("report.html.jinja2")
-    return template.render(findings=findings, summary=summary, report=report, version=version)
+    return template.render(findings=findings, summary=summary, report=report, version=version, coverage=coverage)

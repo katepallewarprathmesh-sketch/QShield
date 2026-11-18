@@ -26,6 +26,7 @@ from qshield import __version__
 from qshield.core.circuit_ir import MAX_EXACT_QUBITS, CircuitIR
 from qshield.core.config import QShieldConfig, load_config
 from qshield.core.parsers import parse_any, parse_file
+from qshield.reporting.coverage import build_coverage_report, coverage_item
 from qshield.reporting.finding import SEVERITY_ORDER, CircuitLocation, Evidence, Finding
 from qshield.reporting.html_exporter import render_html
 from qshield.reporting.json_exporter import render_json
@@ -66,12 +67,31 @@ class ScanResults:
         analyses_run: list[str] | None = None,
         warnings: list[str] | None = None,
         elapsed_seconds: float = 0.0,
+        coverage: dict[str, Any] | None = None,
     ):
         self._circuits = circuits
         self._findings = list(findings)
         self.analyses_run = analyses_run or ["static"]
         self.warnings = warnings or []
         self.elapsed_seconds = elapsed_seconds
+        if coverage is None:
+            coverage = build_coverage_report(
+                requested_analyses=self.analyses_run,
+                circuits=[
+                    {
+                        "circuit_id": circuit.circuit_id,
+                        "name": circuit.name,
+                        "processed": False,
+                        "analyses": {
+                            name: coverage_item("inconclusive", "coverage was not recorded by the result producer")
+                            for name in ("static", "dynamic", "formal")
+                        },
+                    }
+                    for circuit in circuits
+                ],
+                supply_chain=coverage_item("inconclusive", "coverage was not recorded by the result producer"),
+            )
+        self.coverage = coverage
 
     # -- findings -------------------------------------------------------
     @property
@@ -97,6 +117,7 @@ class ScanResults:
 
     @property
     def is_clean(self) -> bool:
+        """Whether no high-or-critical finding was emitted; not a coverage claim."""
         return not any(f.severity_rank >= SEVERITY_ORDER["high"] for f in self._findings)
 
     def exceeds_fail_on(self, fail_on: str) -> bool:
@@ -117,7 +138,7 @@ class ScanResults:
             findings = [f for f in findings if f.threat_type == threat_type]
         if analysis_type:
             findings = [f for f in findings if f.analysis_type == analysis_type]
-        return ScanResults(findings, self._circuits, self.analyses_run, self.warnings, self.elapsed_seconds)
+        return ScanResults(findings, self._circuits, self.analyses_run, self.warnings, self.elapsed_seconds, self.coverage)
 
     # -- export ---------------------------------------------------------
     def to_dict(self) -> dict[str, Any]:
@@ -125,7 +146,9 @@ class ScanResults:
             "tool": {"name": "QSHIELD", "version": __version__},
             "summary": self.summary.to_dict(),
             "is_clean": self.is_clean,
+            "coverage_complete": self.coverage["overall_status"] == "complete",
             "warnings": list(self.warnings),
+            "coverage": self.coverage,
             "circuits": [c.to_dict() for c in self._circuits],
             "findings": [f.to_dict() for f in self.findings],
             "elapsed_seconds": round(self.elapsed_seconds, 3),
@@ -135,7 +158,7 @@ class ScanResults:
         return render_json(self.to_dict())
 
     def to_sarif(self) -> str:
-        return render_sarif(self.findings, tool_version=__version__)
+        return render_sarif(self.findings, tool_version=__version__, coverage=self.coverage)
 
     def to_html(self) -> str:
         report = {
@@ -144,13 +167,14 @@ class ScanResults:
             "source_hash": (self._circuits[0].source_hash if self._circuits else ""),
             "num_qubits": max((c.num_qubits for c in self._circuits), default=0),
             "num_gates": sum(len(c.gates) for c in self._circuits),
+            "coverage": self.coverage,
         }
         summary = {
             "total": self.summary.total, "critical": self.summary.critical,
             "high": self.summary.high, "medium": self.summary.medium,
             "low": self.summary.low,
         }
-        return render_html(self.findings, summary, report, version=__version__)
+        return render_html(self.findings, summary, report, version=__version__, coverage=self.coverage)
 
     # spec calls this to_pdf; we expose it but raise a clear error if the
     # optional dependency is missing.
@@ -261,32 +285,86 @@ class Scanner:
         findings: list[Finding] = []
         warnings: list[str] = []
         circuits_out = [rc.circuit for rc in self._circuits]
+        known_analyses = {"static", "dynamic", "formal", "supply_chain"}
+        unsupported = sorted(set(analyses) - known_analyses)
+        for name in unsupported:
+            warnings.append(f"Unknown analysis {name!r}; it was not run")
 
-        # signature matcher built once
+        # Signature matcher built once; per-circuit reports record whether it
+        # was available and whether that pass actually ran.
         matcher = self._build_matcher(warnings)
+        circuit_coverage: list[dict[str, Any]] = []
+        timeout_reported = False
 
         for rc in self._circuits:
             circuit = rc.circuit
-            if time.monotonic() - start > timeout:
-                warnings.append(f"Timeout after {timeout}s; remaining circuits skipped")
-                break
-            # Surface parser-level notes (resets, classical feedback, skipped
-            # statements) — otherwise a scan of e.g. a non-unitary circuit
-            # would report a clean verdict with no hint of what was excluded.
-            for note in (circuit.metadata or {}).get("warnings", []):
+            requested = time.monotonic() - start <= timeout
+            analyses_coverage = {
+                name: coverage_item("not_run", "analysis was not requested")
+                for name in ("static", "dynamic", "formal")
+                if name not in analyses
+            }
+            if not requested:
+                if not timeout_reported:
+                    warnings.append(f"Timeout after {timeout}s; remaining circuits skipped")
+                    timeout_reported = True
+                for name in ("static", "dynamic", "formal"):
+                    if name in analyses:
+                        analyses_coverage[name] = coverage_item("not_run", f"global timeout stopped before {name} analysis")
+                circuit_coverage.append({
+                    "circuit_id": circuit.circuit_id,
+                    "name": circuit.name,
+                    "processed": False,
+                    "analyses": analyses_coverage,
+                })
+                continue
+
+            parser_notes = list((circuit.metadata or {}).get("warnings", []))
+            for note in parser_notes:
                 warnings.append(f"{circuit.name}: {note}")
             if "static" in analyses:
-                findings += self._run_static(circuit, rc, matcher, warnings)
+                static_findings, static_coverage = self._run_static(circuit, rc, matcher, warnings, parser_notes)
+                findings += static_findings
+                analyses_coverage["static"] = static_coverage
             if "dynamic" in analyses:
-                findings += self._run_dynamic(circuit, dynamic_shots, warnings)
+                dynamic_findings, dynamic_coverage = self._run_dynamic(circuit, dynamic_shots, warnings)
+                findings += dynamic_findings
+                analyses_coverage["dynamic"] = dynamic_coverage
             if "formal" in analyses:
-                findings += self._run_formal(circuit, warnings)
+                formal_findings, formal_coverage = self._run_formal(circuit, warnings)
+                findings += formal_findings
+                analyses_coverage["formal"] = formal_coverage
 
+            circuit_coverage.append({
+                "circuit_id": circuit.circuit_id,
+                "name": circuit.name,
+                "processed": True,
+                "analyses": analyses_coverage,
+            })
+
+        supply_chain_coverage = coverage_item("not_run", "analysis was not requested")
         if "supply_chain" in analyses:
-            findings += self._run_supply_chain(warnings)
+            if self._requirements or self._packages:
+                try:
+                    findings += self._run_supply_chain(warnings)
+                    supply_chain_coverage = coverage_item(
+                        "completed", "registered dependency inputs were checked",
+                        requirements_files=len(self._requirements), package_records=len(self._packages),
+                    )
+                except Exception as exc:
+                    warnings.append(f"Supply-chain analysis inconclusive: {exc}")
+                    supply_chain_coverage = coverage_item("inconclusive", str(exc))
+            else:
+                supply_chain_coverage = coverage_item("not_applicable", "no package or requirements inputs were registered")
 
+        coverage = build_coverage_report(
+            requested_analyses=analyses,
+            circuits=circuit_coverage,
+            supply_chain=supply_chain_coverage,
+            unsupported_analyses=unsupported,
+        )
         elapsed = time.monotonic() - start
-        return ScanResults(findings, circuits_out, analyses, warnings, elapsed)
+        return ScanResults(findings, circuits_out, analyses, warnings, elapsed, coverage)
 
     def run_quick(self) -> ScanResults:
         """Static analysis only; designed for CI (<30s typical)."""
@@ -325,23 +403,46 @@ class Scanner:
         return SignatureMatcher(sigs) if sigs else None
 
     # ------------------------------------------------------------------
-    def _run_static(self, circuit, rc, matcher, warnings):
+    def _run_static(self, circuit, rc, matcher, warnings, parser_notes):
         from qshield.static.structural_analyzer import StructuralAnalyzer
         from qshield.static.unitary_verifier import UnitaryVerifier
 
         findings: list[Finding] = []
+        checks: list[dict[str, Any]] = []
         analyzer = StructuralAnalyzer(self.config)
         findings += analyzer.analyze(circuit)
+        checks.append({"id": "structural_analysis", **coverage_item("completed", "structural analyzer executed")})
 
         if matcher is not None:
+            warning_index = len(matcher.warnings)
             matched = matcher.match(circuit)
             findings += matched
-            warnings += matcher.warnings
+            new_matcher_warnings = matcher.warnings[warning_index:]
+            warnings.extend(new_matcher_warnings)
+            checks.append({
+                "id": "signature_matching",
+                **coverage_item(
+                    "inconclusive" if new_matcher_warnings else "completed",
+                    *(new_matcher_warnings or ["loaded signature matcher executed"]),
+                ),
+            })
+        elif self.signatures_mode == "builtin":
+            checks.append({"id": "signature_matching", **coverage_item("inconclusive", "no builtin signature matcher was available")})
+        else:
+            checks.append({"id": "signature_matching", **coverage_item("not_applicable", "signature matching is disabled")})
 
-        # Unitary equivalence vs expected unitary (if supplied)
+        # Unitary equivalence vs expected unitary (if supplied).
         if rc.expected_unitary is not None:
             verifier = UnitaryVerifier(max_qubits=min(self.config.unitary_max_qubits, MAX_EXACT_QUBITS))
             report = verifier.verify_equivalence(circuit, rc.expected_unitary, self.config.unitary_tolerance)
+            checks.append({
+                "id": "expected_unitary",
+                **coverage_item(
+                    "inconclusive" if report.result.value == "uncomputable" else "completed",
+                    report.message,
+                    result=report.result.value,
+                ),
+            })
             if not report.ok:
                 findings.append(Finding(
                     severity="critical" if report.result.value == "different" else "medium",
@@ -362,38 +463,60 @@ class Scanner:
                     false_positive_probability=0.1,
                     analysis_type="static",
                 ))
+        else:
+            checks.append({"id": "expected_unitary", **coverage_item("not_applicable", "no expected unitary was supplied")})
 
-        # Ancilla independence (small circuits only)
+        # Ancilla independence is bounded to eight qubits.
         candidates = self._ancilla_candidates(circuit)
-        if candidates and circuit.num_qubits <= 8:
-            from qshield.static.unitary_verifier import UnitaryVerifier
-            verifier = UnitaryVerifier(max_qubits=8)
-            leak = verifier.check_ancilla_independence(circuit, candidates)
-            if leak.leaks:
-                findings.append(Finding(
-                    severity="high",
-                    threat_type="T2.1",
-                    title="Ancilla carries information about the computation",
-                    description=(
-                        f"Partial-trace analysis shows ancilla qubit(s) {candidates} are NOT independent "
-                        f"of the data qubits ({leak.details}). Information is leaking out of the computation."
-                    ),
-                    circuit_id=circuit.circuit_id,
-                    location=CircuitLocation(qubit_indices=candidates),
-                    evidence=Evidence(
-                        evidence_type="unitary_mismatch",
-                        details={"max_trace_distance": leak.max_trace_distance,
-                                 "tested_inputs": leak.tested_inputs},
-                    ),
-                    confidence=0.85,
-                    remediation="Remove or re-derive the ancilla; audit what it is entangled with and where it is measured.",
-                    false_positive_probability=0.15,
-                    analysis_type="static",
-                ))
+        if not candidates:
+            checks.append({"id": "ancilla_independence", **coverage_item("not_applicable", "no ancilla candidates identified")})
+        elif circuit.num_qubits > 8:
+            checks.append({"id": "ancilla_independence", **coverage_item("inconclusive", "ancilla independence is capped at 8 qubits", qubits=circuit.num_qubits)})
+        else:
+            try:
+                verifier = UnitaryVerifier(max_qubits=8)
+                leak = verifier.check_ancilla_independence(circuit, candidates)
+            except Exception as exc:
+                warnings.append(f"Ancilla-independence analysis inconclusive for {circuit.name}: {exc}")
+                checks.append({"id": "ancilla_independence", **coverage_item("inconclusive", str(exc))})
+            else:
+                checks.append({
+                    "id": "ancilla_independence",
+                    **coverage_item("completed", "partial-trace check executed", tested_inputs=leak.tested_inputs),
+                })
+                if leak.leaks:
+                    findings.append(Finding(
+                        severity="high",
+                        threat_type="T2.1",
+                        title="Ancilla carries information about the computation",
+                        description=(
+                            f"Partial-trace analysis shows ancilla qubit(s) {candidates} are NOT independent "
+                            f"of the data qubits ({leak.details}). Information is leaking out of the computation."
+                        ),
+                        circuit_id=circuit.circuit_id,
+                        location=CircuitLocation(qubit_indices=candidates),
+                        evidence=Evidence(
+                            evidence_type="unitary_mismatch",
+                            details={"max_trace_distance": leak.max_trace_distance,
+                                     "tested_inputs": leak.tested_inputs},
+                        ),
+                        confidence=0.85,
+                        remediation="Remove or re-derive the ancilla; audit what it is entangled with and where it is measured.",
+                        false_positive_probability=0.15,
+                        analysis_type="static",
+                    ))
+
+        if parser_notes:
+            checks.append({"id": "parser_coverage", **coverage_item("inconclusive", *parser_notes)})
+        else:
+            checks.append({"id": "parser_coverage", **coverage_item("completed", "no parser-level skipped-construct warnings")})
 
         # min-confidence filter (same semantics as the structural analyzer)
         min_conf = self.config.threshold("min_confidence")
-        return [f for f in findings if f.confidence >= min_conf]
+        findings = [f for f in findings if f.confidence >= min_conf]
+        reasons = [reason for check in checks if check["status"] == "inconclusive" for reason in check["reasons"]]
+        status = "inconclusive" if reasons else "completed"
+        return findings, {"status": status, "reasons": reasons, "checks": checks}
 
     def _ancilla_candidates(self, circuit: CircuitIR) -> list[int]:
         if circuit.ancilla_qubits:
@@ -408,7 +531,10 @@ class Scanner:
             from qshield.dynamic.differential_tester import DifferentialTester
             tester = DifferentialTester(shots=dynamic_shots, significance_level=self.config.significance_level)
             report = tester.cross_check_against_aer(circuit)
-            if report.compared and report.comparison is not None and report.comparison.suspicious:
+            if not report.compared or report.comparison is None:
+                warnings.append(f"Dynamic analysis skipped for {circuit.name}: {report.message}")
+                return findings, coverage_item("skipped", report.message, shots=dynamic_shots)
+            if report.comparison.suspicious:
                 findings.append(Finding(
                     severity="high",
                     threat_type="T3.3",
@@ -435,20 +561,28 @@ class Scanner:
                     false_positive_probability=0.2,
                     analysis_type="dynamic",
                 ))
+            return findings, coverage_item(
+                "completed", report.message,
+                backend_a=report.backend_a, backend_b=report.backend_b, shots=report.shots,
+            )
         except Exception as exc:
-            warnings.append(f"Dynamic analysis skipped for {circuit.name}: {exc}")
-        return findings
+            reason = f"Dynamic analysis failed for {circuit.name}: {exc}"
+            warnings.append(reason)
+            return findings, coverage_item("inconclusive", reason, shots=dynamic_shots)
 
     def _run_formal(self, circuit, warnings):
         from qshield.formal import pyzx_available
+
         if not pyzx_available():
-            warnings.append("Formal analysis requested but pyzx is not installed; skipping (pip install 'qshield[formal]')")
-            return []
-        warnings.append(
-            "Formal ZX-calculus equivalence needs a reference circuit; "
-            "use `qshield compare --formal A B` or the verify API. No expected artifact supplied; skipping."
+            reason = "pyzx is not installed; formal equivalence was not run (pip install 'qshield[formal]')"
+            warnings.append(f"Formal analysis skipped for {circuit.name}: {reason}")
+            return [], coverage_item("skipped", reason)
+        reason = (
+            "formal ZX-calculus equivalence needs a reference circuit; no expected artifact was supplied. "
+            "Use `qshield compare --formal A B` or the verify API."
         )
-        return []
+        warnings.append(f"Formal analysis skipped for {circuit.name}: {reason}")
+        return [], coverage_item("skipped", reason)
 
     def _run_supply_chain(self, warnings):
         from qshield.static.dependency_scanner import DependencyScanner

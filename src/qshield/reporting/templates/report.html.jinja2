@@ -41,6 +41,10 @@
               padding:2px 6px; font-family: ui-monospace, Menlo, monospace; font-size:.8rem; }
   pre { padding:10px; overflow:auto; }
   .clean { text-align:center; padding:60px 0; color:#5eead4; }
+  .coverage { background:var(--panel); border:1px solid #232c52; border-radius:12px; padding:16px 18px; margin:20px 0; }
+  .coverage.inconclusive { border-color:var(--medium); }
+  .coverage h2 { margin:0 0 8px; font-size:1.1rem; }
+  .coverage li { margin:6px 0; }
   footer { color:var(--muted); font-size:.75rem; padding: 18px 40px; border-top:1px solid #232c52; }
 </style>
 </head>
@@ -58,6 +62,21 @@
     <div class="tile"><div class="n" style="color:var(--low)">{{ summary.low }}</div><div class="t">Low</div></div>
     <div class="tile"><div class="n">{{ report.num_qubits }} / {{ report.num_gates }}</div><div class="t">Qubits / Gates</div></div>
   </div>
+
+  {% if coverage %}
+  <section class="coverage {{ coverage.overall_status }}">
+    <h2>Analysis coverage: {{ coverage.overall_status }}</h2>
+    <p>{{ coverage.summary.circuits_processed }} of {{ coverage.summary.circuits_total }} circuits processed. Inconclusive pipeline runs: {{ coverage.summary.inconclusive_pipeline_runs }}; requested runs not started: {{ coverage.summary.requested_pipeline_runs_not_started }}.</p>
+    <ul>
+      {% for circuit in coverage.circuits %}
+      <li><strong>{{ circuit.name }}</strong>{% if not circuit.processed %} — not processed{% endif %}
+        <ul>{% for analysis, outcome in circuit.analyses.items() %}<li>{{ analysis }}: {{ outcome.status }}{% if outcome.reasons %} — {{ outcome.reasons | join('; ') }}{% endif %}</li>{% endfor %}</ul>
+      </li>
+      {% endfor %}
+      <li>supply chain: {{ coverage.supply_chain.status }}{% if coverage.supply_chain.reasons %} — {{ coverage.supply_chain.reasons | join('; ') }}{% endif %}</li>
+    </ul>
+  </section>
+  {% endif %}
 
   {% if findings %}
     {% for f in findings %}
@@ -79,7 +98,7 @@
     </div>
     {% endfor %}
   {% else %}
-    <div class="clean"><h2>✓ No findings above threshold</h2><p>The circuit passed all enabled analyses.</p></div>
+    <div class="clean"><h2>✓ No findings above threshold</h2><p>No findings were emitted; consult the analysis coverage above for checks that were inconclusive or not run.</p></div>
   {% endif %}
 </main>
 <footer>QSHIELD {{ version }} — Quantum Software Supply Chain Security Framework — Apache 2.0</footer>

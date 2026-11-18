@@ -21,6 +21,7 @@ def to_sarif(
     tool_name: str = "QSHIELD",
     tool_version: str = "0.1.0",
     information_uri: str = "https://github.com/qshield/qshield",
+    coverage: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     rules: dict[str, dict] = {}
     results = []
@@ -86,6 +87,7 @@ def to_sarif(
                     }
                 },
                 "results": results,
+                **({"properties": {"qshieldCoverage": coverage}} if coverage is not None else {}),
             }
         ],
     }

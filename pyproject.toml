@@ -80,7 +80,7 @@ Documentation = "https://katepallewarprathmesh-sketch.github.io/QShield/"
 where = ["src"]
 
 [tool.setuptools.package-data]
-"qshield" = ["signatures/builtin/*.yaml", "signatures/community/*.yaml", "signatures/community/*.yml", "signatures/community/*.json", "signatures/community/*.md", "plugins/*.json", "reporting/templates/*.jinja2", "fixtures/clean_circuits/*.qasm", "fixtures/malicious_circuits/*.qasm", "ui/static/*.js", "provenance/*.json", "py.typed"]
+"qshield" = ["signatures/builtin/*.yaml", "signatures/community/*.yaml", "signatures/community/*.yml", "signatures/community/*.json", "signatures/community/*.md", "plugins/*.json", "reporting/*.json", "reporting/templates/*.jinja2", "fixtures/clean_circuits/*.qasm", "fixtures/malicious_circuits/*.qasm", "ui/static/*.js", "provenance/*.json", "py.typed"]
 
 [tool.pytest.ini_options]
 markers = [

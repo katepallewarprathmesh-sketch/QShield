@@ -33,6 +33,8 @@ def aer_distribution(circuit: CircuitIR, shots: int = 10_000) -> dict[str, int] 
     We therefore remap our qubit ``i`` to Qiskit qubit ``n - 1 - i`` and read
     the big-endian probability keys, which then coincide with our bit strings.
     Measurements are dropped: the comparison operates on the final state.
+    A ``None`` result means the backend is absent or some circuit construct
+    could not be represented/executed, so callers must report that as skipped.
     """
     try:
         from qiskit import QuantumCircuit

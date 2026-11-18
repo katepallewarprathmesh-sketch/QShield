@@ -51,8 +51,19 @@ def _render_text_summary(results: ScanResults) -> None:
     if results.warnings:
         for w in results.warnings:
             console.print(f"[dim]warning: {w}[/dim]")
+    coverage = results.coverage
+    coverage_color = "green" if coverage["overall_status"] == "complete" else "yellow"
+    coverage_summary = coverage["summary"]
+    console.print(
+        f"Analysis coverage: [{coverage_color}]{coverage['overall_status']}[/{coverage_color}]  |  "
+        f"circuits processed {coverage_summary['circuits_processed']}/{coverage_summary['circuits_total']}  |  "
+        f"inconclusive/skipped {coverage_summary['inconclusive_pipeline_runs']}  |  "
+        f"requested not started {coverage_summary['requested_pipeline_runs_not_started']}"
+    )
     if not results.findings:
-        console.print("[bold green]✓ Clean — no findings above threshold[/bold green]")
+        console.print("[bold green]✓ No findings above threshold[/bold green]")
+        if coverage["overall_status"] != "complete":
+            console.print("[yellow]This is not a comprehensive clean result; review the coverage reasons above.[/yellow]")
         return
     table = Table(show_header=True, header_style="bold", show_lines=False)
     table.add_column("Severity", width=10)

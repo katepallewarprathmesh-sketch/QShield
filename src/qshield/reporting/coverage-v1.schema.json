@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qshield-coverage-v1",
+  "title": "QSHIELD per-run coverage report v1",
+  "type": "object",
+  "required": ["spec_version", "granularity", "requested_analyses", "overall_status", "summary", "circuits", "supply_chain", "unsupported_analyses", "limitations"],
+  "properties": {
+    "spec_version": {"const": "qshield-coverage-v1"},
+    "granularity": {"type": "string"},
+    "requested_analyses": {"type": "array", "items": {"type": "string"}},
+    "overall_status": {"enum": ["complete", "inconclusive"]},
+    "summary": {
+      "type": "object",
+      "required": ["circuits_total", "circuits_processed", "inconclusive_pipeline_runs", "requested_pipeline_runs_not_started", "by_analysis"],
+      "properties": {
+        "circuits_total": {"type": "integer", "minimum": 0},
+        "circuits_processed": {"type": "integer", "minimum": 0},
+        "inconclusive_pipeline_runs": {"type": "integer", "minimum": 0},
+        "requested_pipeline_runs_not_started": {"type": "integer", "minimum": 0},
+        "by_analysis": {"type": "object", "additionalProperties": {"$ref": "#/$defs/statusCounts"}}
+      },
+      "additionalProperties": true
+    },
+    "circuits": {"type": "array", "items": {"$ref": "#/$defs/circuit"}},
+    "supply_chain": {"$ref": "#/$defs/outcome"},
+    "unsupported_analyses": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "outcome": {
+      "type": "object",
+      "required": ["status", "reasons"],
+      "properties": {
+        "status": {"enum": ["completed", "inconclusive", "skipped", "not_run", "not_applicable"]},
+        "reasons": {"type": "array", "items": {"type": "string"}},
+        "details": {"type": "object"},
+        "checks": {"type": "array", "items": {"$ref": "#/$defs/check"}}
+      },
+      "additionalProperties": true
+    },
+    "check": {
+      "allOf": [
+        {"$ref": "#/$defs/outcome"},
+        {"type": "object", "required": ["id"], "properties": {"id": {"type": "string"}}}
+      ]
+    },
+    "circuit": {
+      "type": "object",
+      "required": ["circuit_id", "name", "processed", "analyses"],
+      "properties": {
+        "circuit_id": {"type": "string"},
+        "name": {"type": "string"},
+        "processed": {"type": "boolean"},
+        "analyses": {"type": "object", "additionalProperties": {"$ref": "#/$defs/outcome"}}
+      },
+      "additionalProperties": false
+    },
+    "statusCounts": {
+      "type": "object",
+      "properties": {
+        "completed": {"type": "integer", "minimum": 0},
+        "inconclusive": {"type": "integer", "minimum": 0},
+        "skipped": {"type": "integer", "minimum": 0},
+        "not_run": {"type": "integer", "minimum": 0},
+        "not_applicable": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
