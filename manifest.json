@@ -6,8 +6,8 @@
   "files": [
     {
       "path": "assets/workbench.js",
-      "sha256": "4cb27b6709e0cc8fd35d233fe5d20ce7262d869c9e555e759811b62aae3e4796",
-      "bytes": 22793
+      "sha256": "2263cc8194959ce92a754b2eed65f8d129833479236c579e7f6fad5d5492343b",
+      "bytes": 23141
     },
     {
       "path": "bootstrap.ec97fd0078c5.js",
@@ -76,8 +76,8 @@
     },
     {
       "path": "vendor/qshield.whl",
-      "sha256": "b994ea817f7a4ecaa103c5863dbbfc8538424a5025506d9b3638af9c0ca20020",
-      "bytes": 361740
+      "sha256": "e4b4f13da913be6f9fdaf7b2ecd01074a530f9c80aba1b6a1272dee636df9467",
+      "bytes": 362081
     },
     {
       "path": "workbench.html",
