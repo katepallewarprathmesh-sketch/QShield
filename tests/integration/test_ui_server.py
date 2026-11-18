@@ -75,7 +75,9 @@ def test_page_serves(server):
     assert status == 200 and "QSHIELD" in body and "Workbench" in body
     csp = headers["Content-Security-Policy"]
     nonce = re.search(r'<script nonce="([^"]+)"', body)
-    assert nonce and f"script-src 'nonce-{nonce.group(1)}'" in csp
+    assert nonce and f"'nonce-{nonce.group(1)}'" in csp
+    assert f"script-src 'nonce-{nonce.group(1)}'" in csp
+    assert '<script nonce="' + nonce.group(1) + '" src="/assets/workbench.js" defer></script>' in body
     assert "unsafe-inline" not in csp.split("script-src", 1)[1].split(";", 1)[0]
     assert "frame-ancestors 'none'" in csp
     assert headers["X-Frame-Options"] == "DENY"
@@ -91,6 +93,16 @@ def test_page_serves(server):
         second_body = second_response.read().decode()
     second_nonce = re.search(r'<script nonce="([^"]+)"', second_body)
     assert second_nonce and second_nonce.group(1) != nonce.group(1)
+
+
+def test_serves_compiled_workbench_asset(server):
+    with urllib.request.urlopen(server + "/assets/workbench.js", timeout=15) as response:
+        assert response.status == 200
+        assert response.headers.get_content_type() == "text/javascript"
+        script = response.read().decode()
+    assert "function buildTabs" in script
+    assert "function loadPolicies" in script
+    assert "addEventListener" in script
 
 
 def test_overview_and_policies(server):

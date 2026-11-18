@@ -1,0 +1,18 @@
+{
+  "name": "qshield-ui",
+  "private": true,
+  "version": "1.4.0",
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:workbench && npm run build:bootstrap && npm run build:vscode",
+    "build:workbench": "tsc -p tsconfig.workbench.json",
+    "build:bootstrap": "tsc -p tsconfig.bootstrap.json",
+    "build:vscode": "tsc -p tsconfig.vscode.json",
+    "check": "tsc -p tsconfig.workbench.json --noEmit && tsc -p tsconfig.bootstrap.json --noEmit && tsc -p tsconfig.vscode.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "@types/vscode": "^1.75.0",
+    "typescript": "5.9.3"
+  }
+}

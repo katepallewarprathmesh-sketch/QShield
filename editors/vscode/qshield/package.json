@@ -9,6 +9,7 @@
   "categories": ["Linters", "Other"],
   "activationEvents": ["onStartupFinished"],
   "main": "./extension.js",
+  "files": ["extension.js", "package.json", "README.md", "CHANGELOG.md", "LICENSE"],
   "contributes": {
     "commands": [
       { "command": "qshield.scanFile", "title": "QSHIELD: Scan current circuit" }

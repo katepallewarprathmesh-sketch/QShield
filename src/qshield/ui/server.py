@@ -46,6 +46,7 @@ def _default_fixture_root() -> Path:
 
 
 FIXTURE_ROOT = _default_fixture_root()
+UI_STATIC_ROOT = Path(__file__).resolve().parent / "static"
 
 
 def _repo_fixtures_dir(kind: str) -> Path:
@@ -190,7 +191,14 @@ class WorkbenchHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         parsed = urlparse(self.path)
         path, qs = parsed.path, parse_qs(parsed.query)
-        if path == "/":
+        if path == "/assets/workbench.js":
+            try:
+                asset = (UI_STATIC_ROOT / "workbench.js").read_bytes()
+            except OSError:
+                self._json(404, {"error": "Workbench asset missing; rebuild the TypeScript UI assets"})
+                return
+            self._send(200, asset, "text/javascript; charset=utf-8")
+        elif path == "/":
             nonce = secrets.token_urlsafe(18)
             page = WORKBENCH_HTML.replace("__CSP_NONCE__", nonce)
             policy = (

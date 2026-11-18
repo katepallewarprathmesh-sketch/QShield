@@ -46,6 +46,7 @@ CANNED_AI = {
     "report_mr": REPO / "scripts" / "static_demo_canned" / "ai_report_ancilla_mr-IN.json",
 }
 BOOTSTRAP = REPO / "scripts" / "site" / "bootstrap.js"
+WORKBENCH_ASSET = REPO / "src" / "qshield" / "ui" / "static" / "workbench.js"
 HOME_PAGE = REPO / "scripts" / "site" / "home.html"
 THREAT_MODEL_PAGE = REPO / "scripts" / "site" / "threat-model.html"
 FIXTURE_CORPUS = ("clean_circuits", "malicious_circuits")
@@ -206,16 +207,17 @@ def _render_workbench(bootstrap_src: str = "bootstrap.js") -> str:
             raise RuntimeError(f"WORKBENCH_HTML anchor {needle!r} not unique/found")
     html = html.replace("</style>", banner_css + "</style>", 1)
     html = html.replace("<body>", "<body>\n" + banner, 1)
+    marker = '<script nonce="__CSP_NONCE__" src="/assets/workbench.js" defer></script>'
+    if html.count(marker) != 1:
+        raise RuntimeError("TypeScript Workbench script marker not unique/found in WORKBENCH_HTML")
     inject = (
         f"<script>window.__QSHIELD_AI_CANNED__ = {_canned_ai_json()};</script>\n"
         f'<script src="./{bootstrap_src}"></script>\n'
+        '<script src="./assets/workbench.js" defer></script>'
     )
-    # Inject BEFORE the page's inline script so window.fetch is already
-    # intercepted when the page fires its initial /api/* calls.
-    marker = '<script nonce="__CSP_NONCE__">\n"use strict";'
-    if html.count(marker) != 1:
-        raise RuntimeError("main inline script marker not unique/found in WORKBENCH_HTML")
-    return html.replace(marker, inject + marker, 1)
+    # The bootstrap installs the fetch adapter before the compiled TypeScript
+    # application issues its initial /api/* requests.
+    return html.replace(marker, inject, 1)
 
 
 def _render_home(version: str) -> str:
@@ -271,6 +273,11 @@ def main() -> int:
     bootstrap_bytes = BOOTSTRAP.read_bytes()
     bootstrap_name = f"bootstrap.{_sha256(bootstrap_bytes)[:12]}.js"
     (out / bootstrap_name).write_bytes(bootstrap_bytes)
+    if not WORKBENCH_ASSET.is_file():
+        raise RuntimeError(f"compiled TypeScript Workbench asset missing: {WORKBENCH_ASSET}; run npm run build in frontend/")
+    asset_dir = out / "assets"
+    asset_dir.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(WORKBENCH_ASSET, asset_dir / "workbench.js")
     (out / "index.html").write_text(_render_home(manifest_version), encoding="utf-8")
     (out / "workbench.html").write_text(_render_workbench(bootstrap_name), encoding="utf-8")
     _write_public_threat_model(out, manifest_version)

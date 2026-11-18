@@ -3,4 +3,8 @@ include LICENSE
 recursive-include examples *
 recursive-include benchmarks *
 recursive-include tests *
+include frontend/package.json
+include frontend/package-lock.json
+include frontend/tsconfig*.json
+recursive-include frontend/src *.ts
 recursive-include src/qshield/fixtures *.qasm

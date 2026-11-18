@@ -9,6 +9,8 @@ _render_home = _site_builder["_render_home"]
 def test_workbench_can_reference_a_content_hashed_bootstrap():
     html = _render_workbench("bootstrap.012345abcdef.js")
     assert '<script src="./bootstrap.012345abcdef.js"></script>' in html
+    assert '<script src="./assets/workbench.js" defer></script>' in html
+    assert 'src="/assets/workbench.js"' not in html
     assert "IN-BROWSER ANALYSIS" in html
     assert "SERVER-SIDE ANALYSIS" not in html
 

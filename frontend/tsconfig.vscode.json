@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "Node10",
+    "lib": ["ES2022", "DOM"],
+    "types": ["node", "vscode"],
+    "strict": false,
+    "skipLibCheck": true,
+    "noEmitOnError": true,
+    "rootDir": "src/vscode",
+    "outDir": "../editors/vscode/qshield"
+  },
+  "include": ["src/vscode/extension.ts"]
+}
