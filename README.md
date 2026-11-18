@@ -42,7 +42,17 @@ Find suspicious circuit behavior, check equivalence, and audit dependencies—wi
 | `qshield ui` | **Workbench** — local web UI: scan, compare, Policy Studio (score policies against the fixture corpus when available), Robustness Probe (does a finding survive semantics-preserving camouflage?) |
 | Reports | SARIF (GitHub Security tab) · JSON · HTML · PDF |
 
-Everything runs offline: no hardware, no cloud, no accounts, no network calls.
+Core circuit analysis runs offline with no hardware or account requirement. The optional runtime proxy connects to its configured upstream, and the optional AI features use cloud services when enabled.
+
+## What's new in 1.5.0
+
+- **Hardened runtime proxy:** TLS 1.2+, optional mutual TLS, scoped bearer-token authentication, bounded capacity, explicit failure modes, and policy-versioned audit events. Loopback remains the default; remote listeners require an authenticated TLS setup or an explicitly trusted front proxy.
+- **Circuit provenance:** create an offline manifest with `qshield provenance create circuit.qasm -o circuit.provenance.json`. Install `qshield[provenance]` to generate Ed25519 keys and sign or verify manifests.
+- **Transpilation reports:** compare source and ordered compiler stages with `qshield provenance transform-report source.qasm --stage optimized=optimized.qasm -o transform-report.json`.
+- **Coverage-aware scans:** terminal and JSON results report which analysis runs completed, were skipped, or were inconclusive.
+- **More circuit inputs:** pytket circuits are supported with `qshield[pytket]`.
+
+See the [1.5.0 changelog](CHANGELOG.md#150--runtime-security--circuit-assurance) for details.
 
 ## Why
 
