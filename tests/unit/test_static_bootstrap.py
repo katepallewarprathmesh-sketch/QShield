@@ -27,6 +27,18 @@ def test_home_page_links_to_workbench_and_has_current_version():
     assert "__QSHIELD_VERSION__" not in html
 
 
+def test_about_tab_label_is_synced_in_source_and_runtime_bundle():
+    repo = Path(__file__).resolve().parents[2]
+    sources = [
+        repo / "frontend" / "src" / "workbench.ts",
+        repo / "src" / "qshield" / "ui" / "static" / "workbench.js",
+    ]
+    for source in sources:
+        text = source.read_text(encoding="utf-8")
+        assert '"about", "About"' in text
+        assert "About & limits" not in text
+
+
 def test_static_policies_api_reports_fixture_availability():
     bootstrap = Path(__file__).resolve().parents[2] / "scripts" / "site" / "bootstrap.js"
     source = bootstrap.read_text(encoding="utf-8")

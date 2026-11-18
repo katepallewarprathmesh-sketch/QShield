@@ -7,7 +7,7 @@ const TABS = [
   ["robustness", "Robustness Probe", '<svg viewBox="0 0 24 24"><path d="M12 2 L20 6 V12 C20 17.5 16.5 21 12 22 C7.5 21 4 17.5 4 12 V6 Z"/><path d="M9.5 12.5 L11.5 14.5 L15 10.5"/></svg>'],
   ["policy", "Policy Studio", '<svg viewBox="0 0 24 24"><path d="M9 4 h6 a1 1 0 0 1 1 1 v2 h3 v14 a1 1 0 0 1 -1 1 h-12 a1 1 0 0 1 -1 -1 v-14 h3 v-2 a1 1 0 0 1 1 -1 Z"/><line x1="9.5" y1="12" x2="14.5" y2="12"/><line x1="9.5" y1="16" x2="14.5" y2="16"/></svg>'],
   ["ai", "AI Triage", '<svg viewBox="0 0 24 24"><path d="M12 3v3"/><path d="M12 18v3"/><path d="M3 12h3"/><path d="M18 12h3"/><path d="M5.6 5.6l2.1 2.1"/><path d="M16.3 16.3l2.1 2.1"/><path d="M5.6 18.4l2.1-2.1"/><path d="M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="4"/></svg>'],
-  ["about", "About & limits", '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><line x1="12" y1="7.5" x2="12.01" y2="7.5"/></svg>'],
+  ["about", "About", '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><line x1="12" y1="7.5" x2="12.01" y2="7.5"/></svg>'],
 ];
 const $ = (s: string, r: ParentNode = document): any => r.querySelector(s);
 const $$ = (s: string, r: ParentNode = document): any[] => [...r.querySelectorAll(s)];
