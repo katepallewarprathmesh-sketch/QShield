@@ -5,9 +5,14 @@
   "ai": "precomputed real outputs on the ancilla fixture, labeled; live AI unavailable on static pages",
   "files": [
     {
-      "path": "bootstrap.38017af051f8.js",
-      "sha256": "38017af051f8ac89f792e71f3cd5c2c712c6eccf505b9cc20417de0ebdc45b59",
-      "bytes": 13104
+      "path": "assets/workbench.js",
+      "sha256": "aaad9317684a91b87cb65cdc3903b76302d83b7af4be3c223e8d535c710c6ff0",
+      "bytes": 21461
+    },
+    {
+      "path": "bootstrap.70489b973179.js",
+      "sha256": "70489b973179703f522b3b9877bd6d22ef233abfcbfc4c214c78b4e7296367d9",
+      "bytes": 14040
     },
     {
       "path": "index.html",
@@ -71,13 +76,13 @@
     },
     {
       "path": "vendor/qshield.whl",
-      "sha256": "9807a111ba925f034fd771e5d9ed6b48ba93370d20870b15ed2ec30b68487ace",
-      "bytes": 333484
+      "sha256": "a194a443874d36e84265e582375e6d0d3572b91792c893daf5916d1bd24948e3",
+      "bytes": 334189
     },
     {
       "path": "workbench.html",
-      "sha256": "33b84d6f5fe87c9a76540be92ba13aa93f61e2b9766b360330e328cd1d62783c",
-      "bytes": 56416
+      "sha256": "c13692b49ba7dd1c459cc8f38ab2c54d18a96672ed444e7a3c29cb2e1e471b74",
+      "bytes": 36552
     }
   ]
 }
