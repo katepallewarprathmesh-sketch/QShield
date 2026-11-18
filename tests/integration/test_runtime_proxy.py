@@ -1,14 +1,21 @@
 """Integration tests for the M4.1 interceptor proxy against a synthetic upstream."""
 
+import ipaddress
 import json
+import ssl
 import threading
 import time
 import urllib.error
 import urllib.request
+from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import ClassVar
 
 import pytest
+from cryptography import x509
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.x509.oid import NameOID
 
 from qshield.runtime.alerting import AlertRouter, JsonLinesSink
 from qshield.runtime.integrity import HASH_HEADER, canonical_circuit_hash
@@ -38,7 +45,9 @@ class FakeQuantumCloud(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def do_POST(self) -> None:
-        FakeQuantumCloud.calls.append((self.path, self.headers.get("X-QShield-Intercepted")))
+        FakeQuantumCloud.calls.append((
+            self.path, self.headers.get("X-QShield-Intercepted"), self.headers.get("Authorization"),
+        ))
         length = int(self.headers.get("Content-Length") or 0)
         body = json.loads(self.rfile.read(length) or b"{}")
         if self.path == "/jobs":
@@ -70,6 +79,9 @@ class FakeQuantumCloud(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self) -> None:
+        FakeQuantumCloud.calls.append((
+            self.path, self.headers.get("X-QShield-Intercepted"), self.headers.get("Authorization"),
+        ))
         if self.path == "/slow":
             FakeQuantumCloud.slow_started.set()
             time.sleep(0.4)
@@ -114,9 +126,10 @@ def _post_json(url, payload, headers=None):
             return exc.code, dict(exc.headers), exc.read()
 
 
-def _get(url):
+def _get(url, headers=None, *, context=None):
+    req = urllib.request.Request(url, headers=headers or {})  # noqa: S310 - test-only client for a local synthetic upstream
     try:
-        with urllib.request.urlopen(url, timeout=5.0) as resp:  # noqa: S310 - test client for a local synthetic upstream
+        with urllib.request.urlopen(req, timeout=5.0, context=context) as resp:  # noqa: S310 - test client for a local synthetic upstream
             return resp.status, dict(resp.headers), resp.read()
     except urllib.error.HTTPError as exc:
         with exc:
@@ -126,6 +139,58 @@ def _get(url):
 def _job_submit(circuit_qasm=BELL_MEAS, shots=200):
     return {"program_id": "sampler",
             "params": {"circuits": [circuit_qasm], "shots": shots}}
+
+
+def _write_test_certificates(directory):
+    now = datetime.now(timezone.utc)
+    ca_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    ca_name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "QShield Test CA")])
+    ca_cert = (
+        x509.CertificateBuilder().subject_name(ca_name).issuer_name(ca_name)
+        .public_key(ca_key.public_key()).serial_number(x509.random_serial_number())
+        .not_valid_before(now - timedelta(minutes=1)).not_valid_after(now + timedelta(days=1))
+        .add_extension(x509.BasicConstraints(ca=True, path_length=None), critical=True)
+        .add_extension(x509.KeyUsage(
+            digital_signature=False, content_commitment=False, key_encipherment=False,
+            data_encipherment=False, key_agreement=False, key_cert_sign=True,
+            crl_sign=True, encipher_only=False, decipher_only=False,
+        ), critical=True)
+        .add_extension(x509.SubjectKeyIdentifier.from_public_key(ca_key.public_key()), critical=False)
+        .add_extension(x509.AuthorityKeyIdentifier.from_issuer_public_key(ca_key.public_key()), critical=False)
+        .sign(ca_key, hashes.SHA256())
+    )
+    ca_file = directory / "ca.pem"
+    ca_file.write_bytes(ca_cert.public_bytes(serialization.Encoding.PEM))
+
+    outputs = {"ca": ca_file}
+    for common_name, prefix, san in (
+        ("localhost", "server", x509.SubjectAlternativeName([
+            x509.DNSName("localhost"), x509.IPAddress(ipaddress.ip_address("127.0.0.1")),
+        ])),
+        ("qshield test client", "client", None),
+    ):
+        key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+        subject = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, common_name)])
+        builder = (
+            x509.CertificateBuilder().subject_name(subject).issuer_name(ca_name)
+            .public_key(key.public_key()).serial_number(x509.random_serial_number())
+            .not_valid_before(now - timedelta(minutes=1)).not_valid_after(now + timedelta(days=1))
+        )
+        builder = builder.add_extension(
+            x509.AuthorityKeyIdentifier.from_issuer_public_key(ca_key.public_key()), critical=False,
+        )
+        if san is not None:
+            builder = builder.add_extension(san, critical=False)
+        cert = builder.sign(ca_key, hashes.SHA256())
+        cert_file, key_file = directory / f"{prefix}.pem", directory / f"{prefix}-key.pem"
+        cert_file.write_bytes(cert.public_bytes(serialization.Encoding.PEM))
+        key_file.write_bytes(key.private_bytes(
+            serialization.Encoding.PEM, serialization.PrivateFormat.TraditionalOpenSSL,
+            serialization.NoEncryption(),
+        ))
+        outputs[prefix] = cert_file
+        outputs[f"{prefix}_key"] = key_file
+    return outputs
 
 
 class TestProxyHappyPath:
@@ -209,6 +274,45 @@ class TestProxyResultValidation:
 
 
 class TestProxyPlumbing:
+    def test_tls_bearer_auth_and_mutual_tls(self, upstream, tmp_path):
+        certs = _write_test_certificates(tmp_path)
+        read_token = "v" * 48
+        proxy = QShieldProxy(
+            ProxyConfig(upstream=upstream, auth_tokens={read_token: ["proxy:read"]}),
+            AlertRouter(sinks=[], min_severity="critical"),
+            host="127.0.0.1", port=0, tls_certfile=certs["server"], tls_keyfile=certs["server_key"],
+        ).start()
+        try:
+            tls = ssl.create_default_context(cafile=str(certs["ca"]))
+            url = f"https://127.0.0.1:{proxy.port}/jobs"
+            status, _, body = _get(url, context=tls)
+            assert status == 401
+            assert json.loads(body)["error"]["code"] == "qshield_unauthorized"
+            status, _, _ = _get(
+                url, headers={"Authorization": f"Bearer {read_token}"}, context=tls,
+            )
+            assert status == 404
+            assert FakeQuantumCloud.calls[-1][2] is None
+        finally:
+            proxy.stop()
+
+        mtls_proxy = QShieldProxy(
+            ProxyConfig(upstream=upstream),
+            AlertRouter(sinks=[], min_severity="critical"),
+            host="127.0.0.1", port=0, tls_certfile=certs["server"],
+            tls_keyfile=certs["server_key"], client_ca_file=certs["ca"],
+        ).start()
+        try:
+            mtls = ssl.create_default_context(cafile=str(certs["ca"]))
+            mtls.load_cert_chain(str(certs["client"]), str(certs["client_key"]))
+            status, _, _ = _get(f"https://127.0.0.1:{mtls_proxy.port}/jobs", context=mtls)
+            assert status == 404
+            without_client_cert = ssl.create_default_context(cafile=str(certs["ca"]))
+            with pytest.raises((urllib.error.URLError, ssl.SSLError)):
+                _get(f"https://127.0.0.1:{mtls_proxy.port}/jobs", context=without_client_cert)
+        finally:
+            mtls_proxy.stop()
+
     def test_body_cap_returns_413(self, upstream):
         proxy = QShieldProxy(ProxyConfig(upstream=upstream, max_body_bytes=16),
                              AlertRouter(sinks=[], min_severity="critical"),
@@ -269,6 +373,49 @@ class TestProxyPlumbing:
                                          {"params": {"circuits": [bad], "shots": 10}})
             assert status == 400
             assert json.loads(body)["error"]["code"] == "qshield_unverifiable"
+        finally:
+            proxy.stop()
+
+    def test_scoped_bearer_tokens_authenticate_and_authorize_requests(self, upstream, tmp_path):
+        read_token = "r" * 48
+        submit_token = "s" * 48
+        audit_file = tmp_path / "audit.jsonl"
+        config = ProxyConfig(
+            upstream=upstream,
+            auth_tokens={read_token: ["proxy:read"], submit_token: ["proxy:submit"]},
+        )
+        proxy = QShieldProxy(
+            config, AlertRouter(sinks=[JsonLinesSink(audit_file)], min_severity="critical"),
+            host="127.0.0.1", port=0,
+        ).start()
+        try:
+            url = f"http://127.0.0.1:{proxy.port}"
+            status, headers, body = _get(url + "/jobs")
+            assert status == 401
+            assert headers["X-QShield-Decision"] == "block"
+            assert json.loads(body)["error"]["code"] == "qshield_unauthorized"
+
+            status, _, body = _get(url + "/jobs", headers={"Authorization": f"Bearer {submit_token}"})
+            assert status == 403
+            assert json.loads(body)["error"]["code"] == "qshield_forbidden"
+
+            status, _, _ = _get(url + "/jobs", headers={"Authorization": f"Bearer {read_token}"})
+            assert status == 404  # authenticated and forwarded to the synthetic upstream
+
+            status, _, body = _post_json(
+                url + "/jobs", _job_submit(), headers={"Authorization": f"Bearer {read_token}"},
+            )
+            assert status == 403
+            assert json.loads(body)["error"]["code"] == "qshield_forbidden"
+
+            status, _, _ = _post_json(
+                url + "/jobs", _job_submit(), headers={"Authorization": f"Bearer {submit_token}"},
+            )
+            assert status == 200
+            assert len(FakeQuantumCloud.calls) == 2  # only the correctly scoped GET and POST were forwarded
+            assert all(call[2] is None for call in FakeQuantumCloud.calls)
+            audit_text = audit_file.read_text()
+            assert read_token not in audit_text and submit_token not in audit_text
         finally:
             proxy.stop()
 

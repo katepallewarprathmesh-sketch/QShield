@@ -153,12 +153,24 @@ Then run `pre-commit install` and `pre-commit run --all-files`. The hook scans s
 
 The runtime proxy supports `--policy observe|enforce` for findings and `--failure-mode open|closed` when a circuit cannot be checked. By default, `observe` uses `open` and `enforce` uses `closed`; set the mode explicitly for production. `--max-workers` and `--request-queue-size` bound concurrency and pending connections. On overload, `closed` returns an explicit 503 block; `open` forwards the request without inspection and logs coverage as skipped. Gate-decision audit events include the policy version, decision, circuit digest(s), and coverage, independent of the alert severity threshold. Set `--policy-version` to the identifier used by your deployment.
 
-The proxy binds to loopback by default and does not implement client authentication or TLS termination. For remote deployments, place it behind a trusted TLS-terminating, authenticated reverse proxy or service mesh; do not expose the plain HTTP listener directly to an untrusted network.
+The proxy binds to loopback by default. It can terminate TLS 1.2+ itself and optionally require verified client certificates (mTLS). Scoped bearer tokens are loaded from a JSON file whose POSIX permissions must be `0600` or stricter; keep it outside source control and rotate it through your secret-management process. Token scopes are `proxy:read` (GET/HEAD/OPTIONS), `proxy:submit` (other non-DELETE methods), `proxy:manage` (DELETE), and `proxy:admin` (all methods). The proxy compares tokens in constant time and does not relay configured client-auth bearer tokens to the upstream.
+
+A non-loopback listener requires TLS plus bearer-token or mTLS authentication, unless `--trusted-front-proxy` explicitly delegates both TLS and client authentication to a trusted front proxy/service mesh. That flag is a trust assertion, not a mechanism that verifies the connecting peer. Do not expose a delegated plain-HTTP listener to an untrusted network. Token file format:
+
+```json
+{"tokens":[{"token":"replace-with-a-random-secret-of-at-least-32-characters","scopes":["proxy:read","proxy:submit"]}]}
+```
+
+Example TLS listener with bearer tokens:
 
 ```bash
 qshield runtime proxy --upstream https://provider.example/api \
+  --host 0.0.0.0 --tls-cert /etc/qshield/server.pem --tls-key /etc/qshield/server-key.pem \
+  --tokens-file /etc/qshield/proxy-tokens.json \
   --policy enforce --failure-mode closed --policy-version release-2026-11
 ```
+
+For mTLS instead, provide `--client-ca /etc/qshield/client-ca.pem` with the TLS cert and key; clients must present a certificate chaining to that CA. On a loopback-only listener TLS and client authentication are optional. The token-file JSON schema is packaged at `qshield.runtime/proxy-token-file.schema.json`.
 
 ## Optional detector plugins (WebAssembly/WASI)
 

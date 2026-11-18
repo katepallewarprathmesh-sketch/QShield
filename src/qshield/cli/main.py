@@ -983,6 +983,11 @@ def runtime_proxy(
     min_severity: str = typer.Option("high", "--min-severity", help="enforce: block threshold for static findings"),
     failure_mode: str | None = typer.Option(None, "--failure-mode", help="open|closed when a circuit cannot be checked (defaults: observe=open, enforce=closed)"),
     policy_version: str = typer.Option("local-unversioned", "--policy-version", help="identifier recorded with gate decisions"),
+    tls_cert: Path | None = typer.Option(None, "--tls-cert", help="TLS server certificate PEM"),
+    tls_key: Path | None = typer.Option(None, "--tls-key", help="TLS server private key PEM"),
+    client_ca: Path | None = typer.Option(None, "--client-ca", help="CA PEM; require verified client certificates (mTLS)"),
+    tokens_file: Path | None = typer.Option(None, "--tokens-file", help="0600 JSON file containing scoped bearer tokens"),
+    trusted_front_proxy: bool = typer.Option(False, "--trusted-front-proxy", help="explicitly delegate TLS/auth to a trusted front proxy"),
     max_workers: int = typer.Option(32, "--max-workers", min=1, max=1024, help="maximum concurrent proxy handlers"),
     request_queue_size: int = typer.Option(128, "--request-queue-size", min=1, max=65535, help="bounded pending connection backlog"),
     alert_min_severity: str = typer.Option("medium", "--alert-min-severity", help="minimum severity routed to alert sinks"),
@@ -992,27 +997,34 @@ def runtime_proxy(
     no_static: bool = typer.Option(False, "--no-static", help="disable static scan in-flight (hash+commitment still run)"),
 ) -> None:
     """Run the QSHIELD interceptor proxy in front of a quantum cloud endpoint."""
-    from qshield.runtime.proxy import ProxyConfig, QShieldProxy, build_alert_router
+    from qshield.runtime.proxy import ProxyConfig, QShieldProxy, build_alert_router, load_bearer_tokens
 
     if policy not in ("observe", "enforce"):
         console.print("[red]--policy must be 'observe' or 'enforce'[/red]")
         raise typer.Exit(code=2)
     try:
+        auth_tokens = load_bearer_tokens(tokens_file) if tokens_file else {}
         config = ProxyConfig(
             upstream=upstream, policy=policy, min_severity=min_severity,
             failure_mode=failure_mode, policy_version=policy_version,
+            auth_tokens=auth_tokens,
             max_workers=max_workers, request_queue_size=request_queue_size,
             alert_min_severity=alert_min_severity,
             validate_results=not no_validate, run_static=not no_static,
         )
-    except ValueError as exc:
+        proxy = QShieldProxy(
+            config, host=host, port=port, alert_router=build_alert_router(alert_file, webhook, alert_min_severity),
+            tls_certfile=tls_cert, tls_keyfile=tls_key, client_ca_file=client_ca,
+            trusted_front_proxy=trusted_front_proxy,
+        )
+    except (OSError, ValueError, TypeError) as exc:
         raise typer.BadParameter(str(exc)) from exc
-    router = build_alert_router(alert_file, webhook, alert_min_severity)
-    proxy = QShieldProxy(config, router, host=host, port=port)
-    console.print(f"[green]qshield runtime proxy listening on {host}:{proxy.port}[/green]")
+    scheme = "https" if proxy.tls_enabled else "http"
+    console.print(f"[green]qshield runtime proxy listening on {scheme}://{host}:{proxy.port}[/green]")
     console.print(f"  upstream: {upstream}")
     console.print(f"  policy:   {policy}   (block ≥ {min_severity}, alert ≥ {alert_min_severity})")
     console.print(f"  failure:  {config.failure_mode}   (policy version: {config.policy_version})")
+    console.print(f"  auth:     {'scoped bearer tokens' if config.auth_tokens else ('mTLS' if proxy.client_auth_enabled else ('trusted front proxy' if trusted_front_proxy else 'loopback only'))}")
     console.print(f"  capacity: {max_workers} workers, queue {request_queue_size}")
     console.print(f"  alerts:   {alert_file or 'stderr'}" + (f" + {webhook}" if webhook else ""))
     console.print("  press Ctrl-C to stop")

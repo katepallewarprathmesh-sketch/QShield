@@ -26,9 +26,14 @@ microseconds-to-milliseconds for typical payloads; the benchmark
 
 from __future__ import annotations
 
+import hmac
+import ipaddress
 import json
 import math
+import os
 import re
+import ssl
+import stat
 import threading
 import time
 import urllib.error
@@ -49,6 +54,8 @@ HOP_BY_HOP = frozenset({
     "connection", "keep-alive", "proxy-authenticate", "proxy-authorization",
     "te", "trailer", "trailers", "transfer-encoding", "upgrade", "host",
 })
+AUTH_SCOPES = frozenset({"proxy:read", "proxy:submit", "proxy:manage", "proxy:admin"})
+BEARER_TOKEN_PATTERN = re.compile(r"^[A-Za-z0-9._~+/-]+=*$")
 
 
 @dataclass
@@ -59,6 +66,7 @@ class ProxyConfig:
     alert_min_severity: str = "medium"     # router threshold for circuit events
     failure_mode: str | None = None          # "open" | "closed"; defaults by policy mode
     policy_version: str = "local-unversioned"
+    auth_tokens: dict[str, tuple[str, ...]] = field(default_factory=dict, repr=False)
     max_workers: int = 32
     request_queue_size: int = 128
     block_on_commitment_mismatch: bool = True
@@ -86,6 +94,18 @@ class ProxyConfig:
             raise ValueError(f"alert_min_severity must be one of {sorted(SEVERITY_RANK)}")
         if not isinstance(self.policy_version, str) or not self.policy_version.strip() or len(self.policy_version) > 128:
             raise ValueError("policy_version must be a non-empty string of at most 128 characters")
+        if not isinstance(self.auth_tokens, dict):
+            raise TypeError("auth_tokens must map bearer-token strings to scope lists")
+        normalized_tokens: dict[str, tuple[str, ...]] = {}
+        for token, scopes in self.auth_tokens.items():
+            if not isinstance(token, str) or not 32 <= len(token) <= 8_192 or not BEARER_TOKEN_PATTERN.fullmatch(token):
+                raise ValueError("bearer tokens must be 32 to 8192 characters using the HTTP bearer-token alphabet")
+            if not isinstance(scopes, (list, tuple, set, frozenset)) or not scopes:
+                raise ValueError("each bearer token must have at least one scope")
+            if any(not isinstance(scope, str) or scope not in AUTH_SCOPES for scope in scopes):
+                raise ValueError(f"bearer scopes must be drawn from {sorted(AUTH_SCOPES)}")
+            normalized_tokens[token] = tuple(sorted(set(scopes)))
+        self.auth_tokens = normalized_tokens
         if type(self.max_workers) is not int or not 1 <= self.max_workers <= 1024:
             raise ValueError("max_workers must be an integer from 1 to 1024")
         if type(self.request_queue_size) is not int or not 1 <= self.request_queue_size <= 65535:
@@ -121,6 +141,56 @@ class ProxyConfig:
                 raise ValueError(f"extra header {key!r} is reserved by the proxy")
             if not isinstance(value, str) or "\r" in value or "\n" in value:
                 raise ValueError(f"extra header {key!r} must have a single-line string value")
+
+
+def load_bearer_tokens(path: str | Path) -> dict[str, tuple[str, ...]]:
+    """Load scoped bearer tokens from a local JSON file with restrictive permissions."""
+    token_path = Path(path)
+    flags = os.O_RDONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        fd = os.open(token_path, flags)
+        try:
+            file_stat = os.fstat(fd)
+            if not stat.S_ISREG(file_stat.st_mode):
+                raise ValueError("token file must be a regular file")
+            if file_stat.st_size > 64 * 1024:
+                raise ValueError("token file exceeds the 64 KiB limit")
+            if os.name == "posix" and stat.S_IMODE(file_stat.st_mode) & 0o077:
+                raise ValueError("token file permissions must be 0600 or stricter")
+            with os.fdopen(fd, "rb") as token_stream:
+                fd = -1
+                raw = token_stream.read(64 * 1024 + 1)
+        finally:
+            if fd >= 0:
+                os.close(fd)
+    except OSError as exc:
+        raise ValueError(f"could not safely read token file: {exc}") from exc
+    if len(raw) > 64 * 1024:
+        raise ValueError("token file exceeds the 64 KiB limit")
+    try:
+        data = json.loads(raw)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"invalid token file JSON: {exc}") from exc
+    if not isinstance(data, dict) or set(data) != {"tokens"} or not isinstance(data["tokens"], list):
+        raise ValueError("token file must contain exactly a 'tokens' array")
+    tokens: dict[str, tuple[str, ...]] = {}
+    for index, record in enumerate(data["tokens"]):
+        if not isinstance(record, dict) or set(record) != {"token", "scopes"}:
+            raise ValueError(f"token entry {index} must contain exactly token and scopes")
+        token, scopes = record["token"], record["scopes"]
+        if not isinstance(token, str) or len(token) < 32 or not BEARER_TOKEN_PATTERN.fullmatch(token):
+            raise ValueError(f"token entry {index} must have a valid bearer token of at least 32 characters")
+        if token in tokens:
+            raise ValueError(f"duplicate bearer token at entry {index}")
+        if not isinstance(scopes, list) or not scopes or any(
+            not isinstance(scope, str) or scope not in AUTH_SCOPES for scope in scopes
+        ):
+            raise ValueError(f"token entry {index} has invalid scopes; expected values from {sorted(AUTH_SCOPES)}")
+        tokens[token] = tuple(scopes)
+    if not tokens:
+        raise ValueError("token file must define at least one bearer token")
+    # Reuse runtime validation, including line-break and token-scope checks.
+    return ProxyConfig(auth_tokens=tokens).auth_tokens
 
 
 @dataclass
@@ -195,6 +265,31 @@ def build_alert_router(alert_file: Path | None, webhook: str | None,
 
         sinks.append(WebhookSink(webhook))
     return AlertRouter(sinks=sinks, min_severity=min_severity)
+
+
+def _required_scope(method: str) -> str:
+    if method in {"GET", "HEAD", "OPTIONS"}:
+        return "proxy:read"
+    if method == "DELETE":
+        return "proxy:manage"
+    return "proxy:submit"
+
+
+def _token_authorization_status(header: str | None, tokens: dict[str, tuple[str, ...]], method: str) -> int | None:
+    """Return 401/403 when token auth fails, else None. Never expose tokens in errors."""
+    if not header or len(header) > 8_199:
+        return 401
+    scheme, separator, supplied = header.partition(" ")
+    if not separator or scheme.lower() != "bearer" or not BEARER_TOKEN_PATTERN.fullmatch(supplied):
+        return 401
+    granted: tuple[str, ...] | None = None
+    for expected, scopes in tokens.items():
+        if hmac.compare_digest(expected, supplied):
+            granted = scopes
+    if granted is None:
+        return 401
+    required = _required_scope(method)
+    return None if "proxy:admin" in granted or required in granted else 403
 
 
 def _emit_gate_decision(
@@ -333,6 +428,17 @@ def make_handler(config: ProxyConfig, router: AlertRouter, state: ProxyState) ->
             t0 = time.monotonic()
             with state.lock:
                 state.stats.requests += 1
+            auth_status = _token_authorization_status(
+                self.headers.get("Authorization"), config.auth_tokens, method,
+            ) if config.auth_tokens else None
+            if auth_status is not None:
+                _emit_gate_decision(
+                    router, config, "block", coverage_status="not_run",
+                    reasons=["client authentication failed" if auth_status == 401 else "client token lacks required scope"],
+                )
+                error_code = "qshield_unauthorized" if auth_status == 401 else "qshield_forbidden"
+                self._send_json(auth_status, {"error": {"code": error_code}}, decision="block")
+                return
             transfer_encoding = self.headers.get("Transfer-Encoding")
             if transfer_encoding:
                 _emit_gate_decision(
@@ -389,7 +495,9 @@ def make_handler(config: ProxyConfig, router: AlertRouter, state: ProxyState) ->
             upstream_url = config.upstream.rstrip("/") + self.path
             fwd_headers = {
                 k: v for k, v in self.headers.items()
-                if k.lower() not in HOP_BY_HOP and k.lower() != "content-length"
+                if k.lower() not in HOP_BY_HOP
+                and k.lower() != "content-length"
+                and not (config.auth_tokens and k.lower() == "authorization")
             }
             fwd_headers["Content-Length"] = str(len(body))
             fwd_headers["X-QShield-Intercepted"] = "1"
@@ -664,11 +772,54 @@ def make_handler(config: ProxyConfig, router: AlertRouter, state: ProxyState) ->
     return QShieldHandler
 
 
+def _is_loopback_bind(host: str) -> bool:
+    value = host.strip().strip("[]").lower()
+    if value == "localhost":
+        return True
+    try:
+        return ipaddress.ip_address(value.split("%", 1)[0]).is_loopback
+    except ValueError:
+        return False
+
+
 class QShieldProxy:
     """Threaded reverse proxy. ``start()`` spawns serving; ``stop()`` shuts down."""
 
-    def __init__(self, config: ProxyConfig, alert_router: AlertRouter | None = None,
-                 *, host: str = "127.0.0.1", port: int = 0):
+    def __init__(
+        self,
+        config: ProxyConfig,
+        alert_router: AlertRouter | None = None,
+        *,
+        host: str = "127.0.0.1",
+        port: int = 0,
+        tls_certfile: str | Path | None = None,
+        tls_keyfile: str | Path | None = None,
+        client_ca_file: str | Path | None = None,
+        trusted_front_proxy: bool = False,
+    ):
+        if bool(tls_certfile) != bool(tls_keyfile):
+            raise ValueError("TLS server certificate and private key must be configured together")
+        if client_ca_file and not tls_certfile:
+            raise ValueError("client certificate authentication requires TLS")
+        tls_context: ssl.SSLContext | None = None
+        if tls_certfile and tls_keyfile:
+            tls_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+            tls_context.minimum_version = ssl.TLSVersion.TLSv1_2
+            try:
+                tls_context.load_cert_chain(str(tls_certfile), str(tls_keyfile))
+                if client_ca_file:
+                    tls_context.load_verify_locations(cafile=str(client_ca_file))
+                    tls_context.verify_mode = ssl.CERT_REQUIRED
+            except (OSError, ssl.SSLError) as exc:
+                raise ValueError(f"could not configure proxy TLS: {exc}") from exc
+
+        remote_bind = not _is_loopback_bind(host)
+        if remote_bind and not trusted_front_proxy:
+            if tls_context is None:
+                raise ValueError("non-loopback binds require TLS or an explicit trusted_front_proxy")
+            if not config.auth_tokens and not client_ca_file:
+                raise ValueError("remote TLS listeners require scoped bearer tokens or client certificates")
+
         self.config = config
         self.router = alert_router or build_alert_router(None, None, config.alert_min_severity)
         self.state = ProxyState()
@@ -677,6 +828,10 @@ class QShieldProxy:
             config=config, router=self.router, state=self.state,
         )
         self._server.daemon_threads = True
+        self.tls_enabled = tls_context is not None
+        self.client_auth_enabled = bool(client_ca_file)
+        if tls_context is not None:
+            self._server.socket = tls_context.wrap_socket(self._server.socket, server_side=True)
         self._thread: threading.Thread | None = None
 
     @property

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qshield.dev/schemas/runtime-proxy-token-file-1.json",
+  "title": "QSHIELD Runtime Proxy Scoped Token File v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["tokens"],
+  "properties": {
+    "tokens": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["token", "scopes"],
+        "properties": {
+          "token": {"type": "string", "minLength": 32, "maxLength": 8192, "pattern": "^[A-Za-z0-9._~+/-]+=*$"},
+          "scopes": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"enum": ["proxy:read", "proxy:submit", "proxy:manage", "proxy:admin"]}
+          }
+        }
+      }
+    }
+  }
+}

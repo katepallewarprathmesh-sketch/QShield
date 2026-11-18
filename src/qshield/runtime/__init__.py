@@ -33,7 +33,14 @@ from qshield.runtime.integrity import (
     inspect_circuit,
     verify_commitment,
 )
-from qshield.runtime.proxy import ProxyConfig, ProxyState, ProxyStats, QShieldProxy, build_alert_router
+from qshield.runtime.proxy import (
+    ProxyConfig,
+    ProxyState,
+    ProxyStats,
+    QShieldProxy,
+    build_alert_router,
+    load_bearer_tokens,
+)
 from qshield.runtime.validation import ResultVerdict, ideal_probabilities, validate_counts
 
 __all__ = [
@@ -60,6 +67,7 @@ __all__ = [
     "extract_result",
     "ideal_probabilities",
     "inspect_circuit",
+    "load_bearer_tokens",
     "looks_like_qasm",
     "validate_counts",
     "verify_commitment",
