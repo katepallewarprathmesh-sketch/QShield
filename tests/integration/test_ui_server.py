@@ -107,7 +107,7 @@ def test_serves_compiled_workbench_asset(server):
     assert "addEventListener" in script
     with urllib.request.urlopen(server + "/", timeout=15) as response:
         page = response.read().decode()
-    assert "About QSHIELD" in page
+    assert "<h3>About</h3>" in page
     assert "honest limits" not in page
 
 
