@@ -4,255 +4,111 @@
 
 ### Security analysis for quantum circuits and the software that ships them.
 
-Find suspicious circuit behavior, check equivalence, and audit dependencies—with evidence your team can review before a circuit reaches a run.
-
 [![PyPI version](https://img.shields.io/pypi/v/qshield?color=77e3bd&label=PyPI)](https://pypi.org/project/qshield/)
 [![Python versions](https://img.shields.io/pypi/pyversions/qshield)](https://pypi.org/project/qshield/)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-77e3bd)](LICENSE)
 
-[Live Workbench](https://katepallewarprathmesh-sketch.github.io/QShield/workbench.html)
-· [Install from PyPI](https://pypi.org/project/qshield/)
-· [Threat model](https://katepallewarprathmesh-sketch.github.io/QShield/threat-model.html)
-· [Changelog](CHANGELOG.md)
+[Workbench](https://katepallewarprathmesh-sketch.github.io/QShield/workbench.html) · [Threat model](https://katepallewarprathmesh-sketch.github.io/QShield/threat-model.html) · [Changelog](CHANGELOG.md)
 
 </div>
 
-> **Software-only by design.** No QPU, device SDK, or hardware acceptance path. Core analysis runs offline; the browser Workbench runs the real engine locally. Findings are evidence for human review—not proof that a circuit is safe or malicious.
+> **Software-only.** QSHIELD has no QPU or hardware acceptance path. Core analysis runs offline. Findings are evidence for human review—not proof that a circuit is safe or malicious.
 
-## At a glance
+## Features
 
-| Surface | Use it for |
-|---|---|
-| **CLI & CI** | Scan OpenQASM, compare circuits, audit dependencies, emit SARIF / JSON / HTML / PDF |
-| **Python API** | Parse and analyze circuits from Qiskit, Cirq, PennyLane, Amazon Braket, and pytket |
-| **Workbench** | Interactive browser-local or local-server review: scan, compare, robustness probe, and policy scoring |
-| **WASI plugins** | Add explicit, resource-limited detector extensions without changing core verdicts |
+- Scan OpenQASM circuits and emit text, JSON, SARIF, HTML, or PDF reports.
+- Compare circuits using exact or randomized methods; verify unitaries up to 12 qubits.
+- Audit quantum-package dependencies for issues such as typosquatting and vulnerable pins.
+- Use the browser Workbench or Python APIs for Qiskit, Cirq, PennyLane, Amazon Braket, and pytket.
+- Add explicit, resource-limited detector plugins using WASI.
 
-**Measured scope:** 417 bundled fixtures (202 clean / 215 malicious); fixture-corpus rates, not field rates. See [limits and threat model](https://katepallewarprathmesh-sketch.github.io/QShield/threat-model.html).
-
-## What it does
-
-| Command / surface | What it gives you |
-|---|---|
-| `qshield scan` | Severity-ranked findings for a circuit (structural analysis + builtin threat signatures); `--fail-on high` as a CI gate |
-| `qshield compare` | Equivalence of two circuits — exact ZX-calculus proof or randomized identity testing |
-| `qshield verify` | Unitary check of a circuit against an expected matrix (≤12 qubits) |
-| `qshield audit-deps` | Quantum supply-chain audit of a `requirements.txt` (typosquatting, vulnerable pins) |
-| `qshield sig` | Manage the built-in threat signature pack (offline, sha256-verified) |
-| `qshield ui` | **Workbench** — local web UI: scan, compare, Policy Studio (score policies against the fixture corpus when available), Robustness Probe (does a finding survive semantics-preserving camouflage?) |
-| Reports | SARIF (GitHub Security tab) · JSON · HTML · PDF |
-
-Core circuit analysis runs offline with no hardware or account requirement. The optional runtime proxy connects to its configured upstream, and the optional AI features use cloud services when enabled.
-
-## What's new in 1.6.0
-
-- **Tamper-evident runtime audit chain:** enable `--audit-chain` and verify records with `qshield runtime audit-verify`. Keep the reported head hash independently to detect tail truncation; the local JSONL sink is single-writer and is not a centralized audit service.
-- **Reproducible release builds:** publishing is gated on two independent builds producing byte-identical wheels and normalized sdists; Python distributions and the pushed GHCR image receive provenance attestations.
-- **PyPI description refreshed:** the published project description is built from this current README.
-
-See the [1.6.0 changelog](CHANGELOG.md#160--audit-integrity--reproducible-releases) for details.
-
-## Why
-
-Everyone is busy with post-quantum cryptography (PQC) — security for *classical* data against
-quantum attacks. Almost nobody is securing **quantum software itself**. Classical SAST/DAST/SCA
-tools cannot analyze quantum circuits: gates are unitary matrices, states can't be copied for
-inspection, and measurement is destructive. QSHIELD is purpose-built for this territory.
+The bundled corpus has 417 synthetic fixtures (202 clean, 215 malicious). These are fixture-corpus measurements, **not field rates**.
 
 ## Install
 
 ```bash
-pip install qshield                     # core (OpenQASM parser, static analysis, CLI)
-pip install 'qshield[qiskit,cirq]'     # + Qiskit and Cirq parsers (qiskit-aer used by --full)
-pip install 'qshield[pennylane]'        # + PennyLane tape parser
-pip install 'qshield[braket]'           # + Amazon Braket Circuit parser
-pip install 'qshield[pytket]'            # + pytket Circuit parser
-pip install 'qshield[formal]'            # + ZX-calculus verification (PyZX, Z3)
+pip install qshield
+pip install 'qshield[qiskit,cirq]'  # optional parsers
+pip install 'qshield[braket]'       # Amazon Braket
+pip install 'qshield[pytket]'       # pytket
+pip install 'qshield[formal]'       # PyZX and Z3 verification
+pip install 'qshield[plugins]'      # optional WASI plugins
 ```
 
-Docker: `docker pull ghcr.io/katepallewarprathmesh-sketch/qshield:1.6.0` (or build from source: `docker build -t qshield .`). Run it with `docker run --rm -p 127.0.0.1:8765:8765 qshield` to keep the unauthenticated Workbench available only on host loopback. The container binds internally with an explicit non-loopback opt-in; keep the host port mapping on loopback. Do not publish the Workbench beyond localhost without network restrictions and an authenticated TLS proxy. For source installs, a non-loopback bind requires `qshield ui --host 0.0.0.0 --allow-remote` and prints a security warning.
+Requires Python 3.10 or later. To run the v1.6.0 container with the Workbench exposed only on host loopback:
 
-From source: `git clone https://github.com/katepallewarprathmesh-sketch/QShield.git && cd QShield && pip install -e '.[dev]'`
+```bash
+docker run --rm -p 127.0.0.1:8765:8765 ghcr.io/katepallewarprathmesh-sketch/qshield:1.6.0
+```
 
-Requires Python ≥ 3.10.
-
-For releases produced after the provenance workflow change, verify a downloaded wheel or sdist
-against GitHub's signed build provenance before installing (requires GitHub CLI with `gh attestation`):
+For released wheels and source archives, verify GitHub build provenance before installing:
 
 ```bash
 gh attestation verify "$WHEEL_OR_SDIST" --repo katepallewarprathmesh-sketch/QShield
 ```
 
-The Workbench's Policy Studio includes the bundled fixture corpus in wheel and Docker
-installs (202 clean + 215 malicious circuits). For a custom corpus, point
-`QSHIELD_FIXTURES_DIR` at a directory containing `clean_circuits/` and
-`malicious_circuits/`; scan and compare work independently of corpus scoring.
-
 ## Quickstart
 
 ```bash
-qshield scan circuit.qasm                       # scan (text report)
-qshield scan circuit.qasm --fail-on high        # CI gate: exit 1 on high+ findings
-qshield scan . --recursive --format sarif -o out.sarif   # GitHub Security tab
-qshield compare original.qasm suspicious.qasm --formal   # ZX-calculus equivalence proof
-qshield audit-deps --requirements requirements.txt       # quantum supply-chain audit
-qshield ui                                      # Workbench at http://127.0.0.1:8765
+qshield scan circuit.qasm --fail-on high
+qshield scan . --recursive --format sarif -o results.sarif
+qshield compare original.qasm candidate.qasm --formal
+qshield audit-deps --requirements requirements.txt
+qshield ui
 ```
-
-In the Workbench **Scan** tab, choose a local `.qasm`, `.qasm2`, or `.qasm3` file (up to 1 MiB), or paste source into the editor. The file is read by the browser and analyzed only after you choose **Scan**. OpenQASM 2.0 and the supported OpenQASM 3.0 subset are accepted. Malformed syntax returns a parse error; preserved but unmodeled gates are called out with a warning because findings may be incomplete for those operations. Scan findings are evidence, not a guarantee that every malicious circuit will be detected.
 
 Python API:
 
 ```python
 import qshield
 
-results = qshield.scan("circuit.qasm")          # quick static scan
+results = qshield.scan("circuit.qasm")
 print(results.is_clean, results.summary.total)
 ```
 
-Amazon Braket circuits can be converted explicitly or via `parse_any` after installing
-`qshield[braket]`. Supported standard gates map into the shared IR; unsupported operators
-raise an error rather than being silently approximated. Braket qubit labels are normalized
-to dense indices and retained in IR metadata.
+## Workbench
 
-pytket circuits are accepted by `parse_any` or `parse_pytket` after installing
-`qshield[pytket]`. Numeric pytket angles (specified in multiples of pi) are converted to
-radians. Supported gate operations map into the shared IR; unsupported or classically
-conditioned operations fail closed. Measurement assignments and register labels are retained.
-Reset operations and global phase cannot be represented by the current IR and are reported
-in parser warnings rather than silently treated as represented.
+Run `qshield ui` and open `http://127.0.0.1:8765`. The browser Workbench accepts local `.qasm`, `.qasm2`, and `.qasm3` files up to 1 MiB. A selected file is read and analyzed in the browser only after you choose **Scan**. Only a supported OpenQASM subset is modeled; parse errors stop analysis, and unmodeled gates may make findings incomplete.
 
-```python
-from braket.circuits import Circuit
-from qshield.core.parsers import parse_any
+The Workbench server has no built-in authentication. It binds to loopback by default. Do not expose it to an untrusted network without network restrictions and an authenticated TLS proxy. A non-loopback source install requires `qshield ui --host 0.0.0.0 --allow-remote` and prints a warning.
 
-circuit_ir = parse_any(Circuit().h(4).cnot(4, 6).rz(6, 0.5))
-```
+## Runtime proxy and audit chain
 
-### Pre-commit hook
+The runtime proxy connects to its configured upstream. It binds to loopback by default; non-loopback use requires TLS and bearer-token or mutual-TLS authentication. `--trusted-front-proxy` delegates TLS and client authentication—it does not verify the connecting peer. Never expose a delegated plain-HTTP listener to an untrusted network.
 
-Install `pre-commit`, then add QSHIELD to `.pre-commit-config.yaml`. Pin `rev` to a QSHIELD commit or release that contains the hook:
+The proxy supports `--policy observe|enforce` and `--failure-mode open|closed`. In `open` mode, an unchecked circuit may be forwarded and logged as skipped; `closed` mode blocks when checks cannot be completed. Choose these settings for your deployment's risk tolerance.
 
-```yaml
-repos:
-  - repo: https://github.com/katepallewarprathmesh-sketch/QShield
-    rev: v1.6.0
-    hooks:
-      - id: qshield-scan
-        # Optional: default threshold is high.
-        args: [--fail-on, medium]
-```
-
-For a source checkout with QSHIELD installed in the active environment, the equivalent local hook is:
-
-```yaml
-repos:
-  - repo: local
-    hooks:
-      - id: qshield-scan
-        name: QSHIELD OpenQASM scan
-        entry: python -m qshield.pre_commit
-        language: system
-        types: [file]
-        files: '(?i)\.(qasm|qasm2|qasm3)$'
-```
-
-Then run `pre-commit install` and `pre-commit run --all-files`. The hook scans staged `.qasm`, `.qasm2`, and `.qasm3` files; parse errors fail closed. It runs static and supply-chain checks and blocks findings at or above `--fail-on` (default: `high`).
-
-## Runtime gate policy and overload behavior
-
-The runtime proxy supports `--policy observe|enforce` for findings and `--failure-mode open|closed` when a circuit cannot be checked. By default, `observe` uses `open` and `enforce` uses `closed`; set the mode explicitly for production. `--max-workers` and `--request-queue-size` bound concurrency and pending connections. On overload, `closed` returns an explicit 503 block; `open` forwards the request without inspection and logs coverage as skipped. Gate-decision audit events include the policy version, decision, circuit digest(s), and coverage, independent of the alert severity threshold. Set `--policy-version` to the identifier used by your deployment.
-
-For a local tamper-evident audit chain, add `--audit-chain /var/log/qshield/audit.jsonl`. Verify it with `qshield runtime audit-verify /var/log/qshield/audit.jsonl`; retain the reported head hash in a separate trusted location and pass it later as `--expected-head` to detect tail truncation. The log is single-writer and local, not a central audit service; it records event metadata and circuit hashes, never circuit source.
-
-The proxy binds to loopback by default. It can terminate TLS 1.2+ itself and optionally require verified client certificates (mTLS). Scoped bearer tokens are loaded from a JSON file whose POSIX permissions must be `0600` or stricter; keep it outside source control and rotate it through your secret-management process. Token scopes are `proxy:read` (GET/HEAD/OPTIONS), `proxy:submit` (other non-DELETE methods), `proxy:manage` (DELETE), and `proxy:admin` (all methods). The proxy compares tokens in constant time and does not relay configured client-auth bearer tokens to the upstream.
-
-A non-loopback listener requires TLS plus bearer-token or mTLS authentication, unless `--trusted-front-proxy` explicitly delegates both TLS and client authentication to a trusted front proxy/service mesh. That flag is a trust assertion, not a mechanism that verifies the connecting peer. Do not expose a delegated plain-HTTP listener to an untrusted network. Token file format:
-
-```json
-{"tokens":[{"token":"replace-with-a-random-secret-of-at-least-32-characters","scopes":["proxy:read","proxy:submit"]}]}
-```
-
-Example TLS listener with bearer tokens:
+For a local hash-chained audit log:
 
 ```bash
 qshield runtime proxy --upstream https://provider.example/api \
-  --host 0.0.0.0 --tls-cert /etc/qshield/server.pem --tls-key /etc/qshield/server-key.pem \
-  --tokens-file /etc/qshield/proxy-tokens.json \
-  --policy enforce --failure-mode closed --policy-version release-2026-11
+  --audit-chain /var/log/qshield/audit.jsonl
+qshield runtime audit-verify /var/log/qshield/audit.jsonl
 ```
 
-For mTLS instead, provide `--client-ca /etc/qshield/client-ca.pem` with the TLS cert and key; clients must present a certificate chaining to that CA. On a loopback-only listener TLS and client authentication are optional. The token-file JSON schema is packaged at `qshield.runtime/proxy-token-file.schema.json`.
+The sink is local and single-writer. Keep its reported head hash independently and supply it later with `--expected-head` to detect tail truncation. Without that external anchor, truncation cannot be detected. The log contains event metadata and circuit hashes, not circuit source; it is not a central audit service.
 
-## Optional detector plugins (WebAssembly/WASI)
+Keep bearer-token files out of source control and set POSIX permissions to `0600` or stricter. Tokens are compared in constant time and configured client-auth tokens are not forwarded upstream. Scopes are `proxy:read`, `proxy:submit`, `proxy:manage`, and `proxy:admin`.
 
-The plugin API is included in v1.4.0 behind the optional `.[plugins]` extra; plugin execution is explicit and separate from the default scan pipeline. Call `WasmPluginRunner().run(plugin_dir, circuit_ir)`. Plugins use the versioned JSON contract in `qshield/plugins/*schema.json`; the host verifies the module hash and tags findings with the manifest identity. WASI receives no preopened directories or environment variables, and the runner limits memory, fuel, wall time, input, and output. Only WASI Preview 1 imports are accepted; socket-capable imports are explicitly denied. The manifest hash is integrity checking, not publisher authentication; only run plugins you choose to trust. Plugin findings remain separate evidence and do not silently change core scan results or gate decisions.
+## Optional integrations
 
-A Rust example and build steps are in [`examples/plugins/identity-pair`](examples/plugins/identity-pair/README.md).
+- **WASI plugins:** The plugin API was introduced in v1.4.0 and is enabled with `qshield[plugins]`. Plugins have resource limits, no preopened directories or environment, and no socket-capable imports. Their findings do not change core verdicts. A module hash checks integrity, not publisher identity; run only plugins you trust.
+- **AI assistance:** Install `sarvamai` and set `SARVAM_API_KEY` to use opt-in cloud commands. Triage sends finding summaries, not raw circuits; other commands send their supplied text, audio, or report to the provider. Output is advisory, never a verdict; the offline core is unchanged.
 
-```python
-from qshield.core.parsers import parse_file
-from qshield.plugins import WasmPluginRunner
+## Limits and security
 
-circuit = parse_file("circuit.qasm")
-result = WasmPluginRunner().run("path/to/plugin-directory", circuit)
-```
-
-## Optional AI assistance (cloud, advisory)
-
-```bash
-pip install sarvamai
-export SARVAM_API_KEY=...        # or gitignored .env
-qshield ai triage circuit.qasm   # plain-English findings + remediation priority (sends finding summaries, not the raw circuit)
-qshield ai report circuit.qasm --to hi-IN   # audit report in Hindi/Marathi/etc.
-qshield ai speak "text"          # Bulbul text-to-speech
-qshield ai listen clip.wav       # Saaras speech-to-text
-```
-
-Advisory only, never a verdict — the offline core never touches the network; `qshield ai` is opt-in. The **Workbench** surfaces the same features (AI Triage tab + the `qshield ui` page, key stays server-side).
-
-## What it detects
-
-| Threat | Example | Verdict |
-|---|---|---|
-| Parameter perturbation / drift | `rz(π/4 + 0.001)` | catches cumulative drift |
-| Extra gate injection | cancelling `cx … cx` pairs, count anomalies | immediate |
-| Ancilla information leakage | ancilla copied out before mixing | deterministic |
-| Parameter-encoded payloads | angles = bytes on a grid | deterministic |
-| Measurement basis manipulation | `h` right before `measure` | immediate |
-| Package tampering | typosquatting, vulnerable pins, direct URLs | immediate |
-| Compromised compiler / backend | pre/post-compile or cross-backend divergence | statistical / exact |
-
-## Honest limits
-
-For assumptions, trust boundaries, and non-goals, see the [public QSHIELD threat model](https://katepallewarprathmesh-sketch.github.io/QShield/threat-model.html).
-
-- Detection is **evidence, never proof** that a circuit is honest. Measured on the bundled
-  synthetic fixture corpus (202 clean / 215 malicious) — **fixture-corpus rates, not field rates**.
-- Randomized equivalence catches large deviations, not angles ≲ 1e-3 rad; use `--formal` or dense
-  matrix verification where feasible.
-- The community signature pack ships **empty by design** (candidates that measured
-  TPR ≈ FPR were rejected).
-- **Published to PyPI** and as a GHCR image; Apache-2.0. Detection rates above are fixture-corpus measurements, not field rates.
-
-## Status & license
-
-**v1.6.0** — software-only. See `CHANGELOG.md` for release notes.
-Apache-2.0 — see [LICENSE](LICENSE). Contributions to parsers, integrations, tests, and documentation are welcome. The community signature pack is intentionally empty; signature submissions are not being solicited.
+- Detection findings are evidence, not proof of maliciousness or safety. The bundled synthetic corpus does not establish field performance.
+- Randomized equivalence may miss small deviations, including angles near or below `1e-3` radians; use `--formal` or dense-matrix verification where feasible.
+- See the [threat model](https://katepallewarprathmesh-sketch.github.io/QShield/threat-model.html) for trust boundaries, assumptions, and non-goals.
+- The community signature pack is empty by design.
 
 ## Development
 
 ```bash
-pip install -e '.[dev,qiskit,cirq,formal]'
-python -m pytest tests
+pip install -e '.[dev]'
+pytest -q
 ruff check src tests benchmarks
 mypy src
 ```
 
-The Workbench, static-site bootstrap, and VS Code extension are authored in TypeScript. To rebuild their checked-in/runtime JavaScript outputs after editing UI sources:
-
-```bash
-cd frontend
-npm ci
-npm run build
-```
+See [CHANGELOG.md](CHANGELOG.md) for release history and [LICENSE](LICENSE) for license terms.
