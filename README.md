@@ -8,7 +8,7 @@
 [![Python versions](https://img.shields.io/pypi/pyversions/qshield)](https://pypi.org/project/qshield/)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-77e3bd)](LICENSE)
 
-[Workbench](https://katepallewarprathmesh-sketch.github.io/QShield/workbench.html) · [Security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/threat-model.html) · [Changelog](CHANGELOG.md)
+[Workbench](https://katepallewarprathmesh-sketch.github.io/QShield/workbench.html) · [Security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/security-architecture.html) · [Changelog](CHANGELOG.md)
 
 </div>
 
@@ -70,11 +70,11 @@ print(results.is_clean, results.summary.total)
 
 Run `qshield ui` and open `http://127.0.0.1:8765`. The browser Workbench analyzes local `.qasm`, `.qasm2`, and `.qasm3` files in the browser after you choose **Scan**.
 
-For deployment configuration and the Workbench's security architecture, see the [security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/threat-model.html).
+For deployment configuration and the Workbench's security architecture, see the [security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/security-architecture.html).
 
 ## Runtime proxy and audit chain
 
-The runtime proxy adds TLS, bearer-token or mutual-TLS authentication, observe/enforce policies, open/closed failure modes, bounded concurrency, and audit logging. It works with a configured upstream and can be paired with a trusted front proxy. See the [security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/threat-model.html) for deployment guidance.
+The runtime proxy adds TLS, bearer-token or mutual-TLS authentication, observe/enforce policies, open/closed failure modes, bounded concurrency, and audit logging. It works with a configured upstream and can be paired with a trusted front proxy. See the [security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/security-architecture.html) for deployment guidance.
 
 For a local hash-chained audit log:
 
@@ -84,7 +84,7 @@ qshield runtime proxy --upstream https://provider.example/api \
 qshield runtime audit-verify /var/log/qshield/audit.jsonl
 ```
 
-Verify records with `qshield runtime audit-verify`; use `--expected-head` to check against an independently retained chain head. See the [security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/threat-model.html) for audit and credential-handling details.
+Verify records with `qshield runtime audit-verify`; use `--expected-head` to check against an independently retained chain head. See the [security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/security-architecture.html) for audit and credential-handling details.
 
 ## Integrations
 
@@ -93,7 +93,7 @@ Verify records with `qshield runtime audit-verify`; use `--expected-head` to che
 
 ## Security architecture
 
-QSHIELD combines local analysis, runtime controls, provenance, and extensible detectors. Read the [public security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/threat-model.html) for the system's design, evaluation, and deployment details.
+QSHIELD combines local analysis, runtime controls, provenance, and extensible detectors. Read the [public security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/security-architecture.html) for the system's design, evaluation, and deployment details.
 
 ## Development
 

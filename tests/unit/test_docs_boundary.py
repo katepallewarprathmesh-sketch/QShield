@@ -22,7 +22,7 @@ check_source_tree = _BOUNDARY.check_source_tree
 def test_docs_path_detection_is_segment_based():
     assert _is_docs_path("docs/threat-model.md")
     assert _is_docs_path("qshield-1.0/docs/internal.md")
-    assert not _is_docs_path("scripts/site/threat-model.html")
+    assert not _is_docs_path("scripts/site/security-architecture.html")
     assert not _is_docs_path("src/qshield/documentation.py")
 
 
@@ -48,17 +48,17 @@ def test_distribution_check_rejects_docs_and_accepts_public_docs_location(tmp_pa
         check_distributions(dist)
 
 
-def test_public_site_requires_generated_threat_model(tmp_path: Path):
+def test_public_site_requires_generated_security_architecture(tmp_path: Path):
     with pytest.raises(BoundaryError, match="page missing"):
         check_public_site(tmp_path)
-    page = tmp_path / "threat-model.html"
-    page.write_text("<!doctype html><title>QSHIELD Threat Model</title> v1.3.0", encoding="utf-8")
+    page = tmp_path / "security-architecture.html"
+    page.write_text("<!doctype html><title>QSHIELD Security Architecture</title> v1.3.0", encoding="utf-8")
     check_public_site(tmp_path)
 
 
 def test_public_site_rejects_internal_docs_path(tmp_path: Path):
-    (tmp_path / "threat-model.html").write_text(
-        "<title>QSHIELD Threat Model</title> v1.3.0", encoding="utf-8"
+    (tmp_path / "security-architecture.html").write_text(
+        "<title>QSHIELD Security Architecture</title> v1.3.0", encoding="utf-8"
     )
     (tmp_path / "docs").mkdir()
     (tmp_path / "docs" / "secret.md").write_text("internal", encoding="utf-8")

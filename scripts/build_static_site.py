@@ -48,7 +48,7 @@ CANNED_AI = {
 BOOTSTRAP = REPO / "scripts" / "site" / "bootstrap.js"
 WORKBENCH_ASSET = REPO / "src" / "qshield" / "ui" / "static" / "workbench.js"
 HOME_PAGE = REPO / "scripts" / "site" / "home.html"
-THREAT_MODEL_PAGE = REPO / "scripts" / "site" / "threat-model.html"
+SECURITY_ARCHITECTURE_PAGE = REPO / "scripts" / "site" / "security-architecture.html"
 FIXTURE_CORPUS = ("clean_circuits", "malicious_circuits")
 FIXTURES_ROOT = REPO / "tests" / "fixtures"
 
@@ -240,15 +240,32 @@ def _project_version() -> str:
         raise RuntimeError(f"could not read project.version from pyproject.toml: {exc}") from exc
 
 
-def _write_public_threat_model(out: Path, version: str) -> Path:
-    if not THREAT_MODEL_PAGE.is_file():
-        raise RuntimeError(f"public threat model page not found: {THREAT_MODEL_PAGE}")
-    html = THREAT_MODEL_PAGE.read_text(encoding="utf-8").replace("__QSHIELD_VERSION__", version)
+_REDIRECT_PAGE = """<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="0; url=security-architecture.html">
+  <link rel="canonical" href="security-architecture.html">
+  <title>QSHIELD Security Architecture</title>
+</head>
+<body>
+  <p>This page has moved to <a href="security-architecture.html">QSHIELD Security Architecture</a>.</p>
+</body>
+</html>
+"""
+
+
+def _write_security_architecture_page(out: Path, version: str) -> Path:
+    if not SECURITY_ARCHITECTURE_PAGE.is_file():
+        raise RuntimeError(f"public security architecture page not found: {SECURITY_ARCHITECTURE_PAGE}")
+    html = SECURITY_ARCHITECTURE_PAGE.read_text(encoding="utf-8").replace("__QSHIELD_VERSION__", version)
     if "__QSHIELD_VERSION__" in html:
-        raise RuntimeError("public threat model page has an unresolved version token")
+        raise RuntimeError("public security architecture page has an unresolved version token")
     out.mkdir(parents=True, exist_ok=True)
-    target = out / "threat-model.html"
+    target = out / "security-architecture.html"
     target.write_text(html, encoding="utf-8")
+    # Keep the historical URL working for links already published in the wild.
+    (out / "threat-model.html").write_text(_REDIRECT_PAGE, encoding="utf-8")
     return target
 
 
@@ -280,13 +297,13 @@ def main() -> int:
     shutil.copy2(WORKBENCH_ASSET, asset_dir / "workbench.js")
     (out / "index.html").write_text(_render_home(manifest_version), encoding="utf-8")
     (out / "workbench.html").write_text(_render_workbench(bootstrap_name), encoding="utf-8")
-    _write_public_threat_model(out, manifest_version)
+    _write_security_architecture_page(out, manifest_version)
 
     manifest = {
         "qshield_version": manifest_version,
         "pyodide_version": PYODIDE_VERSION,
-        "engine": "real (Pyodide CPython, self-hosted) — no precomputed analysis responses",
-        "ai": "precomputed real outputs on the ancilla fixture, labeled; live AI unavailable on static pages",
+        "engine": "real (Pyodide CPython, self-hosted)",
+        "ai": "precomputed real outputs on the ancilla fixture; live AI runs locally via qshield ui",
         "files": [],
     }
     lines: list[str] = []

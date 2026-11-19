@@ -41,12 +41,15 @@ def check_distributions(dist: Path) -> None:
 
 
 def check_public_site(site: Path) -> None:
-    page = site / "threat-model.html"
+    page = site / "security-architecture.html"
     if not page.is_file():
-        raise BoundaryError(f"public threat model page missing from site build: {page}")
+        raise BoundaryError(f"public security architecture page missing from site build: {page}")
     html = page.read_text(encoding="utf-8")
-    if "QSHIELD Threat Model" not in html or "__QSHIELD_VERSION__" in html:
-        raise BoundaryError("public threat model page is malformed or has an unresolved version")
+    if "QSHIELD Security Architecture" not in html or "__QSHIELD_VERSION__" in html:
+        raise BoundaryError("public security architecture page is malformed or has an unresolved version")
+    legacy = site / "threat-model.html"
+    if legacy.is_file() and "security-architecture.html" not in legacy.read_text(encoding="utf-8"):
+        raise BoundaryError("legacy threat-model.html must redirect to security-architecture.html")
     for path in site.rglob("*"):
         if path.is_file() and _is_docs_path(path.relative_to(site).as_posix()):
             raise BoundaryError(f"internal docs path found in public site: {path.relative_to(site)}")
