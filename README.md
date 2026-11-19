@@ -22,7 +22,7 @@
 - Use the browser Workbench or Python APIs for Qiskit, Cirq, PennyLane, Amazon Braket, and pytket.
 - Add sandboxed detector plugins using WASI.
 
-Benchmarked on 417 bundled fixtures: 202 clean and 215 malicious. See the security architecture for benchmark methodology.
+Score the bundled corpus yourself and check the published numbers: `qshield benchmark`.
 
 ## Install
 
@@ -54,6 +54,7 @@ qshield scan circuit.qasm --fail-on high
 qshield scan . --recursive --format sarif -o results.sarif
 qshield compare original.qasm candidate.qasm --formal
 qshield audit-deps --requirements requirements.txt
+qshield benchmark
 qshield ui
 ```
 
@@ -90,6 +91,18 @@ Verify records with `qshield runtime audit-verify`; use `--expected-head` to che
 
 - **WASI plugins:** Extend analysis with sandboxed detector plugins. The plugin API was introduced in v1.4.0; install `qshield[plugins]`.
 - **AI assistance:** Add opt-in triage, translation, and speech tools with `sarvamai` and `SARVAM_API_KEY`.
+
+## Open benchmark
+
+The corpus, labels, scoring rule, and scorer are public, so any number QSHIELD reports can be reproduced or challenged:
+
+```bash
+qshield benchmark                                   # score the bundled corpus
+qshield benchmark --threshold high --format json    # own operating point, machine-readable
+python benchmarks/benchmark.py --check              # verify published results match a fresh run
+```
+
+Corpus v1 holds 417 circuits (202 clean, 215 malicious) across five labelled attack families. Results ship as `benchmarks/results/benchmark-v1.json`, validated against `benchmarks/benchmark-v1.schema.json`, and CI fails if they drift from a fresh run. The protocol is in [benchmarks/benchmark-v1.md](benchmarks/benchmark-v1.md); the published numbers are on the [open benchmark page](https://katepallewarprathmesh-sketch.github.io/QShield/benchmark.html).
 
 ## Security architecture
 

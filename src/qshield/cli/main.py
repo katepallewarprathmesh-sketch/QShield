@@ -1125,6 +1125,54 @@ def ui(
 
 
 @app.command()
+def benchmark(
+    threshold: str = typer.Option("medium", "--threshold", help="info|low|medium|high|critical — flagging threshold"),
+    sample: int | None = typer.Option(None, "--sample", help="Score only the first N fixtures per split"),
+    output_format: str = typer.Option("text", "--format", "-f", help="text|json"),
+) -> None:
+    """Score the bundled corpus with the open benchmark protocol."""
+    import json as _json
+
+    from qshield.benchmark import run_benchmark
+
+    try:
+        result = run_benchmark(sample=sample, threshold=threshold)
+    except ValueError as exc:
+        raise typer.BadParameter(str(exc), param_hint="--threshold") from exc
+
+    if output_format == "json":
+        console.print_json(_json.dumps(result))
+        return
+
+    metrics = result["metrics"]
+    counts = metrics["counts"]
+    console.print()
+    console.rule("[bold]QSHIELD open benchmark[/bold]")
+    console.print(
+        f"Corpus [bold]{result['corpus_version']}[/bold] · "
+        f"{counts['clean']} clean + {counts['malicious']} malicious · "
+        f"threshold [bold]{metrics['threshold']}[/bold]"
+    )
+    console.print(
+        f"TPR [bold]{metrics['tpr']:.4f}[/bold] ({counts['true_positives']}/{counts['malicious']})  |  "
+        f"FPR [bold]{metrics['fpr']:.4f}[/bold] ({counts['false_positives']}/{counts['clean']})  |  "
+        f"precision {metrics['precision']:.4f}  |  recall {metrics['recall']:.4f}"
+    )
+    table = Table(show_header=True, header_style="bold")
+    table.add_column("Family", width=7)
+    table.add_column("Detected", justify="right", width=9)
+    table.add_column("Recall", justify="right", width=7)
+    table.add_column("Description", overflow="fold")
+    for family, row in metrics["by_family"].items():
+        table.add_row(family, f"{row['detected']}/{row['circuits']}", f"{row['recall']:.4f}", row["description"])
+    console.print(table)
+    if result["misses"]:
+        names = ", ".join(row["name"] for row in result["misses"][:8])
+        console.print(f"[dim]Reported misses ({len(result['misses'])}): {names}[/dim]")
+    console.print("[dim]Fixture-corpus measurement on the bundled corpus. See benchmarks/benchmark-v1.md.[/dim]")
+
+
+@app.command()
 def version() -> None:
     """Print the QSHIELD version."""
     console.print(f"qshield {__version__}")

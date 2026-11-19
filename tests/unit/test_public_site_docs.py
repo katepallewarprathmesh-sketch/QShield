@@ -26,3 +26,19 @@ def test_builder_fails_if_security_architecture_missing(tmp_path: Path, monkeypa
     monkeypatch.setattr(site_builder, "SECURITY_ARCHITECTURE_PAGE", tmp_path / "missing.html")
     with pytest.raises(RuntimeError, match="not found"):
         site_builder._write_security_architecture_page(tmp_path / "out", "1.3.0")
+
+
+def test_builder_renders_public_benchmark_version(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    source = tmp_path / "benchmark.html"
+    source.write_text("<title>QSHIELD Open Benchmark</title> v__QSHIELD_VERSION__", encoding="utf-8")
+    monkeypatch.setattr(site_builder, "BENCHMARK_PAGE", source)
+    target = site_builder._write_benchmark_page(tmp_path / "out", "1.3.0")
+    assert target.name == "benchmark.html"
+    text = target.read_text(encoding="utf-8")
+    assert "v1.3.0" in text and "__QSHIELD_VERSION__" not in text
+
+
+def test_builder_fails_if_public_benchmark_missing(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setattr(site_builder, "BENCHMARK_PAGE", tmp_path / "missing.html")
+    with pytest.raises(RuntimeError, match="not found"):
+        site_builder._write_benchmark_page(tmp_path / "out", "1.3.0")

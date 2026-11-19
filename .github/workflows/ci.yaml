@@ -169,3 +169,35 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           python scripts/check_public_docs_boundary.py --dist dist
 
+  open-benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e . jsonschema
+      - name: Published benchmark results must match a fresh run
+        run: |
+          python benchmarks/benchmark.py --check
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          import jsonschema
+
+          import qshield
+
+          root = Path("benchmarks")
+          schema = json.loads((root / "benchmark-v1.schema.json").read_text(encoding="utf-8"))
+          result = json.loads((root / "results" / "benchmark-v1.json").read_text(encoding="utf-8"))
+          jsonschema.validate(result, schema)
+          leaderboard = json.loads((root / "results" / "leaderboard-v1.json").read_text(encoding="utf-8"))
+          assert leaderboard["corpus_sha256"] == result["corpus_sha256"]
+          assert result["qshield_version"] == qshield.__version__, (
+              f"published results record {result['qshield_version']}, package is {qshield.__version__}"
+          )
+          print(f"open benchmark OK: {result['corpus_version']} tpr={result['metrics']['tpr']} fpr={result['metrics']['fpr']}")
+          PY
+

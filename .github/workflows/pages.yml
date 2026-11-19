@@ -67,6 +67,7 @@ jobs:
           test -f dist-site/index.html
           test -f dist-site/workbench.html
           test -f dist-site/security-architecture.html
+          test -f dist-site/benchmark.html
           grep -q 'security-architecture.html' dist-site/threat-model.html
           test -f dist-site/assets/workbench.js
           grep -q './assets/workbench.js' dist-site/workbench.html

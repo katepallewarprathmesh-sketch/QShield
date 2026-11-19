@@ -1,0 +1,80 @@
+{
+  "spec_version": "qshield-leaderboard-v1",
+  "corpus_version": "corpus-v1",
+  "corpus_sha256": "8d1d7e9f4f43e32d8004eea0b429101a4c77272797843992f660bbf411d121df",
+  "protocol": "benchmarks/benchmark-v1.md",
+  "scorer": "python benchmarks/benchmark.py --check",
+  "rows": [
+    {
+      "rank": 1,
+      "name": "QSHIELD",
+      "version": "1.6.0",
+      "threshold": "medium",
+      "tpr": 0.9116,
+      "fpr": 0.3366,
+      "precision": 0.7424,
+      "recall": 0.9209,
+      "counts": {
+        "clean": 202,
+        "malicious": 215,
+        "true_positives": 196,
+        "false_negatives": 19,
+        "false_positives": 68,
+        "true_negatives": 134,
+        "label_matches": 198
+      },
+      "by_family": {
+        "T1.1": {
+          "detected": 65,
+          "circuits": 65,
+          "recall": 1.0
+        },
+        "T1.3": {
+          "detected": 51,
+          "circuits": 52,
+          "recall": 0.9808
+        },
+        "T2.1": {
+          "detected": 16,
+          "circuits": 34,
+          "recall": 0.4706
+        },
+        "T2.2": {
+          "detected": 44,
+          "circuits": 44,
+          "recall": 1.0
+        },
+        "T2.3": {
+          "detected": 20,
+          "circuits": 20,
+          "recall": 1.0
+        }
+      },
+      "notes": "Reference implementation. Numbers reproduced by the published scorer."
+    }
+  ],
+  "threshold_sweep": [
+    {
+      "threshold": "medium",
+      "tpr": 0.9116,
+      "fpr": 0.3366,
+      "precision": 0.7424,
+      "recall": 0.9209
+    },
+    {
+      "threshold": "high",
+      "tpr": 0.2744,
+      "fpr": 0.0,
+      "precision": 1.0,
+      "recall": 0.9209
+    },
+    {
+      "threshold": "critical",
+      "tpr": 0.0,
+      "fpr": 0.0,
+      "precision": 0.0,
+      "recall": 0.9209
+    }
+  ],
+  "submission": "Open a discussion with a scorer result document; rows are added with submitter and date."
+}

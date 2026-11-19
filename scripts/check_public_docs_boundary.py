@@ -47,6 +47,12 @@ def check_public_site(site: Path) -> None:
     html = page.read_text(encoding="utf-8")
     if "QSHIELD Security Architecture" not in html or "__QSHIELD_VERSION__" in html:
         raise BoundaryError("public security architecture page is malformed or has an unresolved version")
+    benchmark = site / "benchmark.html"
+    if not benchmark.is_file():
+        raise BoundaryError(f"public benchmark page missing from site build: {benchmark}")
+    benchmark_html = benchmark.read_text(encoding="utf-8")
+    if "__QSHIELD_VERSION__" in benchmark_html or "open benchmark" not in benchmark_html.lower():
+        raise BoundaryError("public benchmark page is malformed or has an unresolved version")
     legacy = site / "threat-model.html"
     if legacy.is_file() and "security-architecture.html" not in legacy.read_text(encoding="utf-8"):
         raise BoundaryError("legacy threat-model.html must redirect to security-architecture.html")

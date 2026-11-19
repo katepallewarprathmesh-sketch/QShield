@@ -7,7 +7,19 @@ channels and malicious circuit modifications.
 
 from __future__ import annotations
 
-__version__ = "1.5.0"
+# Single source of truth is the installed distribution metadata, which comes
+# from pyproject.toml. A checked-in fallback keeps source-tree imports working
+# and is asserted against pyproject.toml by tests/unit/test_version_consistency.py
+# so the two can never drift apart again.
+__version__ = "1.6.0"
+
+try:  # pragma: no cover - exercised on installed distributions
+    from importlib.metadata import PackageNotFoundError
+    from importlib.metadata import version as _dist_version
+
+    __version__ = _dist_version("qshield")
+except PackageNotFoundError:  # pragma: no cover
+    pass
 __all__ = [
     "CircuitIR",
     "CircuitLocation",

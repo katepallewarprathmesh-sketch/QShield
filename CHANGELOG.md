@@ -3,6 +3,20 @@
 All notable changes to QSHIELD. Historical spec annotations live in
 `docs/spec/QSHIELD.md`; this file records released versions.
 
+## [Unreleased] — Open benchmark
+
+### Added
+- **Open benchmark corpus v1** — 417 labelled circuits (202 clean, 215 malicious) across five attack families, with the generator, labels, and a published corpus digest.
+- **`qshield benchmark`** — score the bundled corpus from the CLI; `--threshold` and `--format json` for your own operating point.
+- **Published results and schema** — `benchmarks/results/benchmark-v1.json` validated against `benchmarks/benchmark-v1.schema.json`, plus a `--check` mode that CI runs so published numbers cannot drift from the code.
+- **Public benchmark page and leaderboard** — protocol, threshold sweep, per-family results, and submission rules for the adversarial challenge.
+
+### Fixed
+- **`qshield.__version__` could disagree with the released package version.** The value is now read from installed distribution metadata, with a checked-in fallback asserted against `pyproject.toml` in CI.
+
+### Changed
+- Package version source of truth moved from a hand-maintained literal to `pyproject.toml` metadata.
+
 ## [1.6.0] — Audit integrity & reproducible releases
 
 ### Added

@@ -48,6 +48,7 @@ CANNED_AI = {
 BOOTSTRAP = REPO / "scripts" / "site" / "bootstrap.js"
 WORKBENCH_ASSET = REPO / "src" / "qshield" / "ui" / "static" / "workbench.js"
 HOME_PAGE = REPO / "scripts" / "site" / "home.html"
+BENCHMARK_PAGE = REPO / "scripts" / "site" / "benchmark.html"
 SECURITY_ARCHITECTURE_PAGE = REPO / "scripts" / "site" / "security-architecture.html"
 FIXTURE_CORPUS = ("clean_circuits", "malicious_circuits")
 FIXTURES_ROOT = REPO / "tests" / "fixtures"
@@ -255,6 +256,18 @@ _REDIRECT_PAGE = """<!doctype html>
 """
 
 
+def _write_benchmark_page(out: Path, version: str) -> Path:
+    if not BENCHMARK_PAGE.is_file():
+        raise RuntimeError(f"public benchmark page not found: {BENCHMARK_PAGE}")
+    html = BENCHMARK_PAGE.read_text(encoding="utf-8").replace("__QSHIELD_VERSION__", version)
+    if "__QSHIELD_VERSION__" in html:
+        raise RuntimeError("public benchmark page has an unresolved version token")
+    out.mkdir(parents=True, exist_ok=True)
+    target = out / "benchmark.html"
+    target.write_text(html, encoding="utf-8")
+    return target
+
+
 def _write_security_architecture_page(out: Path, version: str) -> Path:
     if not SECURITY_ARCHITECTURE_PAGE.is_file():
         raise RuntimeError(f"public security architecture page not found: {SECURITY_ARCHITECTURE_PAGE}")
@@ -298,6 +311,7 @@ def main() -> int:
     (out / "index.html").write_text(_render_home(manifest_version), encoding="utf-8")
     (out / "workbench.html").write_text(_render_workbench(bootstrap_name), encoding="utf-8")
     _write_security_architecture_page(out, manifest_version)
+    _write_benchmark_page(out, manifest_version)
 
     manifest = {
         "qshield_version": manifest_version,

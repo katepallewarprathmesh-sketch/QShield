@@ -53,12 +53,18 @@ def test_public_site_requires_generated_security_architecture(tmp_path: Path):
         check_public_site(tmp_path)
     page = tmp_path / "security-architecture.html"
     page.write_text("<!doctype html><title>QSHIELD Security Architecture</title> v1.3.0", encoding="utf-8")
+    (tmp_path / "benchmark.html").write_text(
+        "<title>QSHIELD Open Benchmark</title> v1.3.0", encoding="utf-8"
+    )
     check_public_site(tmp_path)
 
 
 def test_public_site_rejects_internal_docs_path(tmp_path: Path):
     (tmp_path / "security-architecture.html").write_text(
         "<title>QSHIELD Security Architecture</title> v1.3.0", encoding="utf-8"
+    )
+    (tmp_path / "benchmark.html").write_text(
+        "<title>QSHIELD Open Benchmark</title> v1.3.0", encoding="utf-8"
     )
     (tmp_path / "docs").mkdir()
     (tmp_path / "docs" / "secret.md").write_text("internal", encoding="utf-8")
