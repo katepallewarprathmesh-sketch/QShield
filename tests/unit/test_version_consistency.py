@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-import tomllib
+import pytest
 
 import qshield
 
@@ -13,6 +13,10 @@ _ROOT = Path(__file__).resolve().parents[2]
 
 
 def _declared_version() -> str:
+    try:
+        import tomllib  # Python 3.11+
+    except ModuleNotFoundError:  # Python 3.10
+        tomllib = pytest.importorskip("tomli", reason="tomli backfills tomllib on 3.10")
     data = tomllib.loads((_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     return data["project"]["version"]
 
