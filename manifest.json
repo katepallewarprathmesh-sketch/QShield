@@ -1,8 +1,8 @@
 {
   "qshield_version": "1.6.0",
   "pyodide_version": "0.27.7",
-  "engine": "real (Pyodide CPython, self-hosted) \u2014 no precomputed analysis responses",
-  "ai": "precomputed real outputs on the ancilla fixture, labeled; live AI unavailable on static pages",
+  "engine": "real (Pyodide CPython, self-hosted)",
+  "ai": "precomputed real outputs on the ancilla fixture; live AI runs locally via qshield ui",
   "files": [
     {
       "path": "assets/workbench.js",
@@ -16,13 +16,18 @@
     },
     {
       "path": "index.html",
-      "sha256": "b6aeaaec6fdc81671d625bf86996317d6da7df83a08d09caeaccb33d45931ec2",
-      "bytes": 17292
+      "sha256": "5efd1c5f564b65fecd8fe964227a6d309a25f1536834e5bd300de7a1e233bb0a",
+      "bytes": 17239
+    },
+    {
+      "path": "security-architecture.html",
+      "sha256": "75387e368c5dc749fd62ad99ec8a5327ca3d60e7b34daa89fa9b8ad21a9713d2",
+      "bytes": 5128
     },
     {
       "path": "threat-model.html",
-      "sha256": "c6265bde3ce348a7b42f464de8c14e1cead1cf45a1b046e24f82ce74c1be2fa9",
-      "bytes": 5745
+      "sha256": "aeb0e0917ee6d3cd6b08bfa51ddb6282c957fac39f872b4cf411be87d32a7a47",
+      "bytes": 380
     },
     {
       "path": "vendor/fixtures.zip",
@@ -76,13 +81,13 @@
     },
     {
       "path": "vendor/qshield.whl",
-      "sha256": "39bd8f2322a07ed9b1921b20d776b4fbe8f9f9c03c8bb9d33deb40a42f115cdd",
-      "bytes": 364004
+      "sha256": "cfdbd7528c251e186331ff91936e4a79e0ca1180909dac58cd259c05acc20294",
+      "bytes": 358902
     },
     {
       "path": "workbench.html",
-      "sha256": "f08da976be77c7b3a6c14b351b7e66ed45b8d6d6f51df15cd0fc7fa03a7ee56b",
-      "bytes": 36400
+      "sha256": "927e2bd09124ecf8e3b5c60248c1fbcd9bbf5ddc218721118291c30d119d7d61",
+      "bytes": 36137
     }
   ]
 }

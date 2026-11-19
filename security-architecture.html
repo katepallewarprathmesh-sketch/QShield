@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>QSHIELD Security Architecture</title>
+  <link rel="canonical" href="security-architecture.html">
+  <style>
+    :root { color-scheme: light dark; --bg:#0b0f16; --panel:#121a28; --line:#28364d; --text:#e6edf7; --muted:#a4b2c7; --accent:#47d8c3; --amber:#ffc176; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    main { max-width:920px; margin:0 auto; padding:36px 22px 64px; }
+    header { border-bottom:1px solid var(--line); padding-bottom:22px; margin-bottom:24px; }
+    h1 { line-height:1.15; margin:0 0 10px; font-size:clamp(2rem,5vw,3rem); }
+    h2 { margin:32px 0 10px; font-size:1.35rem; }
+    h3 { margin:20px 0 6px; font-size:1rem; }
+    p, li { color:var(--muted); }
+    a { color:var(--accent); }
+    code { color:#d5e7ff; background:#182337; border-radius:4px; padding:1px 5px; }
+    .eyebrow { color:var(--accent); text-transform:uppercase; letter-spacing:.14em; font:700 .75rem/1.4 ui-monospace,monospace; }
+    .summary { font-size:1.12rem; max-width:760px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin:14px 0; }
+    .scope { display:grid; grid-template-columns:110px 1fr; gap:12px; }
+    .scope b { color:var(--amber); }
+    .meta { font-size:.9rem; }
+    @media(max-width:620px) { main { padding:24px 16px 48px; } .scope { grid-template-columns:1fr; gap:0; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">QSHIELD · Public security architecture · v1.6.0</p>
+    <h1>Security architecture</h1>
+    <p class="summary">QSHIELD brings evidence-led security to quantum software: circuit analysis, equivalence verification, dependency auditing, runtime policy, and release provenance in one toolkit.</p>
+    <p class="meta">Built for quantum software teams. Local-first analysis with optional cloud AI assistance.</p>
+  </header>
+
+  <h2>What QSHIELD protects</h2>
+  <div class="card">
+    <ul>
+      <li><b>Circuit integrity:</b> source, gate structure, parameters, and expected behavior.</li>
+      <li><b>Supply-chain integrity:</b> dependency declarations, installed package metadata, and analysis configuration.</li>
+      <li><b>Analysis environment:</b> the QSHIELD process, its dependencies, local files, and CI configuration.</li>
+      <li><b>External services:</b> quantum providers, package registries, and optional AI services connect through explicit configuration.</li>
+    </ul>
+    <p>With the local Workbench, the browser sends circuit input to the Workbench server for analysis. Optional AI features use cloud services: triage sends finding summaries, while speech and report commands send their supplied audio, text, or report to the configured provider. Use AI assistance for cloud workflows where that data handling fits your team.</p>
+  </div>
+
+  <h2>Coverage</h2>
+  <div class="card scope"><b>T1 · Gate tampering</b><span>Structural analysis flags inserted, substituted, and perturbed gates. Exact and formal comparison validate circuit behavior across supported methods.</span></div>
+  <div class="card scope"><b>T2 · Information leakage</b><span>Ancilla, measurement, and information-flow analysis surface leakage risks with gate locations and remediation context.</span></div>
+  <div class="card scope"><b>T3 · Supply-chain compromise</b><span>Dependency auditing flags risky pins, typosquatting indicators, and known advisories. Release wheels, source archives, and GHCR images carry build-provenance attestations, and two independent builds are compared before publication. Circuit manifests support Ed25519 signatures for signed provenance.</span></div>
+  <div class="card scope"><b>T4 · Circuit confidentiality</b><span>Local-first analysis keeps circuit review in your environment and produces integrity evidence for engineering workflows.</span></div>
+
+  <h2>Operating guidance</h2>
+  <ul>
+    <li>Parsers enforce size, complexity, and time budgets and report malformed input explicitly.</li>
+    <li>Findings include locations, confidence, and remediation context for engineering review.</li>
+    <li>The Workbench runs on loopback by default; shared deployments use network restrictions with an authenticated TLS proxy and <code>--allow-remote</code>.</li>
+    <li>Core analysis runs locally and offline; AI assistance is opt-in for cloud workflows.</li>
+  </ul>
+
+  <h2>Evaluation</h2>
+  <ul>
+    <li>Benchmarked on 417 bundled fixtures: 202 clean and 215 malicious.</li>
+    <li>Release artifacts are verified with GitHub build provenance before installation.</li>
+    <li>Reports include SARIF, JSON, HTML, and PDF outputs for CI and team review.</li>
+  </ul>
+
+  <p>For vulnerability reporting, see <a href="https://github.com/katepallewarprathmesh-sketch/QShield/blob/main/SECURITY.md">SECURITY.md</a>. Return to the <a href="./">Workbench</a>.</p>
+</main>
+</body>
+</html>
