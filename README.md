@@ -44,15 +44,13 @@ Find suspicious circuit behavior, check equivalence, and audit dependencies—wi
 
 Core circuit analysis runs offline with no hardware or account requirement. The optional runtime proxy connects to its configured upstream, and the optional AI features use cloud services when enabled.
 
-## What's new in 1.5.0
+## What's new in 1.6.0
 
-- **Hardened runtime proxy:** TLS 1.2+, optional mutual TLS, scoped bearer-token authentication, bounded capacity, explicit failure modes, and policy-versioned audit events. Loopback remains the default; remote listeners require an authenticated TLS setup or an explicitly trusted front proxy.
-- **Circuit provenance:** create an offline manifest with `qshield provenance create circuit.qasm -o circuit.provenance.json`. Install `qshield[provenance]` to generate Ed25519 keys and sign or verify manifests.
-- **Transpilation reports:** compare source and ordered compiler stages with `qshield provenance transform-report source.qasm --stage optimized=optimized.qasm -o transform-report.json`.
-- **Coverage-aware scans:** terminal and JSON results report which analysis runs completed, were skipped, or were inconclusive.
-- **More circuit inputs:** pytket circuits are supported with `qshield[pytket]`.
+- **Tamper-evident runtime audit chain:** enable `--audit-chain` and verify records with `qshield runtime audit-verify`. Keep the reported head hash independently to detect tail truncation; the local JSONL sink is single-writer and is not a centralized audit service.
+- **Reproducible release builds:** publishing is gated on two independent builds producing byte-identical wheels and normalized sdists; Python distributions and the pushed GHCR image receive provenance attestations.
+- **PyPI description refreshed:** the published project description is built from this current README.
 
-See the [1.5.0 changelog](CHANGELOG.md#150--runtime-security--circuit-assurance) for details.
+See the [1.6.0 changelog](CHANGELOG.md#160--audit-integrity--reproducible-releases) for details.
 
 ## Why
 
@@ -72,7 +70,7 @@ pip install 'qshield[pytket]'            # + pytket Circuit parser
 pip install 'qshield[formal]'            # + ZX-calculus verification (PyZX, Z3)
 ```
 
-Docker: `docker pull ghcr.io/katepallewarprathmesh-sketch/qshield:1.5.0` (or build from source: `docker build -t qshield .`). Run it with `docker run --rm -p 127.0.0.1:8765:8765 qshield` to keep the unauthenticated Workbench available only on host loopback. The container binds internally with an explicit non-loopback opt-in; keep the host port mapping on loopback. Do not publish the Workbench beyond localhost without network restrictions and an authenticated TLS proxy. For source installs, a non-loopback bind requires `qshield ui --host 0.0.0.0 --allow-remote` and prints a security warning.
+Docker: `docker pull ghcr.io/katepallewarprathmesh-sketch/qshield:1.6.0` (or build from source: `docker build -t qshield .`). Run it with `docker run --rm -p 127.0.0.1:8765:8765 qshield` to keep the unauthenticated Workbench available only on host loopback. The container binds internally with an explicit non-loopback opt-in; keep the host port mapping on loopback. Do not publish the Workbench beyond localhost without network restrictions and an authenticated TLS proxy. For source installs, a non-loopback bind requires `qshield ui --host 0.0.0.0 --allow-remote` and prints a security warning.
 
 From source: `git clone https://github.com/katepallewarprathmesh-sketch/QShield.git && cd QShield && pip install -e '.[dev]'`
 
@@ -138,7 +136,7 @@ Install `pre-commit`, then add QSHIELD to `.pre-commit-config.yaml`. Pin `rev` t
 ```yaml
 repos:
   - repo: https://github.com/katepallewarprathmesh-sketch/QShield
-    rev: v1.5.0
+    rev: v1.6.0
     hooks:
       - id: qshield-scan
         # Optional: default threshold is high.
@@ -239,7 +237,7 @@ For assumptions, trust boundaries, and non-goals, see the [public QSHIELD threat
 
 ## Status & license
 
-**v1.5.0** — software-only. See `CHANGELOG.md` for release notes.
+**v1.6.0** — software-only. See `CHANGELOG.md` for release notes.
 Apache-2.0 — see [LICENSE](LICENSE). Contributions to parsers, integrations, tests, and documentation are welcome. The community signature pack is intentionally empty; signature submissions are not being solicited.
 
 ## Development

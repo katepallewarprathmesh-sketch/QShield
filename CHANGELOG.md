@@ -3,6 +3,15 @@
 All notable changes to QSHIELD. Historical spec annotations live in
 `docs/spec/QSHIELD.md`; this file records released versions.
 
+## [1.6.0] — Audit integrity & reproducible releases
+
+### Added
+- **Tamper-evident runtime audit chain** — optional canonical-JSON SHA-256 chained JSONL records, automatic verification/resumption, and `qshield runtime audit-verify` with an optional independently retained head-hash anchor. The sink is single-writer; without an external anchor, tail truncation cannot be detected. This is a local integrity mechanism, not a centralized audit service or proof of event completeness.
+- **GHCR image provenance** — attest the exact pushed container image digest in addition to Python distribution provenance.
+
+### Changed
+- **Reproducible release gate** — pin the Python build backend, normalize source-archive metadata, and require two independent CI builds to produce byte-identical wheels and sdists before release artifacts can be published. PyPI publishes the verified build and refreshes its description from the current README.
+
 ## [1.5.0] — Runtime security & circuit assurance
 
 ### Added
