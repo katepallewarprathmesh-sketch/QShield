@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>QSHIELD Open Benchmark</title>
+  <link rel="canonical" href="benchmark.html">
+  <style>
+    :root { color-scheme: light dark; --bg:#0b0f16; --panel:#121a28; --line:#28364d; --text:#e6edf7; --muted:#a4b2c7; --accent:#47d8c3; --amber:#ffc176; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    main { max-width:960px; margin:0 auto; padding:36px 22px 64px; }
+    header { border-bottom:1px solid var(--line); padding-bottom:22px; margin-bottom:24px; }
+    h1 { line-height:1.15; margin:0 0 10px; font-size:clamp(2rem,5vw,3rem); }
+    h2 { margin:32px 0 10px; font-size:1.35rem; }
+    p, li { color:var(--muted); }
+    a { color:var(--accent); }
+    code { color:#d5e7ff; background:#182337; border-radius:4px; padding:1px 5px; }
+    .eyebrow { color:var(--accent); text-transform:uppercase; letter-spacing:.14em; font:700 .75rem/1.4 ui-monospace,monospace; }
+    .summary { font-size:1.12rem; max-width:780px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin:14px 0; }
+    table { width:100%; border-collapse:collapse; margin:10px 0; font-size:.95rem; }
+    th, td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); }
+    th { color:var(--text); font-size:.82rem; text-transform:uppercase; letter-spacing:.08em; }
+    td { color:var(--muted); }
+    .num { font-variant-numeric:tabular-nums; text-align:right; }
+    .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:16px 0; }
+    .kpi { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+    .kpi b { display:block; font-size:1.7rem; color:var(--accent); font-variant-numeric:tabular-nums; }
+    .kpi span { font-size:.82rem; color:var(--muted); }
+    .meta { font-size:.9rem; }
+    @media(max-width:620px) { main { padding:24px 16px 48px; } table { font-size:.85rem; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">QSHIELD · Open benchmark · v1.6.0</p>
+    <h1>Open benchmark</h1>
+    <p class="summary">A public corpus, a published scoring rule, and a scorer you can rerun. Every detection number QSHIELD reports is produced here, and the stored results are checked in CI against a fresh run.</p>
+    <p class="meta">Corpus <code>corpus-v1</code> · 417 circuits · protocol <code>qshield-benchmark-v1</code> · scorer: <code>python benchmarks/benchmark.py --check</code></p>
+  </header>
+
+  <h2>Headline result</h2>
+  <div class="kpis">
+    <div class="kpi"><b>0.9116</b><span>TPR at medium threshold</span></div>
+    <div class="kpi"><b>0.3366</b><span>FPR at medium threshold</span></div>
+    <div class="kpi"><b>0.9209</b><span>recall on published labels</span></div>
+    <div class="kpi"><b>417</b><span>circuits scored</span></div>
+  </div>
+  <div class="card">
+    <p>202 clean circuits and 215 malicious circuits, each malicious fixture carrying a published expected threat label. A circuit counts as flagged when QSHIELD emits at least one finding at or above the configured severity.</p>
+  </div>
+
+  <h2>Threshold sweep</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>Threshold</th><th class="num">TPR</th><th class="num">FPR</th><th class="num">Precision</th><th class="num">Recall</th></tr></thead>
+      <tbody>
+        <tr><td>medium</td><td class="num">0.9116</td><td class="num">0.3366</td><td class="num">0.7424</td><td class="num">0.9209</td></tr>
+        <tr><td>high</td><td class="num">0.2744</td><td class="num">0.0000</td><td class="num">1.0000</td><td class="num">0.9209</td></tr>
+        <tr><td>critical</td><td class="num">0.0000</td><td class="num">0.0000</td><td class="num">0.0000</td><td class="num">0.9209</td></tr>
+      </tbody>
+    </table>
+    <p class="meta">Published so you can choose an operating point instead of accepting one headline number.</p>
+  </div>
+
+  <h2>By attack family</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>Family</th><th class="num">Detected</th><th class="num">Recall</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>T1.1</td><td class="num">65 / 65</td><td class="num">1.0000</td><td>Gate-level tampering</td></tr>
+        <tr><td>T1.3</td><td class="num">51 / 52</td><td class="num">0.9808</td><td>Concealed identity structure</td></tr>
+        <tr><td>T2.1</td><td class="num">16 / 34</td><td class="num">0.4706</td><td>Ancilla information leakage</td></tr>
+        <tr><td>T2.2</td><td class="num">44 / 44</td><td class="num">1.0000</td><td>Encoded payloads</td></tr>
+        <tr><td>T2.3</td><td class="num">20 / 20</td><td class="num">1.0000</td><td>Measurement manipulation</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Leaderboard</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>#</th><th>Tool</th><th>Version</th><th class="num">TPR</th><th class="num">FPR</th><th class="num">Precision</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>QSHIELD <span class="meta">reference implementation</span></td><td>1.6.0</td><td class="num">0.9116</td><td class="num">0.3366</td><td class="num">0.7424</td></tr>
+      </tbody>
+    </table>
+    <p class="meta">Rows are added with submitter, version, and date. To submit, run the scorer on the published corpus and attach the result document.</p>
+  </div>
+
+  <h2>Reproduce or challenge</h2>
+  <div class="card">
+    <p>The corpus is public, so the detectors are public too. Rerunning the scorer should reproduce the numbers above exactly:</p>
+    <p><code>pip install -e '.[dev]'</code><br><code>python benchmarks/benchmark.py</code></p>
+    <p>To submit an evasion that QSHIELD misses, attach a <code>.qasm</code> file, the threat family it should map to, and the scorer output showing <code>flagged: false</code>. Accepted submissions become a labelled fixture in the next corpus version, and the gap is recorded in the changelog. Corpus versions are immutable.</p>
+  </div>
+
+  <h2>Protocol</h2>
+  <ul>
+    <li>Corpus, labels, and generator ship in the repository; the corpus digest is recorded in every result.</li>
+    <li>Scoring rule is fixed in advance and applied uniformly to every circuit.</li>
+    <li>Missed circuits and false positives are listed in the result document.</li>
+    <li>CI fails if the stored results drift from a fresh run.</li>
+    <li>Every number describes this corpus and this QSHIELD version.</li>
+  </ul>
+
+  <p>Read the full protocol in <code>benchmarks/benchmark-v1.md</code>, the design in <a href="security-architecture.html">Security architecture</a>, or return to the <a href="./">Workbench</a>.</p>
+</main>
+</body>
+</html>

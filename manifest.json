@@ -10,14 +10,19 @@
       "bytes": 23141
     },
     {
+      "path": "benchmark.html",
+      "sha256": "441dd0fd3b8adee5236add188a4773651015f9b22516a19102912dffa068799a",
+      "bytes": 6906
+    },
+    {
       "path": "bootstrap.ec97fd0078c5.js",
       "sha256": "ec97fd0078c500d3dc6b374a30d89609d7e4e66fe09954e6be3b2d6a9f62d85a",
       "bytes": 14038
     },
     {
       "path": "index.html",
-      "sha256": "5efd1c5f564b65fecd8fe964227a6d309a25f1536834e5bd300de7a1e233bb0a",
-      "bytes": 17239
+      "sha256": "a0702748a687f42cfbb8884d916d397be9b3965c13e589524deca368059970ce",
+      "bytes": 17390
     },
     {
       "path": "security-architecture.html",
@@ -81,8 +86,8 @@
     },
     {
       "path": "vendor/qshield.whl",
-      "sha256": "cfdbd7528c251e186331ff91936e4a79e0ca1180909dac58cd259c05acc20294",
-      "bytes": 358902
+      "sha256": "a6147dffe72450be1bc3010f8a7750b5467c255228565b7dca4a53e5fcdf2e67",
+      "bytes": 364203
     },
     {
       "path": "workbench.html",
