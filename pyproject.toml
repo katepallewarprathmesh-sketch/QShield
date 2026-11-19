@@ -65,6 +65,7 @@ dev = [
     "ruff>=0.1",
     "mypy>=1.5",
     "cryptography>=42",
+    "jsonschema>=4.20",
 ]
 
 [project.scripts]
