@@ -46,7 +46,7 @@ from urllib.parse import urlsplit
 
 from qshield.core.parsers.qasm_parser import parse_qasm
 from qshield.runtime import adapters
-from qshield.runtime.alerting import Alert, AlertRouter, JsonLinesSink, StderrSink
+from qshield.runtime.alerting import Alert, AlertRouter, HashChainJsonLinesSink, JsonLinesSink, StderrSink
 from qshield.runtime.integrity import HASH_HEADER, SEVERITY_RANK, inspect_circuit
 from qshield.runtime.validation import validate_counts
 
@@ -253,13 +253,19 @@ class ProxyState:
             del self.pending[k]
 
 
-def build_alert_router(alert_file: Path | None, webhook: str | None,
-                       min_severity: str) -> AlertRouter:
+def build_alert_router(
+    alert_file: Path | None,
+    webhook: str | None,
+    min_severity: str,
+    audit_chain: Path | None = None,
+) -> AlertRouter:
     sinks: list = []
     if alert_file is not None:
         sinks.append(JsonLinesSink(alert_file))
     else:
         sinks.append(StderrSink())
+    if audit_chain is not None:
+        sinks.append(HashChainJsonLinesSink(audit_chain))
     if webhook:
         from qshield.runtime.alerting import WebhookSink
 

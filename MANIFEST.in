@@ -1,5 +1,6 @@
 include README.md
 include LICENSE
+include scripts/normalize_sdist.py
 recursive-include examples *
 recursive-include benchmarks *
 recursive-include tests *

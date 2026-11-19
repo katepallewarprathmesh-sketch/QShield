@@ -21,9 +21,12 @@ from qshield.runtime.alerting import (
     Alert,
     AlertRouter,
     AlertSink,
+    AuditChainError,
+    HashChainJsonLinesSink,
     JsonLinesSink,
     StderrSink,
     WebhookSink,
+    verify_audit_chain,
 )
 from qshield.runtime.integrity import (
     HASH_HEADER,
@@ -49,7 +52,9 @@ __all__ = [
     "Alert",
     "AlertRouter",
     "AlertSink",
+    "AuditChainError",
     "CommitmentResult",
+    "HashChainJsonLinesSink",
     "IntegrityReport",
     "JsonLinesSink",
     "ProxyConfig",
@@ -70,5 +75,6 @@ __all__ = [
     "load_bearer_tokens",
     "looks_like_qasm",
     "validate_counts",
+    "verify_audit_chain",
     "verify_commitment",
 ]

@@ -17,6 +17,18 @@ def test_version():
     assert r.exit_code == 0 and "qshield" in r.output
 
 
+def test_runtime_audit_verify_command(tmp_path):
+    from qshield.runtime.alerting import Alert, HashChainJsonLinesSink
+
+    log = tmp_path / "audit.jsonl"
+    sink = HashChainJsonLinesSink(log)
+    sink.emit(Alert(severity="info", category="gate.decision", message="allow"))
+    result = runner.invoke(app, ["runtime", "audit-verify", str(log)])
+    assert result.exit_code == 0, result.output
+    assert "Audit chain OK: 1 entries" in result.output
+    assert "tail truncation cannot be detected" in result.output
+
+
 def test_scan_clean_text(tmp_path):
     f = tmp_path / "bell.qasm"
     f.write_text(BELL)

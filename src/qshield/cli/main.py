@@ -992,6 +992,7 @@ def runtime_proxy(
     request_queue_size: int = typer.Option(128, "--request-queue-size", min=1, max=65535, help="bounded pending connection backlog"),
     alert_min_severity: str = typer.Option("medium", "--alert-min-severity", help="minimum severity routed to alert sinks"),
     alert_file: Path | None = typer.Option(None, "--alert-file", help="JSON-lines alert log (default: stderr)"),
+    audit_chain: Path | None = typer.Option(None, "--audit-chain", help="append events to a local tamper-evident hash-chain JSONL log"),
     webhook: str | None = typer.Option(None, "--webhook", help="also POST alerts to this URL"),
     no_validate: bool = typer.Option(False, "--no-validate", help="disable counts-vs-ideal result validation"),
     no_static: bool = typer.Option(False, "--no-static", help="disable static scan in-flight (hash+commitment still run)"),
@@ -1013,7 +1014,8 @@ def runtime_proxy(
             validate_results=not no_validate, run_static=not no_static,
         )
         proxy = QShieldProxy(
-            config, host=host, port=port, alert_router=build_alert_router(alert_file, webhook, alert_min_severity),
+            config, host=host, port=port,
+            alert_router=build_alert_router(alert_file, webhook, alert_min_severity, audit_chain=audit_chain),
             tls_certfile=tls_cert, tls_keyfile=tls_key, client_ca_file=client_ca,
             trusted_front_proxy=trusted_front_proxy,
         )
@@ -1026,7 +1028,11 @@ def runtime_proxy(
     console.print(f"  failure:  {config.failure_mode}   (policy version: {config.policy_version})")
     console.print(f"  auth:     {'scoped bearer tokens' if config.auth_tokens else ('mTLS' if proxy.client_auth_enabled else ('trusted front proxy' if trusted_front_proxy else 'loopback only'))}")
     console.print(f"  capacity: {max_workers} workers, queue {request_queue_size}")
-    console.print(f"  alerts:   {alert_file or 'stderr'}" + (f" + {webhook}" if webhook else ""))
+    console.print(
+        f"  alerts:   {alert_file or 'stderr'}"
+        + (f" + {webhook}" if webhook else "")
+        + (f" + hash-chain {audit_chain}" if audit_chain else "")
+    )
     console.print("  press Ctrl-C to stop")
     try:
         proxy.serve_forever()
@@ -1035,6 +1041,25 @@ def runtime_proxy(
     finally:
         proxy.stop()
     console.print(f"stats: {proxy.stats_snapshot()}")
+
+
+@runtime_app.command("audit-verify")
+def runtime_audit_verify(
+    path: Path = typer.Argument(..., exists=True, help="Hash-chained JSONL audit log"),
+    expected_head: str | None = typer.Option(None, "--expected-head", help="externally stored SHA-256 head anchor"),
+) -> None:
+    """Verify audit-log sequence, record hashes, and chain links."""
+    from qshield.runtime.alerting import AuditChainError, verify_audit_chain
+
+    try:
+        result = verify_audit_chain(path, expected_head=expected_head)
+    except AuditChainError as exc:
+        console.print(f"[red]Audit chain invalid: {exc}[/red]")
+        raise typer.Exit(code=1) from exc
+    console.print(f"[green]Audit chain OK: {result['entries']} entries[/green]")
+    console.print(f"  head: {result['head_hash']}")
+    if expected_head is None:
+        console.print("[yellow]No external head anchor supplied; tail truncation cannot be detected.[/yellow]")
 
 
 @runtime_app.command("check")

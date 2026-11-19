@@ -25,6 +25,7 @@ def test_release_jobs_wait_for_tag_version_and_test_gate() -> None:
 
     assert "tag matches package version" in workflow
     assert "pytest -q tests" in workflow
-    assert "  release:\n    needs: verify" in workflow
-    assert "  pypi:\n    needs: verify" in workflow
-    assert "  ghcr:\n    needs: verify" in workflow
+    assert "  release:\n    needs: [verify, compare-reproducible-builds]" in workflow
+    assert "  pypi:\n    needs: [verify, compare-reproducible-builds]" in workflow
+    assert "  ghcr:\n    needs: [verify, compare-reproducible-builds]" in workflow
+    assert "compare-reproducible-builds:" in workflow

@@ -184,6 +184,42 @@ class TestAlerting:
         with pytest.raises(ValueError):
             alerting.AlertRouter(min_severity="spicy")
 
+    def test_hash_chain_resumes_and_verifies_external_anchor(self, tmp_path):
+        path = tmp_path / "audit" / "events.jsonl"
+        first = alerting.HashChainJsonLinesSink(path)
+        first.emit(alerting.Alert(severity="info", category="gate.decision", message="allow"))
+        first.emit(alerting.Alert(severity="high", category="static.finding", message="review"))
+        state = alerting.verify_audit_chain(path)
+        assert state["entries"] == 2
+
+        resumed = alerting.HashChainJsonLinesSink(path)
+        resumed.emit(alerting.Alert(severity="info", category="gate.decision", message="block"))
+        final = alerting.verify_audit_chain(path)
+        assert final["entries"] == 3
+        assert alerting.verify_audit_chain(path, expected_head=final["head_hash"]) == final
+        with pytest.raises(alerting.AuditChainError, match="expected_head"):
+            alerting.verify_audit_chain(path, expected_head=state["head_hash"])
+
+    def test_hash_chain_detects_tampering_and_anchor_detects_tail_truncation(self, tmp_path):
+        path = tmp_path / "audit.jsonl"
+        sink = alerting.HashChainJsonLinesSink(path)
+        sink.emit(alerting.Alert(severity="info", category="gate.decision", message="first"))
+        sink.emit(alerting.Alert(severity="info", category="gate.decision", message="second"))
+        state = alerting.verify_audit_chain(path)
+        original_lines = path.read_text(encoding="utf-8").splitlines()
+        lines = list(original_lines)
+        first = json.loads(lines[0])
+        first["event"]["message"] = "modified"
+        lines[0] = json.dumps(first, separators=(",", ":"))
+        path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        with pytest.raises(alerting.AuditChainError, match="hash mismatch"):
+            alerting.verify_audit_chain(path)
+
+        # A shorter, internally valid prefix needs an external head anchor to detect truncation.
+        path.write_text(original_lines[0] + "\n", encoding="utf-8")
+        with pytest.raises(alerting.AuditChainError, match="expected_head"):
+            alerting.verify_audit_chain(path, expected_head=state["head_hash"])
+
     def test_failing_sink_never_breaks_router(self, tmp_path):
         class Boom(alerting.AlertSink):
             def emit(self, alert):
