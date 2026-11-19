@@ -101,4 +101,4 @@ def test_evaluate_corpus_small_sample_shapes_and_bounds():
         assert 0.0 <= row["tpr"] <= 1.0 and 0.0 <= row["fpr"] <= 1.0
         assert row["tp"] + row["fn"] + row["fp"] + row["tn"] > 0
     assert 0.0 <= out["any_policy"]["tpr"] <= 1.0
-    assert "not field rates" in out["note"]
+    assert "Benchmark results" in out["note"]

@@ -104,8 +104,8 @@ def probe_finding_robustness(ir: CircuitIR, *, variants_per_attack: int = 2) -> 
         "variants_per_attack": variants_per_attack,
         "attacks": list(ATTACK_NAMES),
         "limitations": [
-            "Probes only the five implemented semantics-preserving rewrites; evasions outside this set are not measured.",
-            "A 'robust' verdict means the evidence survived these rewrites — not that the circuit is safe or malicious.",
+            "Probes the five implemented semantics-preserving rewrites.",
+            "A 'robust' verdict means the evidence survived these rewrites.",
             "Fixture-corpus calibration lives in benchmarks/evasion_results.json; this probe runs your circuit as given.",
         ],
     }

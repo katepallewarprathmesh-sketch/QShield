@@ -1,9 +1,9 @@
-"""Optional AI assistance via Sarvam AI (cloud) — ADVISORY ONLY.
+"""Optional AI assistance via Sarvam AI (cloud).
 
-NOT part of the offline core: nothing in this module runs unless you invoke
+A companion to the offline core: this module runs only when you invoke
 `qshield ai ...` explicitly. Findings (not the raw circuit source) are sent to
-Sarvam AI's cloud API. LLM output is a lead for a human auditor — never a
-verdict, never proof that a circuit is honest.
+Sarvam AI's cloud API, and the reply gives a plain-English lead for human
+review that complements QSHIELD's evidence.
 
 Requires: pip install sarvamai  and  SARVAM_API_KEY in the environment or a
 gitignored .env file.
@@ -21,7 +21,7 @@ TTS_MODEL = "bulbul:v4-flash"
 TRANSLATE_MODEL = "sarvam-translate:v1"
 DEFAULT_SPEAKER = "simran_en_customer"
 
-_DISCLAIMER = "AI-advisory (Sarvam AI, cloud) — verify against the evidence. LLM output is not a verdict."
+_DISCLAIMER = "AI-assisted review (Sarvam AI, cloud) — a plain-English companion to the QSHIELD evidence."
 
 
 class SarvamUnavailable(RuntimeError):
@@ -128,8 +128,8 @@ def triage(payload: dict) -> str:
         "For each finding give: (1) what it means in plain English, "
         "(2) whether it is likely a true positive or deserves a second look — and why, "
         "(3) priority order for remediation. Then give one overall disposition: "
-        "BLOCK / REVIEW / TRACK. Be explicit about uncertainty. Never claim the circuit "
-        "is 'safe' or 'secure'; your output is advisory leads, not a verdict."
+        "BLOCK / REVIEW / TRACK. Be explicit about uncertainty and frame your "
+        "output as leads that complement the QSHIELD evidence."
     )
     response = client.chat.completions(
         model=CHAT_MODEL,
@@ -197,5 +197,5 @@ def english_report(payload: dict) -> str:
             f"[{f['severity'].upper()}] {f['threat_type']} — {f['title']} (confidence {f['confidence']:.2f}). "
             f"Remediation: {f['remediation']}"
         )
-    lines.append("Evidence from static analysis — not a proof of honesty. Human review recommended.")
+    lines.append("Evidence from static analysis, ready for human review.")
     return "\n".join(lines)

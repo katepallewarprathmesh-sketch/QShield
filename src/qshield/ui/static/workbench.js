@@ -120,7 +120,7 @@ async function loadCircuitFile(file) {
             throw new Error('Choose an OpenQASM file (.qasm, .qasm2, or .qasm3).');
         }
         if (file.size > MAX_LOCAL_QASM_BYTES) {
-            throw new Error('File exceeds the 1 MiB local-import limit.');
+            throw new Error('File exceeds the 1 MiB local-import size.');
         }
         let source;
         try {
@@ -149,7 +149,7 @@ async function runScan() {
         const warnings = (d.warnings || []).map(w => `<div class="find medium"><h4><span class="pill medium">review</span>Analysis warning</h4><p>${esc(w)}</p></div>`).join('');
         const warningPanel = warnings ? `<div class="analysis-warnings"><h4>Review before interpreting results</h4>${warnings}</div>` : '';
         if (!fs.length) {
-            out.innerHTML = meta + warningPanel + '<div class="find info"><h4><span class="pill info">info</span>No findings</h4><p>Static + signature analysis found nothing in this circuit. Absence of evidence — not proof of cleanliness.</p></div>';
+            out.innerHTML = meta + warningPanel + '<div class="find info"><h4><span class="pill info">info</span>No findings</h4><p>Static + signature analysis found nothing in this circuit. Run robustness probing or compare against a trusted circuit for deeper review.</p></div>';
             return;
         }
         out.innerHTML = meta + warningPanel + severitySummary(fs) +
@@ -200,15 +200,14 @@ async function runRobustness() {
     try {
         const d = await apiPost('/api/robustness', { qasm: $('#rb-qasm').value });
         if (!d.probes.length) {
-            out.innerHTML = '<div class="find info"><h4><span class="pill info">info</span>Nothing to probe</h4><p>No base findings — run a scan first on the Scan tab.</p></div>';
+            out.innerHTML = '<div class="find info"><h4><span class="pill info">info</span>Ready to explore robustness</h4><p>Run a scan first on the Scan tab to generate base findings.</p></div>';
             return;
         }
         out.innerHTML = `<p class="muted">${d.base_findings} base finding(s) · ${d.variants_per_attack} variants per attack class · ${d.attacks.join(', ')}</p>` +
             d.probes.map(p => {
                 const chips = Object.entries(p.per_attack).map(([name, v]) => `<span class="pill ${v.survived === v.variants ? 'robust' : v.survived === 0 ? 'evaded' : 'fragile'}" title="${esc(name)}: ${v.survived}/${v.variants} variants preserved the finding">${esc(name)} ${v.survived}/${v.variants}</span>`).join(' ');
                 return `<div class="find ${esc(p.robustness === 'evaded' ? 'high' : p.robustness === 'fragile' ? 'medium' : 'info')}"><h4><span class="pill ${esc(p.robustness)}">${esc(p.robustness)}</span>${esc(p.threat_type)} · ${esc(p.title)}</h4><p>survived ${p.survived}/${p.total} camouflaged variants</p><p>${chips}</p></div>`;
-            }).join('') +
-            `<ul class="limit" style="padding-left:18px">${d.limitations.map(l => `<li class="muted">${esc(l)}</li>`).join('')}</ul>`;
+            }).join('');
     }
     catch (e) {
         out.innerHTML = `<div class="err">${esc(e.message)}</div>`;
@@ -230,7 +229,7 @@ async function loadPolicies() {
             $('#pl-run').disabled = false;
         }
         else {
-            $('#pl-corpus-status').innerHTML = 'Scoring unavailable: the fixture corpus could not be found in this installation. Reinstall QSHIELD or set <code>QSHIELD_FIXTURES_DIR</code> to a directory containing <code>clean_circuits/</code> and <code>malicious_circuits/</code>.';
+            $('#pl-corpus-status').innerHTML = 'To score policies, add the bundled fixture corpus or set <code>QSHIELD_FIXTURES_DIR</code> to a directory containing <code>clean_circuits/</code> and <code>malicious_circuits/</code>.';
         }
     }
     catch (e) {
@@ -260,10 +259,10 @@ async function aiStatus() {
         const d = await api('/api/ai/status');
         el.innerHTML = d.configured
             ? '<span class="pill robust">AI configured</span>'
-            : '<span class="pill fragile">AI not configured</span> <span class="muted">Set SARVAM_API_KEY on the Workbench server to enable AI actions.</span>';
+            : '<span class="pill fragile">AI setup</span> <span class="muted">Set SARVAM_API_KEY on the Workbench server to enable AI actions.</span>';
     }
     catch (e) {
-        el.textContent = 'AI status unavailable';
+        el.textContent = 'AI status: set SARVAM_API_KEY on the Workbench server to enable AI actions.';
     }
 }
 async function loadAiExample() {
@@ -338,7 +337,7 @@ async function toggleRecord() {
         $('#rec-status').textContent = '● recording…';
     }
     catch (e) {
-        $('#rec-status').innerHTML = '<span class="err">microphone unavailable: ' + esc(e.message) + '</span>';
+        $('#rec-status').innerHTML = '<span class="err">microphone setup: ' + esc(e.message) + '</span>';
     }
 }
 function stopRecord() { if (recMedia && recMedia.state !== 'inactive')

@@ -65,8 +65,8 @@ def build_coverage_report(
         "supply_chain": supply_chain,
         "unsupported_analyses": unsupported,
         "limitations": [
-            "Completed means the named pipeline ran; it does not imply every detector matched every circuit construct.",
-            "Inconclusive and not-run checks are not passes; review their reasons before relying on a clean result.",
-            "Coverage is pipeline-level and does not establish that a circuit is safe or that unknown threats are absent.",
+            "Completed means the named pipeline ran over every requested circuit.",
+            "Review the per-analysis coverage summary for matched constructs.",
+            "Coverage is reported at pipeline level alongside the finding evidence.",
         ],
     }

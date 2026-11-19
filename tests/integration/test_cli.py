@@ -26,7 +26,7 @@ def test_runtime_audit_verify_command(tmp_path):
     result = runner.invoke(app, ["runtime", "audit-verify", str(log)])
     assert result.exit_code == 0, result.output
     assert "Audit chain OK: 1 entries" in result.output
-    assert "tail truncation cannot be detected" in result.output
+    assert "--expected-head" in result.output
 
 
 def test_scan_clean_text(tmp_path):

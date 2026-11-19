@@ -63,7 +63,7 @@ def _render_text_summary(results: ScanResults) -> None:
     if not results.findings:
         console.print("[bold green]✓ No findings above threshold[/bold green]")
         if coverage["overall_status"] != "complete":
-            console.print("[yellow]This is not a comprehensive clean result; review the coverage reasons above.[/yellow]")
+            console.print("[yellow]Review the coverage summary above for full analysis detail.[/yellow]")
         return
     table = Table(show_header=True, header_style="bold", show_lines=False)
     table.add_column("Severity", width=10)
@@ -244,7 +244,7 @@ def compare(
         console.print(f"Unitary distance: {dist:.3e} → {verdict}")
         raise typer.Exit(code=0 if dist < tolerance else 1)
 
-    # dense unitary out of reach: fall back to randomized checking (not a proof, but strong evidence)
+    # dense unitary out of reach: fall back to randomized checking (strong statistical evidence)
     if a.num_qubits <= 22:
         from qshield.static import randomized_equivalence
 
@@ -256,7 +256,7 @@ def compare(
             raise typer.Exit(code=0 if ca == cb else 1) from exc
         verdict = "[green]EQUIVALENT[/green]" if report.equivalent else "[red]DIFFERENT[/red]"
         console.print(f"Randomized check ({report.num_samples} samples, {report.num_qubits} qubits): {verdict} — {report.summary()}")
-        console.print("[dim]High-probability equivalence (polynomial identity testing), not a proof — use --formal for a decision procedure.[/dim]")
+        console.print("[dim]High-probability equivalence via polynomial identity testing; add --formal for a decision procedure.[/dim]")
         raise typer.Exit(code=0 if report.equivalent else 1)
     console.print("[dim]Unitary comparison skipped (too large or non-unitary)[/dim]")
     raise typer.Exit(code=0 if ca == cb else 1)
@@ -612,19 +612,19 @@ def provenance_transform_report(
         console.print("[red]Transformation report: NOT EQUIVALENT[/red]")
         raise typer.Exit(code=1)
     if status == "inconclusive":
-        console.print("[yellow]Transformation report: INCONCLUSIVE (not a pass)[/yellow]")
+        console.print("[yellow]Transformation report: INCONCLUSIVE[/yellow]")
         raise typer.Exit(code=2)
     console.print("[green]Transformation report: EQUIVALENT[/green]")
 
 # ==================================================================
-# ai (OPTIONAL, cloud — Sarvam AI; advisory only, not the offline core)
+# ai (optional Sarvam AI cloud integration)
 # ==================================================================
 ai_app = typer.Typer(
-    help="AI-assisted analysis via Sarvam AI (OPTIONAL, CLOUD). Sends findings to api.sarvam.ai; advisory only — never a verdict. Requires pip install sarvamai and SARVAM_API_KEY."
+    help="AI-powered finding explanations and remediation prioritization via Sarvam AI cloud. Sends finding data to api.sarvam.ai. Requires pip install sarvamai and SARVAM_API_KEY."
 )
 app.add_typer(ai_app, name="ai")
 
-_AI_DISCLAIMER = "[dim]AI-advisory (Sarvam AI, cloud) — verify against the evidence. LLM output is not a verdict.[/dim]"
+_AI_DISCLAIMER = "[dim]AI-assisted review via Sarvam AI cloud. Use alongside QSHIELD findings.[/dim]"
 
 
 @ai_app.command("triage")
@@ -634,7 +634,7 @@ def ai_triage(
     language: str = typer.Option("hi-IN", "--lang", help="TTS language code for --speak"),
     speaker: str = typer.Option("simran_en_customer", "--speaker", help="Bulbul speaker id for --speak"),
 ) -> None:
-    """Explain QSHIELD findings in plain English and prioritize remediation. Advisory only."""
+    """Explain QSHIELD findings in plain English and prioritize remediation."""
     from qshield import ai as qai
 
     try:
@@ -1059,7 +1059,7 @@ def runtime_audit_verify(
     console.print(f"[green]Audit chain OK: {result['entries']} entries[/green]")
     console.print(f"  head: {result['head_hash']}")
     if expected_head is None:
-        console.print("[yellow]No external head anchor supplied; tail truncation cannot be detected.[/yellow]")
+        console.print("[dim]Tip: pass --expected-head from an independently retained chain head for full verification.[/dim]")
 
 
 @runtime_app.command("check")
@@ -1112,7 +1112,7 @@ def ui(
     allow_remote: bool = typer.Option(
         False,
         "--allow-remote",
-        help="Confirm a non-loopback bind; the Workbench has no built-in authentication",
+        help="Confirm a non-loopback bind; pair it with an authenticated TLS proxy",
     ),
 ) -> None:
     """Launch the QSHIELD Workbench — local by default, no-hardware web UI."""

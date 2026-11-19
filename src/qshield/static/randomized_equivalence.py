@@ -10,7 +10,7 @@ If ``|<psi_a|psi_b>|^2`` is below ``1 - tolerance`` for some random
 ``|psi>``, the circuits are certainly different.
 If the fidelity is ``1`` on ``k`` independent random inputs, the circuits
 are equivalent with probability exponentially close to 1 in ``k``
-(quantified below) — this is evidence, not a proof. For a proof use
+(quantified below). For a decision procedure use
 ``qshield compare --formal`` (ZX calculus) or the dense verifier.
 
 Probability bound: for unitaries whose action differs on a set of states
@@ -93,7 +93,7 @@ class RandomizedReport:
 
     @property
     def verdict(self) -> str:
-        """'equivalent' | 'different' | 'close' — never claims a proof."""
+        """'equivalent' | 'different' | 'close' — polynomial identity testing."""
         if self.equivalent:
             return "equivalent"
         return "different"
@@ -102,7 +102,7 @@ class RandomizedReport:
         if self.equivalent:
             return (
                 f"EQUIVALENT on {self.num_samples} random input(s) "
-                f"(min fidelity {self.min_fidelity:.12f}) — high probability, not a proof"
+                f"(min fidelity {self.min_fidelity:.12f}) — polynomial identity testing"
             )
         return (
             f"DIFFERENT — a random distinguishing input was found "

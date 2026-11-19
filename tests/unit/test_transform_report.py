@@ -48,7 +48,7 @@ def test_pipeline_is_sequential_and_inconclusive_is_not_a_pass(tmp_path):
     assert report["transforms"][1]["before"] == report["transforms"][0]["after"]
     assert report["transforms"][1]["comparison"]["status"] == "inconclusive"
     assert report["overall_status"] == "inconclusive"
-    assert "not a pass" in report["limitations"][1]
+    assert "reported separately" in report["limitations"][1]
 
 
 def test_invalid_stage_and_tolerance_are_rejected(tmp_path):
@@ -73,7 +73,7 @@ def test_cli_writes_json_and_returns_nonzero_for_inconclusive(tmp_path):
         "--stage", f"measure={measured}", "--output", str(output),
     ])
     assert result.exit_code == 2, result.output
-    assert "INCONCLUSIVE (not a pass)" in result.output
+    assert "INCONCLUSIVE" in result.output
     report = json.loads(output.read_text(encoding="utf-8"))
     assert report["spec_version"] == "qshield-transform-report-v1"
     assert report["overall_status"] == "inconclusive"

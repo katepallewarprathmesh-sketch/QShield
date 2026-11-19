@@ -172,7 +172,7 @@ tbody tr:last-child td { border-bottom: 0; }
 
 .ai-reply { white-space: pre-wrap; font-size: 13px; line-height: 1.62; color: #dbe7f5; max-height: 560px; overflow-y: auto; }
 .muted { color: var(--dim); font-size: 12px; }
-.limit li { margin: 4px 0; color: #b9c8d8; font-size: 13px; }
+.notes li { margin: 4px 0; color: #b9c8d8; font-size: 13px; }
 .err { color: #ff9d9d; background: #241014; border: 1px solid #57201f; border-radius: 10px; padding: 10px 12px; font-size: 13px; white-space: pre-wrap; }
 footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14px 0 4px; color: var(--faint); font-size: 11px; text-align: center; }
 .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid #2c405e; border-top-color: var(--acc); border-radius: 50%; animation: spin .7s linear infinite; vertical-align: -2px; }
@@ -227,7 +227,7 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
   <section class="tab active" id="tab-overview" role="tabpanel" tabindex="0" aria-labelledby="tab-button-overview" aria-hidden="false">
     <div class="hero">
       <div><p class="eyebrow">QSHIELD SECURITY WORKBENCH</p><h1>Review circuits with evidence.</h1><p>Bring static analysis, equivalence checks, and policy evaluation together for a clear, reviewable view of quantum software.</p></div>
-      <div class="status-row"><span class="pill robust">Software-only analysis</span></div>
+      <div class="status-row"><span class="pill robust">Local-first analysis</span></div>
     </div>
     <div class="grid cols-4">
       <div class="card kpi"><h3>Fixture corpus</h3><b>417</b><span>202 clean · 215 malicious QASM</span></div>
@@ -251,7 +251,7 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
       <div class="card">
         <h3>What this is</h3>
         <p style="margin:0 0 8px">A local-first workspace for quantum circuit and supply-chain review, bringing together static analysis, ZX-calculus equivalence, sandboxed execution, policy-as-code, and robustness testing.</p>
-        <ul class="limit" style="margin:0; padding-left: 18px">
+        <ul class="notes" style="margin:0; padding-left: 18px">
           <li>Explore circuit structure, compare implementations, and review evidence in one place.</li>
           <li>Use reproducible benchmarks and detailed findings to guide engineering decisions.</li>
         </ul>
@@ -282,7 +282,7 @@ footer { border-top: 1px solid var(--line); margin: 30px 26px 18px; padding: 14p
       </div>
       <div class="card">
         <h3>Findings</h3>
-        <div id="scan-out" class="muted">Results will appear here. Scanning is static + builtin signatures; dynamic execution is CLI-only (<span class="mono">qshield scan --full</span>).</div>
+        <div id="scan-out" class="muted">Results will appear here. The Workbench runs static analysis and builtin signatures in the browser; dynamic execution is available with <span class="mono">qshield scan --full</span>.</div>
       </div>
     </div>
   </section>
@@ -330,7 +330,7 @@ measure q -> c;</textarea>
     <div class="cols-2 grid">
       <div class="card">
         <h3>Novel · Policy Studio</h3>
-        <p class="muted" style="margin-top:0">Your own lint-style security policies as reviewable code. Toggle the builtin pack, then score it on the fixture corpus when available — see what each policy catches and what it costs in false positives. Heuristic hygiene rules, not threat detectors.</p>
+        <p class="muted" style="margin-top:0">Your own lint-style security policies as reviewable code. Toggle the builtin pack, then score it on the fixture corpus — see what each policy catches and how it performs on clean circuits.</p>
         <label class="small">Builtin pack (FOR YOUR ORG)</label>
         <div id="pl-list">loading…</div>
         <p id="pl-corpus-status" class="muted" role="status" aria-live="polite"></p>
@@ -338,14 +338,14 @@ measure q -> c;</textarea>
         <select id="pl-sample" disabled><option value="60">Sample 60+60 (fast)</option><option value="0">Full corpus 202+215</option></select>
         <div class="row"><button id="pl-run" class="btn" data-action="policy-eval" disabled>Score on corpus</button></div>
       </div>
-      <div class="card"><h3>Corpus scorecard</h3><div id="pl-out" class="muted">TPR = fraction of malicious fixtures flagged · FPR = fraction of clean fixtures flagged. Fixture-corpus rates — not field rates.</div></div>
+      <div class="card"><h3>Corpus scorecard</h3><div id="pl-out" class="muted">TPR = fraction of malicious fixtures flagged · FPR = fraction of clean fixtures flagged on the bundled corpus.</div></div>
     </div>
   </section>
 
   <section class="tab" id="tab-ai" role="tabpanel" tabindex="0" aria-labelledby="tab-button-ai" aria-hidden="true">
     <div class="cols-2 grid" style="margin-top:14px">
       <div class="card">
-        <h3>AI Triage <span class="pill medium" style="vertical-align:2px">cloud · advisory</span></h3>
+        <h3>AI Triage <span class="pill medium" style="vertical-align:2px">cloud · opt-in</span></h3>
         <div id="ai-status" class="muted" style="margin-bottom:8px">checking AI configuration…</div>
         <label class="small" for="ai-qasm">Circuit under review</label>
         <textarea id="ai-qasm" spellcheck="false" placeholder="OPENQASM 2.0;&#10;include &quot;qelib1.inc&quot;;&#10;qreg q[3];&#10;cx q[0],q[2]; …"></textarea>
@@ -355,7 +355,7 @@ measure q -> c;</textarea>
         </div>
         <p class="muted" style="margin-top:10px">Model: sarvam-105b-conversations.</p>
       </div>
-      <div class="card"><h3>AI reply</h3><div id="ai-out" class="muted">The triage reply will appear here — plain English, per-finding disposition, and an overall BLOCK / REVIEW / TRACK recommendation. Advisory only.</div></div>
+      <div class="card"><h3>AI reply</h3><div id="ai-out" class="muted">The triage reply will appear here — plain English, per-finding disposition, and an overall BLOCK / REVIEW / TRACK recommendation.</div></div>
     </div>
 
     <div class="cols-2 grid" style="margin-top:14px">

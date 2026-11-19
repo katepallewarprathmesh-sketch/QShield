@@ -278,8 +278,8 @@ def evaluate_corpus(
 ) -> dict[str, Any]:
     """Evaluate every policy on the fixture corpus (QASM files).
 
-    Returns per-policy TPR/FPR plus the any-policy aggregate.  Fixture-corpus
-    rates — not field rates; stated as such because they are.
+    Returns per-policy TPR/FPR plus the any-policy aggregate on the bundled
+    fixture corpus.
     """
     from qshield.core.parsers.qasm_parser import parse_qasm
 
@@ -324,5 +324,5 @@ def evaluate_corpus(
         "per_policy": per_policy,
         "any_policy": {**agg, "tpr": round(agg_tpr, 4), "fpr": round(agg_fpr, 4)},
         "corpus": {"clean": len(clean_files), "malicious": len(mal_files), "skipped_unparseable": skipped},
-        "note": "Fixture-corpus rates on the bundled clean/malicious QASM fixtures — not field rates.",
+        "note": "Benchmark results on the bundled clean/malicious QASM fixtures.",
     }

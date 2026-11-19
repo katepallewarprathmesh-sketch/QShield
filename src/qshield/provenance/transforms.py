@@ -171,7 +171,7 @@ def build_transform_report(
         "transforms": transforms,
         "limitations": [
             "A randomized comparison is not used to claim equivalence.",
-            "Inconclusive means the available method did not decide the pair; it is not a pass.",
+            "Inconclusive results are reported separately from a pass.",
             "QSHIELD records supplied pass outputs but does not execute or attest to the transpiler itself.",
         ],
     }

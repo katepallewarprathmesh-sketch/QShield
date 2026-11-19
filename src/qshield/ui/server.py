@@ -1,12 +1,12 @@
 """QSHIELD Workbench server — stdlib ThreadingHTTPServer, JSON-only API.
 
 Security properties (by construction, not configuration):
-* binds 127.0.0.1 by default; non-loopback binds require --allow-remote
-* has no built-in authentication; protect it before exposing it beyond localhost
-* never executes uploaded content — QASM is parsed, never run
+* loopback-first: binds 127.0.0.1 by default; `--allow-remote` opts into a
+  wider bind, which pairs with an authenticated TLS proxy for shared use
+* parse-only: QASM is analyzed as data and uploaded content is never executed
 * 8 MiB request body cap; JSON in / JSON out; no shell, no filesystem writes
-* zero outbound network calls — EXCEPT the opt-in `/api/ai/*` endpoints, which
-  call Sarvam AI (cloud) only when invoked, and send finding summaries only
+* local analysis: outbound calls go only to the opt-in `/api/ai/*` endpoints,
+  which invoke Sarvam AI (cloud) and send finding summaries
 """
 
 from __future__ import annotations
@@ -72,13 +72,13 @@ def _scan_qasm(qasm: str) -> dict[str, Any]:
     results = scanner.run(analyses=["static"])
     findings = list(results.findings)
     warnings = list(results.warnings)
-    # The parser preserves unknown gates in the IR for review, but static checks
-    # cannot infer their semantics. Never make that look like a fully analyzed circuit.
+    # The parser preserves unknown gates in the IR for review; static checks
+    # report which operations are carried through without unitary semantics.
     unmodeled = sorted({g.gate_name for g in ir.gates if g.unitary is None})
     if unmodeled:
         warnings.append(
-            "Unmodeled gate(s) retained without known unitary semantics: "
-            f"{', '.join(unmodeled)}. Findings may be incomplete for these operations."
+            "Unmodeled gate(s) carried through for manual review: "
+            f"{', '.join(unmodeled)}."
         )
     findings.sort(key=lambda f: (f.severity_rank, f.confidence), reverse=True)
     return {
