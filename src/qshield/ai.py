@@ -14,6 +14,7 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
+from typing import Any
 
 CHAT_MODEL = "sarvam-105b-conversations"
 STT_MODEL = "saaras:v4"
@@ -108,12 +109,47 @@ def scan_findings_ir(ir, name: str = "workbench") -> dict:
     return _payload(results, name)
 
 
-def configured() -> bool:
+def _has_key() -> bool:
     """True if a SARVAM_API_KEY is discoverable (env or gitignored .env). Never reveals it."""
     repo_root = Path(__file__).resolve().parents[2]
     _load_dotenv(Path.cwd() / ".env")
     _load_dotenv(repo_root / ".env")
     return bool(os.environ.get("SARVAM_API_KEY"))
+
+
+def _has_sdk() -> bool:
+    from importlib.util import find_spec
+
+    try:
+        return find_spec("sarvamai") is not None
+    except (ImportError, ValueError):
+        return False
+
+
+def configured() -> bool:
+    """True only when AI actions can actually run: key present and SDK importable."""
+    return _has_key() and _has_sdk()
+
+
+def readiness() -> dict[str, Any]:
+    """Explain AI availability so the UI can show the real reason, never the key itself."""
+    has_key, has_sdk = _has_key(), _has_sdk()
+    if not has_key:
+        reason = "SARVAM_API_KEY is not set on the Workbench server."
+        hint = "Export SARVAM_API_KEY, or add it to a .env file next to the project."
+    elif not has_sdk:
+        reason = "SARVAM_API_KEY is set but the 'sarvamai' package is not installed."
+        hint = "pip install sarvamai, then restart the Workbench."
+    else:
+        reason = ""
+        hint = ""
+    return {
+        "configured": has_key and has_sdk,
+        "key_present": has_key,
+        "sdk_installed": has_sdk,
+        "reason": reason,
+        "hint": hint,
+    }
 
 
 def disclaimer() -> str:

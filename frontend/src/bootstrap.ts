@@ -141,7 +141,7 @@ type HttpError = Error & { __httpStatus?: number };
   function requireAncilla(qasm) {
     return isAncilla(qasm).then(function (ok) {
       if (!ok) {
-        throw httpError(400, 'The static page only carries the precomputed AI output for the bundled ancilla-leakage fixture. Run locally (pip install -e . && SARVAM_API_KEY=... qshield ui) for live AI on your own circuits.');
+        throw httpError(400, 'This static demo page replays precomputed AI output for the bundled ancilla-leakage fixture only. It cannot call the cloud, so your own circuits have no AI output here. Live AI runs server-side in the local Workbench: pip install -e . && qshield ui');
       }
     });
   }
@@ -176,7 +176,14 @@ type HttpError = Error & { __httpStatus?: number };
       if (path === '/api/ai/status') {
         return Promise.resolve({
           configured: false,
-          disclaimer: 'AI-advisory (Sarvam AI, cloud). A static page cannot hold a Sarvam key — live AI is unavailable here; the AI tab shows precomputed real outputs. Run locally with SARVAM_API_KEY for live AI. LLM output is not a verdict.',
+          key_present: false,
+          sdk_installed: false,
+          static_page: true,
+          reason:
+            'This is the static demo page: it has no server process, so it cannot hold a Sarvam key or reach the cloud.',
+          hint: 'Run the Workbench locally for live AI: pip install -e . && qshield ui',
+          disclaimer:
+            'AI-advisory (Sarvam AI, cloud). This static page replays precomputed real outputs and labels them; live AI runs server-side in the local Workbench. LLM output is not a verdict.',
         });
       }
       if (path === '/api/policies') {

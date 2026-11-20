@@ -41,7 +41,7 @@
             return { pyodide: pyodide, version: version };
         })();
     }
-    // Engine calls pass arguments through globals (passed as values
+    // Engine calls pass arguments through globals (never string-interpolated
     // into Python source — no code-injection surface from page input).
     function callPython(code, args) {
         return READY.then(function (engine) {
@@ -96,7 +96,7 @@
     /* ---------------------------------------------------------------- AI
      * Precomputed real outputs (ancilla fixture), always labeled.            */
     var AI = window.__QSHIELD_AI_CANNED__ || {};
-    var CANNED_NOTE = 'precomputed real output (real engine + Sarvam AI on the bundled ancilla fixture) — run locally with SARVAM_API_KEY for live AI';
+    var CANNED_NOTE = 'precomputed real output (real engine + Sarvam AI on the bundled ancilla fixture) — the static page cannot call the cloud; run locally with SARVAM_API_KEY for live AI';
     function norm(s) {
         return String(s || '')
             .replace(/\/\*[^]*?\*\//g, '')
@@ -117,7 +117,7 @@
     function requireAncilla(qasm) {
         return isAncilla(qasm).then(function (ok) {
             if (!ok) {
-                throw httpError(400, 'Precomputed AI output is bundled for the ancilla-leakage fixture. Run locally (pip install -e . && SARVAM_API_KEY=... qshield ui) for live AI on your own circuits.');
+                throw httpError(400, 'This static demo page replays precomputed AI output for the bundled ancilla-leakage fixture only. It cannot call the cloud, so your own circuits have no AI output here. Live AI runs server-side in the local Workbench: pip install -e . && qshield ui');
             }
         });
     }
@@ -155,7 +155,12 @@
             if (path === '/api/ai/status') {
                 return Promise.resolve({
                     configured: false,
-                    disclaimer: 'AI assistance (Sarvam AI, cloud). The AI tab shows precomputed real outputs here. Run locally with SARVAM_API_KEY for live AI on your own circuits.',
+                    key_present: false,
+                    sdk_installed: false,
+                    static_page: true,
+                    reason: 'This is the static demo page: it has no server process, so it cannot hold a Sarvam key or reach the cloud.',
+                    hint: 'Run the Workbench locally for live AI: pip install -e . && qshield ui',
+                    disclaimer: 'AI-advisory (Sarvam AI, cloud). This static page replays precomputed real outputs and labels them; live AI runs server-side in the local Workbench. LLM output is not a verdict.',
                 });
             }
             if (path === '/api/policies') {
@@ -212,7 +217,7 @@
                     __sample: (sample === undefined || sample === null) ? null : sample,
                 });
             }
-            /* ---- AI endpoints: precomputed real outputs ---- */
+            /* ---- AI endpoints: canned real outputs, honestly labeled ---- */
             if (path === '/api/ai/triage') {
                 var tqasm = String(body.qasm || '').trim();
                 if (!tqasm)
@@ -231,12 +236,12 @@
                 return requireAncilla(pqasm).then(function () {
                     var pack = to === 'hi-IN' ? AI.report_hi : to === 'mr-IN' ? AI.report_mr : null;
                     if (!pack)
-                        return Promise.reject(httpError(400, 'Precomputed ' + to + ' report is bundled for the ancilla fixture (hi-IN, mr-IN). Run locally for other languages.'));
+                        return Promise.reject(httpError(400, 'The static page only carries the precomputed ' + to + ' report for the ancilla fixture (hi-IN, mr-IN). Run locally for other languages.'));
                     return Object.assign({}, pack, { note: CANNED_NOTE });
                 });
             }
             if (path === '/api/ai/speak' || path === '/api/ai/listen') {
-                return Promise.reject(httpError(503, 'Cloud voice features run locally with SARVAM_API_KEY (qshield ui).'));
+                return Promise.reject(httpError(503, 'Cloud voice features are unavailable on the static page — run locally with SARVAM_API_KEY (qshield ui).'));
             }
             return Promise.reject(httpError(404, 'not found'));
         }

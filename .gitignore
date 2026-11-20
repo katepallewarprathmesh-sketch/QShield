@@ -22,3 +22,6 @@ results.json
 out/
 dist-site/
 **/target/
+
+# Node build dependencies (frontend/package-lock.json stays tracked)
+node_modules/

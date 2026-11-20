@@ -35,6 +35,28 @@ function activate(id, label) {
     s.setAttribute('aria-hidden', String(!active));
   });
   $('#crumb-current').textContent = label;
+  autoProbeOnOpen(id);
+}
+
+/* The Robustness tab runs against the circuit already scanned, without asking the
+   user to paste it again. It only fires when a circuit is available and the user
+   has not already produced a result for that exact circuit. */
+let probedSignature = '';
+let probeInFlight = false;
+function circuitSignature(qasm: string): string {
+  let hash = 5381;
+  for (let i = 0; i < qasm.length; i++) hash = ((hash << 5) + hash + qasm.charCodeAt(i)) | 0;
+  return `${qasm.length}:${hash}`;
+}
+function autoProbeOnOpen(id: string): void {
+  if (id !== 'robustness') return;
+  const source = circuitFor('robustness');
+  if (!source) return;
+  const signature = circuitSignature(source);
+  if (probeInFlight || signature === probedSignature) return;
+  probeInFlight = true;
+  probedSignature = signature;
+  runRobustness().finally(() => { probeInFlight = false; });
 }
 function buildTabs() {
   const nav = $('#sidenav');
@@ -64,6 +86,12 @@ function buildTabs() {
     nav.appendChild(b);
   });
 }
+/* The circuit last successfully scanned. The Robustness and AI tabs read this
+   so a user who already loaded and scanned a file does not paste it twice. */
+let lastLoadedName = '';
+let lastScannedQasm = '';
+let lastScannedName = '';
+
 const sevOrder = {critical:0, high:1, medium:2, low:3, info:4};
 function severitySummary(fs) {
   const counts = {critical:0, high:0, medium:0, low:0, info:0};
@@ -122,21 +150,76 @@ async function loadCircuitFile(file: File) {
     }
     if (!source.trim()) throw new Error('The selected file is empty.');
     $('#scan-qasm').value = source;
+    lastLoadedName = file.name;
     status.textContent = `${file.name} loaded (${file.size.toLocaleString()} bytes). It stays in this browser until you run Scan.`;
   } catch (e) {
     status.textContent = `Could not load file: ${e.message || e}`;
   }
 }
+function currentCircuit(): string {
+  /* A tab the user edited by hand wins for that tab; otherwise use the last scan. */
+  const rb = ($('#rb-qasm') as HTMLTextAreaElement | null)?.value?.trim() || '';
+  const ai = ($('#ai-qasm') as HTMLTextAreaElement | null)?.value?.trim() || '';
+  const scan = ($('#scan-qasm') as HTMLTextAreaElement | null)?.value?.trim() || '';
+  const rbEdited = rb && rb !== (autoFilled['rb-qasm'] || '').trim();
+  const aiEdited = ai && ai !== (autoFilled['ai-qasm'] || '').trim();
+  if (rbEdited) return rb;
+  if (aiEdited) return ai;
+  if (scan) return scan;
+  return rb || ai;
+}
+
+function circuitFor(tab: string): string {
+  /* Per-tab resolution: an edited box wins, else the last scanned circuit. */
+  const id = tab === 'robustness' ? 'rb-qasm' : 'ai-qasm';
+  const own = ($('#' + id) as HTMLTextAreaElement | null)?.value?.trim() || '';
+  const auto = (autoFilled[id] || '').trim();
+  if (own && own !== auto) return own;
+  return lastScannedQasm || own;
+}
+
+/* Tabs that hold their own copy of the circuit. A tab keeps user-edited text and
+   only accepts the scanned circuit while it still holds the previous auto-fill. */
+const autoFilled: { [id: string]: string } = {};
+
+function setAutoFill(id: string, qasm: string): void {
+  const el = $('#' + id) as HTMLTextAreaElement | null;
+  if (!el) return;
+  const current = el.value.trim();
+  const previousAuto = autoFilled[id] || '';
+  if (current && current !== previousAuto.trim()) return;  // user typed here: leave it
+  el.value = qasm;
+  autoFilled[id] = qasm;
+}
+
+/* Push the scanned circuit into the other tabs that operate on it. */
+function shareCircuit(qasm: string, name: string): void {
+  lastScannedQasm = qasm;
+  lastScannedName = name;
+  setAutoFill('rb-qasm', qasm);
+  setAutoFill('ai-qasm', qasm);
+  const rbNote = $('#rb-source');
+  if (rbNote) rbNote.textContent = name
+    ? `Using the circuit from your last scan (${name}).`
+    : 'Using the circuit from your last scan.';
+  const aiNote = $('#ai-source');
+  if (aiNote) aiNote.textContent = name
+    ? `Using the circuit from your last scan (${name}).`
+    : 'Using the circuit from your last scan.';
+}
+
 async function runScan() {
   const out = $('#scan-out'); spin(out);
   try {
-    const d = await apiPost('/api/scan', { qasm: $('#scan-qasm').value });
+    const source = $('#scan-qasm').value;
+    const d = await apiPost('/api/scan', { qasm: source });
     const fs = (d.findings || []).slice().sort((a,b) => (sevOrder[a.severity] ?? 9) - (sevOrder[b.severity] ?? 9));
     const meta = `<div class="scan-meta"><span><b>${d.stats.gates}</b> gates</span><span><b>${d.stats.depth}</b> depth</span><span><b>${d.stats.qubits}</b> qubits</span><span><b>${fs.length}</b> finding(s)</span></div>`;
     const warnings = (d.warnings || []).map(w => `<div class="find medium"><h4><span class="pill medium">review</span>Analysis warning</h4><p>${esc(w)}</p></div>`).join('');
     const warningPanel = warnings ? `<div class="analysis-warnings"><h4>Review before interpreting results</h4>${warnings}</div>` : '';
     if (!fs.length) {
       out.innerHTML = meta + warningPanel + '<div class="find info"><h4><span class="pill info">info</span>No findings</h4><p>Static + signature analysis found nothing in this circuit. Absence of evidence — not proof of cleanliness.</p></div>';
+      shareCircuit(source, lastLoadedName);
       return;
     }
     out.innerHTML = meta + warningPanel + severitySummary(fs) +
@@ -160,6 +243,7 @@ async function runScan() {
     $('#scan-search').addEventListener('input', renderFiltered);
     $('#scan-severity').addEventListener('change', renderFiltered);
     renderFiltered();
+    shareCircuit(source, lastLoadedName);
   } catch (e) { out.innerHTML = `<div class="err">${esc(e.message)}</div>`; }
 }
 async function runCompare() {
@@ -176,8 +260,13 @@ async function runCompare() {
 async function runRobustness() {
   const out = $('#rb-out'); spin(out);
   try {
-    const d = await apiPost('/api/robustness', { qasm: $('#rb-qasm').value });
-    if (!d.probes.length) { out.innerHTML = '<div class="find info"><h4><span class="pill info">info</span>Nothing to probe</h4><p>No base findings — run a scan first on the Scan tab.</p></div>'; return; }
+    const source = currentCircuit();
+    if (!source) {
+      out.innerHTML = '<div class="find info"><h4><span class="pill info">info</span>Nothing to probe yet</h4><p>Load or paste a circuit on the Scan tab, then run a scan. This tab picks it up automatically.</p></div>';
+      return;
+    }
+    const d = await apiPost('/api/robustness', { qasm: source });
+    if (!d.probes.length) { out.innerHTML = '<div class="find info"><h4><span class="pill info">info</span>Nothing to probe</h4><p>This circuit produced no base findings to probe for robustness.</p></div>'; return; }
     out.innerHTML = `<p class="muted">${d.base_findings} base finding(s) · ${d.variants_per_attack} variants per attack class · ${d.attacks.join(', ')}</p>` +
       d.probes.map(p => {
         const chips = (Object.entries(p.per_attack) as [string, { survived: number; variants: number }][]).map(([name, v]) =>
@@ -221,12 +310,26 @@ async function runPolicyEval() {
 }
 async function aiStatus() {
   const el = $('#ai-status');
+  if (!el) return;
   try {
     const d = await api('/api/ai/status');
-    el.innerHTML = d.configured
-      ? '<span class="pill robust">AI configured</span>'
-      : '<span class="pill fragile">AI not configured</span> <span class="muted">Set SARVAM_API_KEY on the Workbench server to enable AI actions.</span>';
-  } catch (e) { el.textContent = 'AI status unavailable'; }
+    if (d.configured) {
+      el.innerHTML = '<span class="pill robust">AI ready</span> <span class="muted">Sarvam AI is configured on this Workbench server. Triage, translation, and voice actions run live.</span>';
+    } else if (d.key_present === false) {
+      el.innerHTML = '<span class="pill fragile">AI key missing</span> <span class="muted">'
+        + esc(d.reason || 'SARVAM_API_KEY is not set on the Workbench server.')
+        + ' ' + esc(d.hint || '') + '</span>';
+    } else if (d.key_present && d.sdk_installed === false) {
+      el.innerHTML = '<span class="pill fragile">AI SDK missing</span> <span class="muted">'
+        + esc(d.reason || "The 'sarvamai' package is not installed.")
+        + ' ' + esc(d.hint || '') + '</span>';
+    } else {
+      el.innerHTML = '<span class="pill fragile">AI unavailable</span> <span class="muted">'
+        + esc(d.reason || 'AI actions are unavailable on this deployment.') + '</span>';
+    }
+  } catch (e) {
+    el.innerHTML = '<span class="pill fragile">AI status unavailable</span> <span class="muted">The Workbench server did not answer the status check.</span>';
+  }
 }
 async function loadAiExample() {
   try { const d = await api('/api/example?name=ancilla_leakage'); $('#ai-qasm').value = d.qasm; } catch (e) { /* keep placeholder */ }
@@ -234,7 +337,12 @@ async function loadAiExample() {
 async function runAiTriage() {
   const out = $('#ai-out'); spin(out);
   try {
-    const d = await apiPost('/api/ai/triage', { qasm: $('#ai-qasm').value });
+    const source = circuitFor('ai') || ($('#ai-qasm') as HTMLTextAreaElement).value;
+    if (!source.trim()) {
+      out.innerHTML = '<div class="find info"><h4><span class="pill info">info</span>No circuit yet</h4><p>Load or paste a circuit on the Scan tab, then run a scan. This tab picks it up automatically.</p></div>';
+      return;
+    }
+    const d = await apiPost('/api/ai/triage', { qasm: source });
     lastAiReply = d.reply;
     out.innerHTML = '<div class="ai-reply">' + esc(d.reply) + '</div>' +
       '<p class="muted" style="margin-top:10px; border-top:1px solid var(--line); padding-top:10px">' + esc(d.disclaimer) + '</p>' +

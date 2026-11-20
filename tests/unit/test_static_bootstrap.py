@@ -49,3 +49,32 @@ def test_static_policies_api_reports_fixture_availability():
     assert "capabilities: [" in source and "capabilities: [" in ts_source
     assert "limits: [" not in source and "limits: [" not in ts_source
     assert '"corpus_available": __srv._fixture_corpus_available()' in source
+
+
+def test_static_page_ai_status_names_the_real_cause():
+    """The static page must say it is static, not imply the user misconfigured a key."""
+    repo = Path(__file__).resolve().parents[2]
+    for path in (repo / "frontend" / "src" / "bootstrap.ts", repo / "scripts" / "site" / "bootstrap.js"):
+        text = path.read_text(encoding="utf-8")
+        assert "static_page: true" in text, f"{path} must mark the static page explicitly"
+        assert "cannot hold a Sarvam key" in text or "cannot hold a Sarvam key" in text.replace("'", "")
+        assert "key_present" in text
+        assert "pip install -e . && qshield ui" in text
+
+
+def test_probe_tab_auto_runs_on_open_in_source_and_bundle():
+    """Opening the Robustness tab probes the already-scanned circuit without a click."""
+    repo = Path(__file__).resolve().parents[2]
+    for path in (repo / "frontend" / "src" / "workbench.ts", repo / "src" / "qshield" / "ui" / "static" / "workbench.js"):
+        text = path.read_text(encoding="utf-8")
+        assert "autoProbeOnOpen" in text, f"{path} must auto-probe when the tab opens"
+        assert "circuitFor(" in text, f"{path} must resolve the circuit per tab"
+
+
+def test_scanned_circuit_is_shared_with_probe_and_ai_tabs():
+    repo = Path(__file__).resolve().parents[2]
+    for path in (repo / "frontend" / "src" / "workbench.ts", repo / "src" / "qshield" / "ui" / "static" / "workbench.js"):
+        text = path.read_text(encoding="utf-8")
+        assert "shareCircuit(" in text
+        assert "setAutoFill('rb-qasm'" in text or "setAutoFill(\"rb-qasm\"" in text
+        assert "autoFilled" in text, "user-typed text must be distinguishable from auto-fill"

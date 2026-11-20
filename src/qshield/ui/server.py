@@ -246,7 +246,10 @@ class WorkbenchHandler(BaseHTTPRequestHandler):
         elif path == "/api/ai/status":
             from qshield import ai as qai
 
-            self._json(200, {"configured": qai.configured(), "disclaimer": qai.disclaimer()})
+            self._json(
+                200,
+                {**qai.readiness(), "disclaimer": qai.disclaimer()},
+            )
         elif path == "/api/policies":
             self._json(
                 200,

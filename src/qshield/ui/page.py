@@ -319,8 +319,9 @@ measure q -> c;</textarea>
     <div class="card" style="margin-bottom:14px">
       <h3>Novel · Robustness Probe</h3>
       <p style="margin:0 0 6px" class="muted">Applies the five semantics-preserving attack classes from the evasion suite (camouflage, synonyms, rotation_split, dead_code, qubit_relabel) to <i>your</i> circuit, re-scans each variant, and tells you whether each finding survives. This is the question an auditor asks after a flag: <i>“and if the attacker camouflaged it?”</i></p>
+      <p class="muted" id="rb-source" style="margin:0 0 6px" role="status" aria-live="polite">Runs on the circuit from your last scan. Paste a different circuit below to use that instead.</p>
       <label class="small" for="rb-qasm">Flagged circuit (.qasm)</label>
-      <textarea id="rb-qasm" spellcheck="false" placeholder="Paste the circuit that already triggered a finding…"></textarea>
+      <textarea id="rb-qasm" spellcheck="false" placeholder="Filled automatically after you scan a circuit on the Scan tab…"></textarea>
       <div class="row"><button class="btn" data-action="robustness">Probe finding robustness</button></div>
     </div>
     <div class="card"><h3>Probe results</h3><div id="rb-out" class="muted">One card per base finding with per-attack survival.</div></div>
@@ -347,8 +348,9 @@ measure q -> c;</textarea>
       <div class="card">
         <h3>AI Triage <span class="pill medium" style="vertical-align:2px">cloud · opt-in</span></h3>
         <div id="ai-status" class="muted" style="margin-bottom:8px">checking AI configuration…</div>
+        <p class="muted" id="ai-source" style="margin:0 0 6px" role="status" aria-live="polite">Uses the circuit from your last scan. Paste a different circuit below to review that instead.</p>
         <label class="small" for="ai-qasm">Circuit under review</label>
-        <textarea id="ai-qasm" spellcheck="false" placeholder="OPENQASM 2.0;&#10;include &quot;qelib1.inc&quot;;&#10;qreg q[3];&#10;cx q[0],q[2]; …"></textarea>
+        <textarea id="ai-qasm" spellcheck="false" placeholder="Filled automatically after you scan a circuit on the Scan tab…"></textarea>
         <div class="row">
           <button class="btn" data-action="ai-triage">Explain with AI</button>
           <button class="btn secondary" data-action="load-ai-example">Load ancilla-leakage example</button>
