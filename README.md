@@ -120,6 +120,20 @@ The magic square is the Mermin–Peres grid: every row of two-qubit Pauli observ
 
 This is a verification primitive for circuits, not a device benchmark: it runs on the simulator and confirms the circuit's claimed quantum behaviour.
 
+## Annealer model audit
+
+Annealing workflows submit a QUBO or Ising model to a solver rather than a circuit. `qshield audit-qubo` audits that model before it reaches the solver:
+
+```bash
+qshield audit-qubo model.qubo                                   # structure, coefficients, digest
+qshield audit-qubo model.qubo --hardware-variables 5000         # check the target annealer budget
+qshield audit-qubo model.qubo --expected-digest <hex>           # confirm nothing changed since review
+```
+
+Every model gets a SHA-256 digest over its coefficients at full precision, so you can commit to a model when you approve it and detect any later edit — including a perturbation far smaller than a solver would visibly notice. The audit also reports malformed terms, couplings below the control-error floor, extreme dynamic range, unconstrained variables, and a starting chain strength from uniform torque compensation.
+
+`.qubo` and `.json` model files are discovered by `qshield scan` alongside circuits, and model findings flow into JSON, SARIF, HTML, and PDF output under the same severity gates. The format and check definitions are in [specs/qubo-model-audit-v1.md](specs/qubo-model-audit-v1.md).
+
 ## Security architecture
 
 QSHIELD combines local analysis, runtime controls, provenance, and extensible detectors. Read the [public security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/security-architecture.html) for the system's design, evaluation, and deployment details.

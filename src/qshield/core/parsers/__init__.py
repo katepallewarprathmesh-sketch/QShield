@@ -89,6 +89,12 @@ def parse_file(path: str | Path, name: str | None = None) -> CircuitIR:
         circuit = parse_qasm(source, name=name or path.stem)
         circuit.metadata["source_file"] = str(path)
         return circuit
+    if suffix == ".qubo":
+        raise ValueError(
+            f"{path.name} is a QUBO/Ising model, not a circuit. "
+            "Audit it with `qshield audit-qubo`, or register it with "
+            "`qshield.Scanner().add_qubo(model)`."
+        )
     raise ValueError(
         f"Unsupported circuit file extension {suffix!r}. "
         "Expected .qasm (OpenQASM 2.0). For framework circuits, use the Python API: "

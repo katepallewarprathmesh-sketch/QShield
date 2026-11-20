@@ -27,17 +27,24 @@ __all__ = [
     "Finding",
     "GateNode",
     "GateType",
+    "QuboModel",
+    "QuboReport",
     "ScanResults",
     "ScanSummary",
     "Scanner",
     "ThreatLevel",
     "UnsupportedGateError",
     "__version__",
+    "analyse_qubo",
+    "from_dict",
+    "from_matrix",
+    "parse_qubo",
     "scan",
     "to_qiskit",
 ]
 
 from qshield.core.circuit_ir import CircuitIR, GateNode, GateType, ThreatLevel
 from qshield.core.exporters import UnsupportedGateError, to_qiskit
+from qshield.qubo import QuboModel, QuboReport, analyse_qubo, from_dict, from_matrix, parse_qubo
 from qshield.reporting.finding import CircuitLocation, Evidence, Finding
 from qshield.scanner import Scanner, ScanResults, ScanSummary, scan

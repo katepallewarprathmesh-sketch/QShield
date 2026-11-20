@@ -103,9 +103,19 @@ def scan(
     if path.is_dir():
         pattern = "**/*.qasm" if recursive else "*.qasm"
         files = sorted(path.glob(pattern))
-        if not files:
-            console.print(f"[yellow]No .qasm files found under {path}[/yellow]")
+        model_pattern = "**/*.qubo" if recursive else "*.qubo"
+        model_files = sorted(path.glob(model_pattern))
+        for model_file in model_files:
+            try:
+                scanner.add_qubo(model_file)
+            except (ValueError, FileNotFoundError) as exc:
+                console.print(f"[yellow]Skipped {model_file.name}: {exc}[/yellow]")
+        if not files and not model_files:
+            console.print(f"[yellow]No .qasm or .qubo files found under {path}[/yellow]")
             raise typer.Exit(code=0)
+    elif path.suffix.lower() == ".qubo":
+        scanner.add_qubo(path)
+        files = []
     else:
         if path.suffix.lower() in (".py",):
             console.print("[yellow]Direct .py scanning is not supported (executing untrusted code is unsafe).[/yellow]")
@@ -1122,6 +1132,59 @@ def ui(
         run_workbench(host=host, port=port, allow_remote=allow_remote)
     except ValueError as exc:
         raise typer.BadParameter(str(exc), param_hint="--allow-remote") from exc
+
+
+@app.command(name="audit-qubo")
+def audit_qubo(
+    path: Path = typer.Argument(..., help="QUBO or Ising model file (.qubo/.json)", exists=True),
+    hardware_variables: int | None = typer.Option(
+        None, "--hardware-variables", help="Variable budget of the target annealer"
+    ),
+    expected_digest: str | None = typer.Option(
+        None, "--expected-digest", help="Digest committed before submission"
+    ),
+    output_format: str = typer.Option("text", "--format", "-f", help="text|json"),
+    fail_on: str = typer.Option("high", "--fail-on", help="critical|high|medium|low|info|never"),
+) -> None:
+    """Audit a QUBO/Ising model before submitting it to an annealer."""
+    import json as _json
+
+    from qshield.qubo import analyse_qubo, parse_qubo
+
+    try:
+        model = parse_qubo(path)
+    except (ValueError, FileNotFoundError) as exc:
+        console.print(f"[red]Could not parse model: {exc}[/red]")
+        raise typer.Exit(code=2) from exc
+
+    report = analyse_qubo(model, hardware_variables=hardware_variables, expected_digest=expected_digest)
+    payload = report.to_dict()
+
+    if output_format == "json":
+        console.print_json(_json.dumps(payload))
+    else:
+        console.print()
+        console.rule("[bold]QSHIELD model audit[/bold]")
+        console.print(
+            f"Model: [bold]{report.stats['num_variables']}[/bold] variables · "
+            f"{report.stats['num_couplings']} couplings · density {report.stats['density']}"
+        )
+        console.print(f"Digest: [bold]{report.digest}[/bold]")
+        chain = report.stats.get("chain_strength") or {}
+        if chain.get("available") and chain.get("recommended_chain_strength") is not None:
+            console.print(f"Suggested chain strength: {chain['recommended_chain_strength']}")
+        if report.findings:
+            for finding in report.findings:
+                console.print(f"  [bold]{finding.severity.upper()}[/bold] {finding.title} — {finding.detail}")
+        else:
+            console.print("[green]No model-level issues found[/green]")
+
+    order = {"info": 0, "low": 1, "medium": 2, "high": 3, "never": 4}
+    if fail_on not in order:
+        console.print(f"[red]Unknown --fail-on level: {fail_on}[/red]")
+        raise typer.Exit(code=2)
+    if fail_on != "never" and report.max_severity is not None:
+        raise typer.Exit(code=1 if order[report.max_severity] >= order[fail_on] else 0)
 
 
 @app.command()

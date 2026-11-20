@@ -26,6 +26,7 @@ from qshield import __version__
 from qshield.core.circuit_ir import MAX_EXACT_QUBITS, CircuitIR
 from qshield.core.config import QShieldConfig, load_config
 from qshield.core.parsers import parse_any, parse_file
+from qshield.qubo import QuboModel, parse_qubo
 from qshield.reporting.coverage import build_coverage_report, coverage_item
 from qshield.reporting.finding import SEVERITY_ORDER, CircuitLocation, Evidence, Finding
 from qshield.reporting.html_exporter import render_html
@@ -232,6 +233,7 @@ class Scanner:
         self._packages: list[_RegisteredPackage] = []
         self._requirements: list[str] = []
         self._extra_signature_paths: list[str] = []
+        self._qubo_models: list[QuboModel] = []
 
     # ------------------------------------------------------------------
     def add_circuit(
@@ -269,6 +271,22 @@ class Scanner:
         self._requirements.append(text)
         return req_id
 
+    def add_qubo(self, model: Any) -> int:
+        """Register a QUBO/Ising model for audit. Returns the model index.
+
+        Accepts a path, a square/upper-triangular matrix, or a parsed model.
+        """
+        if isinstance(model, QuboModel):
+            parsed = model
+        elif isinstance(model, (str, Path)):
+            parsed = parse_qubo(model)
+        else:
+            from qshield.qubo import from_matrix
+
+            parsed = from_matrix(model)
+        self._qubo_models.append(parsed)
+        return len(self._qubo_models) - 1
+
     def add_signatures(self, path: str) -> Scanner:
         self._extra_signature_paths.append(path)
         return self
@@ -295,6 +313,14 @@ class Scanner:
         matcher = self._build_matcher(warnings)
         circuit_coverage: list[dict[str, Any]] = []
         timeout_reported = False
+
+        # QUBO/Ising models are audited alongside circuits; findings flow into
+        # the same result object so every reporter renders them.
+        if self._qubo_models:
+            from qshield.qubo import analyse_qubo, to_findings
+
+            for model in self._qubo_models:
+                findings.extend(to_findings(analyse_qubo(model)))
 
         for rc in self._circuits:
             circuit = rc.circuit
