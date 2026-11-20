@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import dataclasses
 import json
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -258,7 +258,7 @@ def test_revoked_baseline_state(keys) -> None:
 
 def test_expired_baseline_state(keys) -> None:
     private, public = keys
-    past = (datetime.now(UTC) - timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    past = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
     registry = BaselineRegistry()
     record = sign_baseline(
         create_baseline(_ir(BASE), workload_id="w1", approved_by="a", expires_at=past), private

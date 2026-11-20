@@ -18,7 +18,7 @@ import argparse
 import hashlib
 import json
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -243,7 +243,7 @@ def measure() -> dict[str, Any]:
 
     return {
         "spec_version": SPEC,
-        "generated_at": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "corpus": {"clean": len(clean), "malicious": len(malicious)},
         "summary": {
             "legacy_pattern": {
