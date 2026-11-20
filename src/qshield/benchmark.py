@@ -337,4 +337,21 @@ def run_benchmark(
     }
     if include_sweep:
         result["threshold_sweep"] = threshold_sweep(sample=sample)
+        result["contextuality"] = _contextuality_block()
     return result
+
+
+def _contextuality_block() -> dict[str, Any]:
+    """Physics-anchored check: the ceiling comes from quantum mechanics, not a corpus."""
+    from qshield.contextuality import verify_contextuality
+
+    report = verify_contextuality()
+    magic = report.magic_square
+    chsh = report.chsh
+    return {
+        "verdict": report.verdict,
+        "magic_square_win_rate": magic["win_rate"],
+        "magic_square_classical_bound": magic["classical_bound"],
+        "chsh_s_value": chsh["s_value"],
+        "chsh_quantum_limit": chsh["quantum_limit"],
+    }

@@ -1125,6 +1125,38 @@ def ui(
 
 
 @app.command()
+def contextuality(
+    output_format: str = typer.Option("text", "--format", "-f", help="text|json"),
+) -> None:
+    """Verify quantum contextuality (magic square + CHSH)."""
+    import json as _json
+
+    from qshield.contextuality import verify_contextuality
+
+    report = verify_contextuality()
+    if output_format == "json":
+        console.print_json(_json.dumps(report.to_dict()))
+        return
+
+    magic = report.magic_square
+    chsh = report.chsh
+    console.print()
+    console.rule("[bold]QSHIELD contextuality verification[/bold]")
+    console.print(
+        f"Magic square: [bold]{magic['win_rate']:.4f}[/bold] "
+        f"({magic['wins']}/{magic['rounds']}) vs classical ceiling "
+        f"{magic['classical_bound']:.4f}"
+    )
+    console.print(
+        f"CHSH:         S = [bold]{chsh['s_value']:.4f}[/bold] vs classical bound "
+        f"{chsh['classical_bound']:.1f} (quantum limit {chsh['quantum_limit']:.4f})"
+    )
+    verdict_style = "green" if report.contextual else "yellow"
+    console.print(f"Verdict:      [{verdict_style}]{report.verdict}[/{verdict_style}]")
+    console.print("[dim]Simulator evidence for the modelled circuit, not a hardware device.[/dim]")
+
+
+@app.command()
 def benchmark(
     threshold: str = typer.Option("medium", "--threshold", help="info|low|medium|high|critical — flagging threshold"),
     sample: int | None = typer.Option(None, "--sample", help="Score only the first N fixtures per split"),

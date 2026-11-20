@@ -4,55 +4,211 @@
   "title": "QSHIELD open benchmark result v1",
   "description": "Machine-readable result produced by `python benchmarks/benchmark.py`. Every number is a fixture-corpus measurement on the bundled corpus; it describes this corpus, not field performance.",
   "type": "object",
-  "required": ["spec_version", "corpus_version", "corpus_sha256", "qshield_version", "threshold", "metrics"],
+  "required": [
+    "spec_version",
+    "corpus_version",
+    "corpus_sha256",
+    "qshield_version",
+    "threshold",
+    "metrics"
+  ],
   "properties": {
-    "spec_version": {"const": "qshield-benchmark-v1"},
-    "corpus_version": {"type": "string"},
-    "corpus_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-    "qshield_version": {"type": "string"},
-    "threshold": {"enum": ["info", "low", "medium", "high", "critical"]},
-    "metrics": {"$ref": "#/$defs/metrics"},
-    "threshold_sweep": {"type": "array", "items": {"$ref": "#/$defs/sweepRow"}},
-    "misses": {"type": "array", "items": {"$ref": "#/$defs/miss"}},
-    "false_positives": {"type": "array", "items": {"$ref": "#/$defs/falsePositive"}},
-    "per_circuit": {"type": "array", "items": {"$ref": "#/$defs/circuitOutcome"}}
+    "spec_version": {
+      "const": "qshield-benchmark-v1"
+    },
+    "corpus_version": {
+      "type": "string"
+    },
+    "corpus_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "qshield_version": {
+      "type": "string"
+    },
+    "threshold": {
+      "enum": [
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "metrics": {
+      "$ref": "#/$defs/metrics"
+    },
+    "threshold_sweep": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/sweepRow"
+      }
+    },
+    "misses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/miss"
+      }
+    },
+    "false_positives": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/falsePositive"
+      }
+    },
+    "per_circuit": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/circuitOutcome"
+      }
+    },
+    "contextuality": {
+      "type": "object",
+      "required": [
+        "verdict",
+        "magic_square_win_rate",
+        "magic_square_classical_bound",
+        "chsh_s_value",
+        "chsh_quantum_limit"
+      ],
+      "properties": {
+        "verdict": {
+          "enum": [
+            "contextual",
+            "classical",
+            "mixed"
+          ]
+        },
+        "magic_square_win_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "magic_square_classical_bound": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "chsh_s_value": {
+          "type": "number",
+          "minimum": 0
+        },
+        "chsh_quantum_limit": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    }
   },
   "additionalProperties": false,
   "$defs": {
-    "ratio": {"type": "number", "minimum": 0, "maximum": 1},
+    "ratio": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
     "metrics": {
       "type": "object",
-      "required": ["threshold", "counts", "tpr", "fpr", "precision", "recall", "by_family"],
+      "required": [
+        "threshold",
+        "counts",
+        "tpr",
+        "fpr",
+        "precision",
+        "recall",
+        "by_family"
+      ],
       "properties": {
-        "threshold": {"enum": ["info", "low", "medium", "high", "critical"]},
+        "threshold": {
+          "enum": [
+            "info",
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
         "counts": {
           "type": "object",
-          "required": ["clean", "malicious", "true_positives", "false_negatives", "false_positives", "true_negatives", "label_matches"],
+          "required": [
+            "clean",
+            "malicious",
+            "true_positives",
+            "false_negatives",
+            "false_positives",
+            "true_negatives",
+            "label_matches"
+          ],
           "properties": {
-            "clean": {"type": "integer", "minimum": 0},
-            "malicious": {"type": "integer", "minimum": 0},
-            "true_positives": {"type": "integer", "minimum": 0},
-            "false_negatives": {"type": "integer", "minimum": 0},
-            "false_positives": {"type": "integer", "minimum": 0},
-            "true_negatives": {"type": "integer", "minimum": 0},
-            "label_matches": {"type": "integer", "minimum": 0}
+            "clean": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "malicious": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "true_positives": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "false_negatives": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "false_positives": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "true_negatives": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "label_matches": {
+              "type": "integer",
+              "minimum": 0
+            }
           },
           "additionalProperties": false
         },
-        "tpr": {"$ref": "#/$defs/ratio"},
-        "fpr": {"$ref": "#/$defs/ratio"},
-        "precision": {"$ref": "#/$defs/ratio"},
-        "recall": {"$ref": "#/$defs/ratio"},
+        "tpr": {
+          "$ref": "#/$defs/ratio"
+        },
+        "fpr": {
+          "$ref": "#/$defs/ratio"
+        },
+        "precision": {
+          "$ref": "#/$defs/ratio"
+        },
+        "recall": {
+          "$ref": "#/$defs/ratio"
+        },
         "by_family": {
           "type": "object",
           "additionalProperties": {
             "type": "object",
-            "required": ["circuits", "detected", "recall", "description"],
+            "required": [
+              "circuits",
+              "detected",
+              "recall",
+              "description"
+            ],
             "properties": {
-              "circuits": {"type": "integer", "minimum": 0},
-              "detected": {"type": "integer", "minimum": 0},
-              "recall": {"$ref": "#/$defs/ratio"},
-              "description": {"type": "string"}
+              "circuits": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "detected": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "recall": {
+                "$ref": "#/$defs/ratio"
+              },
+              "description": {
+                "type": "string"
+              }
             },
             "additionalProperties": false
           }
@@ -62,47 +218,136 @@
     },
     "sweepRow": {
       "type": "object",
-      "required": ["threshold", "tpr", "fpr", "precision", "recall"],
+      "required": [
+        "threshold",
+        "tpr",
+        "fpr",
+        "precision",
+        "recall"
+      ],
       "properties": {
-        "threshold": {"enum": ["info", "low", "medium", "high", "critical"]},
-        "tpr": {"$ref": "#/$defs/ratio"},
-        "fpr": {"$ref": "#/$defs/ratio"},
-        "precision": {"$ref": "#/$defs/ratio"},
-        "recall": {"$ref": "#/$defs/ratio"}
+        "threshold": {
+          "enum": [
+            "info",
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "tpr": {
+          "$ref": "#/$defs/ratio"
+        },
+        "fpr": {
+          "$ref": "#/$defs/ratio"
+        },
+        "precision": {
+          "$ref": "#/$defs/ratio"
+        },
+        "recall": {
+          "$ref": "#/$defs/ratio"
+        }
       },
       "additionalProperties": false
     },
     "miss": {
       "type": "object",
-      "required": ["name", "expected", "threat_types"],
+      "required": [
+        "name",
+        "expected",
+        "threat_types"
+      ],
       "properties": {
-        "name": {"type": "string"},
-        "expected": {"type": ["string", "null"]},
-        "threat_types": {"type": "array", "items": {"type": "string"}}
+        "name": {
+          "type": "string"
+        },
+        "expected": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "threat_types": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       },
       "additionalProperties": false
     },
     "falsePositive": {
       "type": "object",
-      "required": ["name", "threat_types"],
+      "required": [
+        "name",
+        "threat_types"
+      ],
       "properties": {
-        "name": {"type": "string"},
-        "threat_types": {"type": "array", "items": {"type": "string"}}
+        "name": {
+          "type": "string"
+        },
+        "threat_types": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       },
       "additionalProperties": false
     },
     "circuitOutcome": {
       "type": "object",
-      "required": ["name", "split", "expected_threat", "flagged", "findings", "max_severity", "threat_types", "label_matched"],
+      "required": [
+        "name",
+        "split",
+        "expected_threat",
+        "flagged",
+        "findings",
+        "max_severity",
+        "threat_types",
+        "label_matched"
+      ],
       "properties": {
-        "name": {"type": "string"},
-        "split": {"enum": ["clean", "malicious"]},
-        "expected_threat": {"type": ["string", "null"]},
-        "flagged": {"type": "boolean"},
-        "findings": {"type": "integer", "minimum": 0},
-        "max_severity": {"type": ["string", "null"]},
-        "threat_types": {"type": "array", "items": {"type": "string"}},
-        "label_matched": {"type": ["boolean", "null"]}
+        "name": {
+          "type": "string"
+        },
+        "split": {
+          "enum": [
+            "clean",
+            "malicious"
+          ]
+        },
+        "expected_threat": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "flagged": {
+          "type": "boolean"
+        },
+        "findings": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_severity": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "threat_types": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "label_matched": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
       },
       "additionalProperties": false
     }

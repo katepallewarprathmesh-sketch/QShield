@@ -97,6 +97,22 @@ Accepted submissions are added to the next corpus version with a label, and the
 detection gap is reported in the changelog. Corpus versions are immutable: a new
 version is published rather than silently editing v1.
 
+## Contextuality axis
+
+Alongside corpus detection, every benchmark run reports a physics-anchored
+measurement whose ceiling comes from quantum mechanics rather than from a
+fixture set (`qshield contextuality`):
+
+| Check | Result | Bound |
+|---|---|---|
+| Mermin–Peres magic square | 9/9 rounds (1.0000) | classical ceiling 8/9 (0.8889) |
+| CHSH on a Bell state | S = 2.8284 | classical bound 2.0, Tsirelson limit 2√2 |
+
+The magic-square bound is a parity contradiction: the three row products and
+the three column products are both the product of the same nine values, so
+they must agree, and they do not. That makes it a fixed ceiling that does not
+move as detectors improve.
+
 ## What this benchmark does not establish
 
 - It does not measure performance on real quantum hardware.

@@ -21,6 +21,7 @@
 - Audit quantum-package dependencies for issues such as typosquatting and vulnerable pins.
 - Use the browser Workbench or Python APIs for Qiskit, Cirq, PennyLane, Amazon Braket, and pytket.
 - Add sandboxed detector plugins using WASI.
+- Verify quantum contextuality with the Mermin–Peres magic square and CHSH.
 
 Score the bundled corpus yourself and check the published numbers: `qshield benchmark`.
 
@@ -55,6 +56,7 @@ qshield scan . --recursive --format sarif -o results.sarif
 qshield compare original.qasm candidate.qasm --formal
 qshield audit-deps --requirements requirements.txt
 qshield benchmark
+qshield contextuality
 qshield ui
 ```
 
@@ -103,6 +105,20 @@ python benchmarks/benchmark.py --check              # verify published results m
 ```
 
 Corpus v1 holds 417 circuits (202 clean, 215 malicious) across five labelled attack families. Results ship as `benchmarks/results/benchmark-v1.json`, validated against `benchmarks/benchmark-v1.schema.json`, and CI fails if they drift from a fresh run. The protocol is in [benchmarks/benchmark-v1.md](benchmarks/benchmark-v1.md); the published numbers are on the [open benchmark page](https://katepallewarprathmesh-sketch.github.io/QShield/benchmark.html).
+
+## Contextuality verification
+
+`qshield contextuality` checks that a modelled circuit realises a genuinely non-classical strategy:
+
+```
+Magic square: 1.0000 (9/9) vs classical ceiling 0.8889
+CHSH:         S = 2.8284 vs classical bound 2.0 (quantum limit 2.8284)
+Verdict:      contextual
+```
+
+The magic square is the Mermin–Peres grid: every row of two-qubit Pauli observables multiplies to `+I`, and the columns multiply to `+I, +I, −I`. Those products are both the product of the same nine values, so they must agree — and they don't. No pre-assigned table can satisfy all nine constraints, which caps every classical strategy at 8/9; entangled qubits win 9/9. CHSH reaches the Tsirelson bound of 2√2 on a Bell state.
+
+This is a verification primitive for circuits, not a device benchmark: it runs on the simulator and confirms the circuit's claimed quantum behaviour.
 
 ## Security architecture
 
