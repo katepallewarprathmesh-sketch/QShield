@@ -472,9 +472,35 @@ class StructuralAnalyzer:
         return findings
 
     # ------------------------------------------------------------------
-    # 6. Basis rotations before measurement (T2.3)
+    # 6. Basis rotations before measurement — MOVED, not merely changed
     # ------------------------------------------------------------------
     def check_measurement_basis(self, circuit: CircuitIR) -> list[Finding]:
+        """Deprecated: T2.3 is now a baseline-differential check.
+
+        A basis rotation before measurement is what a correct Deutsch or
+        Bernstein-Vazirani circuit does, so the gate pattern cannot distinguish
+        a legitimate readout basis from a tampered one. Emitting a T2.3 finding
+        here would re-introduce that defect no matter what the differential
+        evaluator does.
+
+        The detection now lives in :mod:`qshield.integrity.evaluate`, which
+        compares a candidate readout against an approved baseline and returns
+        PASS / FINDING / INDETERMINATE / ERROR.
+
+        This method is retained so existing callers keep working; it returns an
+        empty list and the substitution is recorded on the circuit metadata.
+        """
+        findings: list[Finding] = []
+        if circuit.measurements:
+            circuit.metadata["t23_requires_baseline"] = True
+        return findings
+
+    def _legacy_measurement_basis_pattern(self, circuit: CircuitIR) -> list[Finding]:
+        """The previous context-free pattern rule, retained for reference only.
+
+        Not called by :meth:`analyze`. Kept so the historical behaviour can be
+        reproduced when auditing the change that removed it.
+        """
         findings: list[Finding] = []
         if not circuit.measurements:
             return findings

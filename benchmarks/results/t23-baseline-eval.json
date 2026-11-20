@@ -1,0 +1,4203 @@
+{
+ "corpus": {
+  "clean": 202,
+  "malicious": 215
+ },
+ "distinct_t23_fixtures": 11,
+ "generated_at": "2026-11-20T14:01:29Z",
+ "per_fixture": [
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "bell_state",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "bernstein_vazirani",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "cascade_chain",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "clifford_basic",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "deutsch",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "deutsch_jozsa",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_bell_ladder_0",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_bell_ladder_1",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_bell_ladder_10",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_bell_ladder_11",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_bell_ladder_12",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_bell_ladder_13",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_bell_ladder_14",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_bell_ladder_15",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_bell_ladder_16",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_bell_ladder_17",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_bell_ladder_18",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_bell_ladder_19",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_bell_ladder_2",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_bell_ladder_3",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_bell_ladder_4",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_bell_ladder_5",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_bell_ladder_6",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_bell_ladder_7",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_bell_ladder_8",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_bell_ladder_9",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_cascade_4qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_cascade_5qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_cascade_6qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_cascade_7qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_cascade_8qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_cascade_9qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_0",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_1",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_10",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_11",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_12",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_13",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_14",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_15",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_16",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_17",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_18",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_19",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_2",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_20",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_21",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_22",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_23",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_24",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_3",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_4",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_5",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_6",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_7",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_8",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_dense_clifford_9",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_10qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_12qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_16qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_20qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_3qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_4qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_5qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_6qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_7qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_8qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_0",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_1",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_10",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_11",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_12",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_13",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_14",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_15",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_16",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_17",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_18",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_19",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_2",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_3",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_4",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_5",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_6",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_7",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_8",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_cz_9",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_rev_10qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_rev_12qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_rev_14qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_rev_18qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_rev_24qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_rev_4qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_rev_6qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ghz_rev_8qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ising_3qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ising_4qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ising_5qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ising_6qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ising_7qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_ising_8qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_phase_estimation_2qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_phase_estimation_3qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_phase_estimation_4qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_phase_estimation_5qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_phase_estimation_6qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_0",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_1",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_10",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_11",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_12",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_13",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_14",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_15",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_2",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_3",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_4",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_5",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_6",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_7",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_8",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_9",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_hi_0",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_hi_1",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_hi_10",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_hi_11",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_hi_12",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_hi_13",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_hi_14",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_hi_2",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_hi_3",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_hi_4",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_hi_5",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_hi_6",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_hi_7",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_hi_8",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qaoa_hi_9",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qft_2qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qft_3qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qft_5qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qft_6qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qft_7qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qft_8qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qpe_cz_0",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qpe_cz_1",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qpe_cz_2",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qpe_cz_3",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qpe_cz_4",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qpe_cz_5",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qpe_cz_6",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qpe_cz_7",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qpe_cz_8",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_qpe_cz_9",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_0",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_1",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_10",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_11",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_random_clifford_12",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_13",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_14",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_15",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_random_clifford_16",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_17",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_18",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_19",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_2",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_20",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_21",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_22",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_23",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_24",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_3",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_4",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_5",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_6",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_7",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_8",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "gen_random_clifford_9",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_repetition_0",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_repetition_1",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_repetition_2",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_repetition_3",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_repetition_4",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_repetition_5",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_repetition_6",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_repetition_7",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_repetition_8",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "gen_repetition_9",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "ghz_3qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "ghz_4qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "ghz_5qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "grover_3qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "ising_evolution",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "magic_state_prep",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "phase_kickback",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "qaoa_maxcut",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "qft_3qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "qft_4qubit",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "superdense",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "swap_network",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": true,
+   "name": "teleportation",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": null,
+   "legacy_pattern_fires": false,
+   "name": "vqe_h2",
+   "readout_changed": false,
+   "reference_provenance": "self",
+   "split": "clean",
+   "t23_outcome": "pass",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "ancilla_leakage",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "cx_cx_separated",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "distributed_backdoor",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "fanout_shadow_channel",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_basis2_0_h",
+   "readout_changed": true,
+   "reference_provenance": "documented",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_basis2_1_y",
+   "readout_changed": true,
+   "reference_provenance": "documented",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_basis2_2_s",
+   "readout_changed": true,
+   "reference_provenance": "documented",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_basis2_3_sdg",
+   "readout_changed": true,
+   "reference_provenance": "documented",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_basis2_4_t",
+   "readout_changed": true,
+   "reference_provenance": "documented",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_basis2_5_tdg",
+   "readout_changed": true,
+   "reference_provenance": "documented",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_basis2_6_h",
+   "readout_changed": true,
+   "reference_provenance": "documented",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_basis2_7_y",
+   "readout_changed": true,
+   "reference_provenance": "documented",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_basis2_8_s",
+   "readout_changed": true,
+   "reference_provenance": "documented",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_basis2_9_sdg",
+   "readout_changed": true,
+   "reference_provenance": "documented",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_basis_0_h",
+   "readout_changed": true,
+   "reference_provenance": "documented",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_basis_1_x",
+   "readout_changed": true,
+   "reference_provenance": "documented",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_basis_2_s",
+   "readout_changed": true,
+   "reference_provenance": "documented",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_basis_3_sdg",
+   "readout_changed": true,
+   "reference_provenance": "documented",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_basis_4_t",
+   "readout_changed": true,
+   "reference_provenance": "documented",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_basis_5_y",
+   "readout_changed": true,
+   "reference_provenance": "documented",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel3_0",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel3_1",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel3_2",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel3_3",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel3_4",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel3_5",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel3_6",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel3_7",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel3_8",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel3_9",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel4_0",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel4_1",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel4_10",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel4_11",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel4_12",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel4_13",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel4_14",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel4_2",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel4_3",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel4_4",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel4_5",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel4_6",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel4_7",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel4_8",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel4_9",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel5_0",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel5_1",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel5_10",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel5_11",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel5_12",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel5_13",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel5_14",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel5_2",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel5_3",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel5_4",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel5_5",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel5_6",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel5_7",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel5_8",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel5_9",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel_0",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel_1",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": false,
+   "name": "gen_cancel_2",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel_3",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel_4",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "gen_cancel_5",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout2_0",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout2_1",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout2_2",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout2_3",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout2_4",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout2_5",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout2_6",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout2_7",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout2_8",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout2_9",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout_0",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout_1",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout_10",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout_11",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout_12",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout_13",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout_14",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout_2",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout_3",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout_4",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout_5",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout_6",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout_7",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout_8",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_fanout_9",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_leaf_0_cx3",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_leaf_1_swap3",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_leaf_2_cx4",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_leaf_3_swap4",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_leaf_4_swap5",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_0",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_1",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_10",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_11",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_12",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_13",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_14",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_15",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_16",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_17",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_18",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_19",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_2",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_3",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_4",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_5",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_6",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_7",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_8",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro3_9",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_ent_0",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_ent_1",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_ent_10",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_ent_11",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_ent_12",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_ent_13",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_ent_14",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_ent_2",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_ent_3",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_ent_4",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_ent_5",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_ent_6",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_ent_7",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_ent_8",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_ent_9",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_0",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_1",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_10",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_11",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_12",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_13",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_14",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_15",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_16",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_17",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_18",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_19",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_2",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_3",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_4",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_5",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_6",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_7",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_8",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot2_9",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot_0",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot_1",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot_2",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot_3",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot_4",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot_5",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "gen_micro_rot_6",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_0",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_1",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_10",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_11",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_12",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_13",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_14",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_15",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_16",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_17",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_18",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_19",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_2",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_3",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_4",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_5",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_6",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_7",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_8",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego2_9",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego3_0",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego3_1",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego3_10",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego3_11",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego3_12",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego3_13",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego3_14",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego3_2",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego3_3",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego3_4",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego3_5",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego3_6",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego3_7",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego3_8",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego3_9",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego_4556314c2121",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego_455846494c5452415445",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego_4b33524e334c",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego_4d414c4943494f5553",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego_535550504c59",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "gen_stego_54524f4a414e3132",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "h_cancellation_adjacent",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "identity_pair_hidden",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": true,
+   "name": "leaf_ancilla_measure",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.1",
+   "legacy_pattern_fires": false,
+   "name": "leaf_ancilla_swap",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "measurement_manipulation",
+   "readout_changed": true,
+   "reference_provenance": "derived",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "micro_rotation_dense",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.1",
+   "legacy_pattern_fires": false,
+   "name": "micro_rotation_hidden",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "parameter_encoded",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "s_sdg_separated",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "stego_ascii_backdoor",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.2",
+   "legacy_pattern_fires": false,
+   "name": "stego_ascii_qshield",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "tdg_before_measure",
+   "readout_changed": true,
+   "reference_provenance": "derived",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "x_before_measure",
+   "readout_changed": true,
+   "reference_provenance": "derived",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T2.3",
+   "legacy_pattern_fires": true,
+   "name": "y_before_measure",
+   "readout_changed": true,
+   "reference_provenance": "derived",
+   "split": "malicious",
+   "t23_outcome": "finding",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "y_y_pair_separated",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  },
+  {
+   "expected": "T1.3",
+   "legacy_pattern_fires": true,
+   "name": "z_cancellation_hidden",
+   "readout_changed": null,
+   "reference_provenance": "none",
+   "split": "malicious",
+   "t23_outcome": "indeterminate",
+   "t23_outcome_no_baseline": "indeterminate"
+  }
+ ],
+ "spec_version": "qshield-t23-baseline-eval-v1",
+ "summary": {
+  "differential_absent": {
+   "clean_findings": 0,
+   "clean_indeterminate": 202,
+   "t23_family_findings": 0,
+   "t23_family_indeterminate": 20
+  },
+  "differential_baselined": {
+   "clean_findings": 0,
+   "t23_family_findings": 20,
+   "t23_family_indeterminate": 0,
+   "t23_family_pass": 0
+  },
+  "legacy_pattern": {
+   "clean_flagged": 68,
+   "t23_family_flagged": 20
+  },
+  "reference_provenance": {
+   "derived": 4,
+   "documented": 16
+  }
+ }
+}

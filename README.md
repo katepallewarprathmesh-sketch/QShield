@@ -106,6 +106,24 @@ python benchmarks/benchmark.py --check              # verify published results m
 
 Corpus v1 holds 417 circuits (202 clean, 215 malicious) across five labelled attack families. Results ship as `benchmarks/results/benchmark-v1.json`, validated against `benchmarks/benchmark-v1.schema.json`, and CI fails if they drift from a fresh run. The protocol is in [benchmarks/benchmark-v1.md](benchmarks/benchmark-v1.md); the published numbers are on the [open benchmark page](https://katepallewarprathmesh-sketch.github.io/QShield/benchmark.html).
 
+### Readout manipulation (T2.3) needs a baseline
+
+T2.3 is a **differential** check, not a gate pattern. A basis rotation before measurement is what a correct Deutsch or Bernstein–Vazirani circuit does, so matching the pattern flagged 68 clean circuits while adding no real discrimination.
+
+The check now compares a candidate readout against an approved, signed reference and reports one of four states — `PASS`, `FINDING`, `INDETERMINATE`, `ERROR`. With no baseline it returns `INDETERMINATE`; it never guesses. T2.3 findings therefore require a baseline:
+
+```python
+from qshield import Scanner
+from qshield.integrity.baseline import BaselineRegistry, load_baseline_file
+
+scanner = Scanner()
+scanner.add_circuit("candidate.qasm")
+scanner.set_baselines(BaselineRegistry(), public_key_pem=pem_bytes, workload_id="my-workload")
+results = scanner.run()
+```
+
+Design, baseline format, and measured before/after figures: [specs/t2-3-differential-design.md](specs/t2-3-differential-design.md), [specs/t2-3-baseline-format.md](specs/t2-3-baseline-format.md), [specs/t2-3-before-after.md](specs/t2-3-before-after.md).
+
 ## Contextuality verification
 
 `qshield contextuality` checks that a modelled circuit realises a genuinely non-classical strategy:

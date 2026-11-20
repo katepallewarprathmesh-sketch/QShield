@@ -234,6 +234,11 @@ class Scanner:
         self._requirements: list[str] = []
         self._extra_signature_paths: list[str] = []
         self._qubo_models: list[QuboModel] = []
+        # Readout baselines for the T2.3 differential. Absent by default: a scan
+        # with no baseline reports T2.3 as INDETERMINATE, never as a pass.
+        self._baseline_registry: Any = None
+        self._baseline_public_key: bytes | None = None
+        self._baseline_workloads: dict[str, str] = {}
 
     # ------------------------------------------------------------------
     def add_circuit(
@@ -286,6 +291,26 @@ class Scanner:
             parsed = from_matrix(model)
         self._qubo_models.append(parsed)
         return len(self._qubo_models) - 1
+
+    def set_baselines(
+        self,
+        registry: Any,
+        *,
+        public_key_pem: bytes | None = None,
+        workload_id: str | None = None,
+    ) -> Scanner:
+        """Attach approved readout baselines for the T2.3 differential check.
+
+        ``registry`` is a :class:`qshield.integrity.baseline.BaselineRegistry`.
+        ``workload_id`` names the baseline a circuit should be compared against;
+        when omitted each circuit resolves by its own name.
+        """
+        self._baseline_registry = registry
+        self._baseline_public_key = public_key_pem
+        if workload_id:
+            for rc in self._circuits:
+                self._baseline_workloads[rc.circuit.circuit_id] = workload_id
+        return self
 
     def add_signatures(self, path: str) -> Scanner:
         self._extra_signature_paths.append(path)
@@ -438,6 +463,30 @@ class Scanner:
         analyzer = StructuralAnalyzer(self.config)
         findings += analyzer.analyze(circuit)
         checks.append({"id": "structural_analysis", **coverage_item("completed", "structural analyzer executed")})
+
+        # T2.3 is a differential against an approved baseline, so it reports its
+        # own coverage. Without a baseline the state is INDETERMINATE, which is
+        # recorded rather than hidden.
+        from qshield.integrity.evaluate import Outcome, evaluate_t23
+
+        t23 = evaluate_t23(
+            circuit,
+            registry=self._baseline_registry,
+            workload_id=self._baseline_workloads.get(circuit.circuit_id),
+            public_key_pem=self._baseline_public_key,
+        )
+        circuit.metadata["t23_outcome"] = t23.outcome.value
+        if t23.finding is not None:
+            findings.append(t23.finding)
+        t23_coverage = {
+            Outcome.PASS: coverage_item("completed", t23.detail),
+            Outcome.FINDING: coverage_item("completed", t23.detail),
+            Outcome.INDETERMINATE: coverage_item("inconclusive", t23.detail),
+            # "inconclusive" is the coverage vocabulary's word for "did not
+            # decide"; an analysis failure must never read as completed.
+            Outcome.ERROR: coverage_item("inconclusive", t23.detail),
+        }[t23.outcome]
+        checks.append({"id": "t2_3_readout_differential", "outcome": t23.outcome.value, **t23_coverage})
 
         if matcher is not None:
             warning_index = len(matcher.warnings)

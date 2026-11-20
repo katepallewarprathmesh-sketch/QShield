@@ -48,12 +48,62 @@ def test_all_malicious_circuits_detected(malicious_circuits):
         f"fixture/expectation drift: missing {set(malicious_circuits) - set(expectations)}, "
         f"extra {set(expectations) - set(malicious_circuits)}"
     )
+    # T2.3 is a differential against an approved reference, so the scan supplies
+    # one. A missing baseline would make the check INDETERMINATE, and that is
+    # tested separately in tests/unit/test_t23_baseline.py.
+    registry, public_key = _t23_baseline_registry(malicious_circuits, expectations)
+
     for stem, path in malicious_circuits.items():
         scanner = Scanner(config="strict")
         scanner.add_circuit(str(path))
+        if expectations[stem] == "T2.3":
+            scanner.set_baselines(
+                registry, public_key_pem=public_key, workload_id=Path(path).stem
+            )
         results = scanner.run()
         expected_threat = expectations[stem]
         assert any(f.threat_type == expected_threat for f in results.findings), (
             f"{stem}: expected a {expected_threat} finding, got "
             f"{[f.threat_type for f in results.findings]}"
         )
+
+
+def _t23_baseline_registry(malicious_circuits, expectations):
+    """Signed approved references for each T2.3 fixture.
+
+    The reference is the fixture with its readout-stage gates removed: the
+    pre-tamper circuit. It is reconstructed, never authored to include the
+    malicious gate.
+    """
+    import sys
+
+    from cryptography.hazmat.primitives import serialization
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "integration"))
+    from t23_reference import approved_reference_for
+
+    from qshield.integrity.baseline import BaselineRegistry, create_baseline, sign_baseline
+
+    key = Ed25519PrivateKey.generate()
+    private = key.private_bytes(
+        serialization.Encoding.PEM,
+        serialization.PrivateFormat.PKCS8,
+        serialization.NoEncryption(),
+    )
+    public = key.public_key().public_bytes(
+        serialization.Encoding.PEM, serialization.PublicFormat.SubjectPublicKeyInfo
+    )
+    registry = BaselineRegistry()
+    for stem, path in malicious_circuits.items():
+        if expectations.get(stem) != "T2.3":
+            continue
+        reference = approved_reference_for(Path(path))
+        registry.register(
+            sign_baseline(
+                create_baseline(reference, workload_id=stem, approved_by="security-test"),
+                private,
+            ),
+            public_key_pem=public,
+        )
+    return registry, public

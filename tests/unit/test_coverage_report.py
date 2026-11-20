@@ -15,21 +15,28 @@ def test_static_run_emits_per_circuit_coverage_in_all_exports():
 
     coverage = result.to_dict()["coverage"]
     assert coverage["spec_version"] == "qshield-coverage-v1"
-    assert coverage["overall_status"] == "complete"
+    # T2.3 is a differential check and this run supplied no baseline, so the
+    # pipeline is honest about not having decided that question.
+    assert coverage["overall_status"] == "inconclusive"
     assert coverage["summary"]["circuits_processed"] == 1
     circuit = coverage["circuits"][0]
     assert circuit["processed"] is True
-    assert circuit["analyses"]["static"]["status"] == "completed"
+    assert circuit["analyses"]["static"]["status"] == "inconclusive"
     assert {check["id"] for check in circuit["analyses"]["static"]["checks"]} == {
         "structural_analysis", "signature_matching", "expected_unitary",
-        "ancilla_independence", "parser_coverage",
+        "ancilla_independence", "parser_coverage", "t2_3_readout_differential",
     }
+    t23 = next(
+        c for c in circuit["analyses"]["static"]["checks"]
+        if c["id"] == "t2_3_readout_differential"
+    )
+    assert t23["outcome"] == "indeterminate"
     assert coverage["supply_chain"]["status"] == "not_run"
 
     sarif = json.loads(result.to_sarif())
     assert sarif["runs"][0]["properties"]["qshieldCoverage"] == coverage
     html = result.to_html()
-    assert "Analysis coverage: complete" in html
+    assert "Analysis coverage: inconclusive" in html
     assert "No findings were emitted; consult the analysis coverage" in html
 
 

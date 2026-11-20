@@ -2,114 +2,6 @@
   "tests/fixtures/clean_circuits/bell_state.qasm": [],
   "tests/fixtures/clean_circuits/bernstein_vazirani.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        7
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        8
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        9
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        7
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        8
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        9
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -173,404 +65,28 @@
   ],
   "tests/fixtures/clean_circuits/cascade_chain.qasm": [],
   "tests/fixtures/clean_circuits/clifford_basic.qasm": [],
-  "tests/fixtures/clean_circuits/deutsch.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/deutsch_jozsa.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        6
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        7
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        6
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        7
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_bell_ladder_0.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[0]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_bell_ladder_1.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[1]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_bell_ladder_10.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        5
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[0]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/deutsch.qasm": [],
+  "tests/fixtures/clean_circuits/deutsch_jozsa.qasm": [],
+  "tests/fixtures/clean_circuits/gen_bell_ladder_0.qasm": [],
+  "tests/fixtures/clean_circuits/gen_bell_ladder_1.qasm": [],
+  "tests/fixtures/clean_circuits/gen_bell_ladder_10.qasm": [],
   "tests/fixtures/clean_circuits/gen_bell_ladder_11.qasm": [],
-  "tests/fixtures/clean_circuits/gen_bell_ladder_12.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 5
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        7
-      ],
-      "qubit_indices": [
-        5
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[5]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_bell_ladder_13.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 5
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        8
-      ],
-      "qubit_indices": [
-        5
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[5]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_bell_ladder_12.qasm": [],
+  "tests/fixtures/clean_circuits/gen_bell_ladder_13.qasm": [],
   "tests/fixtures/clean_circuits/gen_bell_ladder_14.qasm": [],
-  "tests/fixtures/clean_circuits/gen_bell_ladder_15.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 5
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        10
-      ],
-      "qubit_indices": [
-        5
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[5]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_bell_ladder_16.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[1]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_bell_ladder_15.qasm": [],
+  "tests/fixtures/clean_circuits/gen_bell_ladder_16.qasm": [],
   "tests/fixtures/clean_circuits/gen_bell_ladder_17.qasm": [],
-  "tests/fixtures/clean_circuits/gen_bell_ladder_18.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        5
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[3]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_bell_ladder_19.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        6
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[1]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_bell_ladder_18.qasm": [],
+  "tests/fixtures/clean_circuits/gen_bell_ladder_19.qasm": [],
   "tests/fixtures/clean_circuits/gen_bell_ladder_2.qasm": [],
-  "tests/fixtures/clean_circuits/gen_bell_ladder_3.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        6
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[3]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_bell_ladder_4.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 4
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        7
-      ],
-      "qubit_indices": [
-        4
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[4]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_bell_ladder_3.qasm": [],
+  "tests/fixtures/clean_circuits/gen_bell_ladder_4.qasm": [],
   "tests/fixtures/clean_circuits/gen_bell_ladder_5.qasm": [],
-  "tests/fixtures/clean_circuits/gen_bell_ladder_6.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 6
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        9
-      ],
-      "qubit_indices": [
-        6
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[6]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_bell_ladder_7.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 7
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        10
-      ],
-      "qubit_indices": [
-        7
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[7]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_bell_ladder_6.qasm": [],
+  "tests/fixtures/clean_circuits/gen_bell_ladder_7.qasm": [],
   "tests/fixtures/clean_circuits/gen_bell_ladder_8.qasm": [],
-  "tests/fixtures/clean_circuits/gen_bell_ladder_9.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[1]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_bell_ladder_9.qasm": [],
   "tests/fixtures/clean_circuits/gen_cascade_4qubit.qasm": [],
   "tests/fixtures/clean_circuits/gen_cascade_5qubit.qasm": [],
   "tests/fixtures/clean_circuits/gen_cascade_6qubit.qasm": [],
@@ -578,60 +94,6 @@
   "tests/fixtures/clean_circuits/gen_cascade_8qubit.qasm": [],
   "tests/fixtures/clean_circuits/gen_cascade_9qubit.qasm": [],
   "tests/fixtures/clean_circuits/gen_dense_clifford_0.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        23
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        23
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        29
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    },
     {
       "confidence": 0.6,
       "details": {
@@ -677,85 +139,10 @@
       "title": "Hidden Identity Gate Pair: h(#16) x h(#23)"
     }
   ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_1.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        36
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_10.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        43
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_11.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        52
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_1.qasm": [],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_10.qasm": [],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_11.qasm": [],
   "tests/fixtures/clean_circuits/gen_dense_clifford_12.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        28
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    },
     {
       "confidence": 0.6,
       "details": {
@@ -845,213 +232,11 @@
       "title": "Hidden Identity Gate Pair: h(#3) x h(#9)"
     }
   ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_13.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        30
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        30
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        38
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_14.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        42
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_15.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        39
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        39
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        47
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_16.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        26
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        26
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        29
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_13.qasm": [],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_14.qasm": [],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_15.qasm": [],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_16.qasm": [],
   "tests/fixtures/clean_circuits/gen_dense_clifford_17.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        37
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    },
     {
       "confidence": 0.6,
       "details": {
@@ -1141,213 +326,11 @@
       "title": "Hidden Identity Gate Pair: h(#14) x h(#22)"
     }
   ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_18.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        34
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        34
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        43
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_19.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        37
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        37
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        48
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_2.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        42
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_20.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        30
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_18.qasm": [],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_19.qasm": [],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_2.qasm": [],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_20.qasm": [],
   "tests/fixtures/clean_circuits/gen_dense_clifford_21.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 4
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        31
-      ],
-      "qubit_indices": [
-        4
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        35
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 4
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        31
-      ],
-      "qubit_indices": [
-        4
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[4]"
-    },
     {
       "confidence": 0.6,
       "details": {
@@ -1437,104 +420,12 @@
       "title": "Hidden Identity Gate Pair: h(#14) x h(#22)"
     }
   ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_22.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        32
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        32
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        41
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_23.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        49
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_22.qasm": [],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_23.qasm": [],
   "tests/fixtures/clean_circuits/gen_dense_clifford_24.qasm": [
     {
       "confidence": 0.6,
       "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        29
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
         "frobenius_distance_to_identity": 0.0,
         "gate_indices": [
           3,
@@ -1577,48 +468,11 @@
       "title": "Hidden Identity Gate Pair: h(#3) x h(#9)"
     }
   ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_3.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        48
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_3.qasm": [],
   "tests/fixtures/clean_circuits/gen_dense_clifford_4.qasm": [
     {
       "confidence": 0.6,
       "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        28
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
         "frobenius_distance_to_identity": 0.0,
         "gate_indices": [
           3,
@@ -1661,229 +515,10 @@
       "title": "Hidden Identity Gate Pair: h(#3) x h(#9)"
     }
   ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_5.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        30
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 4
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        34
-      ],
-      "qubit_indices": [
-        4
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        30
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        37
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 4
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        34
-      ],
-      "qubit_indices": [
-        4
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[4]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_6.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        43
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_dense_clifford_7.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 5
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        43
-      ],
-      "qubit_indices": [
-        5
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 6
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        44
-      ],
-      "qubit_indices": [
-        6
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        49
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 5
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        43
-      ],
-      "qubit_indices": [
-        5
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[5]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 6
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        44
-      ],
-      "qubit_indices": [
-        6
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[6]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_5.qasm": [],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_6.qasm": [],
+  "tests/fixtures/clean_circuits/gen_dense_clifford_7.qasm": [],
   "tests/fixtures/clean_circuits/gen_dense_clifford_8.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        28
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    },
     {
       "confidence": 0.6,
       "details": {
@@ -1974,24 +609,6 @@
     }
   ],
   "tests/fixtures/clean_circuits/gen_dense_clifford_9.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        36
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    },
     {
       "confidence": 0.6,
       "details": {
@@ -4622,173 +3239,9 @@
       "title": "Suspiciously high-precision rotation angle"
     }
   ],
-  "tests/fixtures/clean_circuits/gen_random_clifford_0.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        17
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        17
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    }
-  ],
-  "tests/fixtures/clean_circuits/gen_random_clifford_1.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        24
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        24
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        25
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        17
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_random_clifford_0.qasm": [],
+  "tests/fixtures/clean_circuits/gen_random_clifford_1.qasm": [],
   "tests/fixtures/clean_circuits/gen_random_clifford_10.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        14
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        13
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        14
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
     {
       "confidence": 0.6,
       "details": {
@@ -4834,44 +3287,7 @@
       "title": "Hidden Identity Gate Pair: x(#6) x x(#7)"
     }
   ],
-  "tests/fixtures/clean_circuits/gen_random_clifford_11.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        22
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        22
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_random_clifford_11.qasm": [],
   "tests/fixtures/clean_circuits/gen_random_clifford_12.qasm": [
     {
       "confidence": 0.6,
@@ -4963,42 +3379,6 @@
     }
   ],
   "tests/fixtures/clean_circuits/gen_random_clifford_13.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 4
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        34
-      ],
-      "qubit_indices": [
-        4
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 4
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        34
-      ],
-      "qubit_indices": [
-        4
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[4]"
-    },
     {
       "confidence": 0.6,
       "details": {
@@ -5094,24 +3474,6 @@
     {
       "confidence": 0.6,
       "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        39
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
         "frobenius_distance_to_identity": 0.0,
         "gate_indices": [
           19,
@@ -5155,24 +3517,6 @@
     }
   ],
   "tests/fixtures/clean_circuits/gen_random_clifford_15.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        18
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    },
     {
       "confidence": 0.6,
       "details": {
@@ -5264,81 +3608,8 @@
       "title": "Hidden Identity Gate Pair: h(#10) x h(#12)"
     }
   ],
-  "tests/fixtures/clean_circuits/gen_random_clifford_17.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        25
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 5
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        26
-      ],
-      "qubit_indices": [
-        5
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[5]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_random_clifford_17.qasm": [],
   "tests/fixtures/clean_circuits/gen_random_clifford_18.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        27
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 5
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        33
-      ],
-      "qubit_indices": [
-        5
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[5]"
-    },
     {
       "confidence": 0.6,
       "details": {
@@ -5522,42 +3793,6 @@
   ],
   "tests/fixtures/clean_circuits/gen_random_clifford_19.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        35
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        35
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[3]"
-    },
-    {
       "confidence": 0.6,
       "details": {
         "frobenius_distance_to_identity": 0.0,
@@ -5650,60 +3885,6 @@
     {
       "confidence": 0.6,
       "details": {
-        "gate": "s",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        23
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        22
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        20
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
         "frobenius_distance_to_identity": 0.0,
         "gate_indices": [
           7,
@@ -5747,42 +3928,6 @@
     }
   ],
   "tests/fixtures/clean_circuits/gen_random_clifford_20.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        19
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        17
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[2]"
-    },
     {
       "confidence": 0.6,
       "details": {
@@ -5830,60 +3975,6 @@
   ],
   "tests/fixtures/clean_circuits/gen_random_clifford_21.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        23
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        23
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 4
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        22
-      ],
-      "qubit_indices": [
-        4
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[4]"
-    },
-    {
       "confidence": 0.6,
       "details": {
         "frobenius_distance_to_identity": 0.0,
@@ -5928,81 +4019,8 @@
       "title": "Hidden Identity Gate Pair: h(#10) x h(#12)"
     }
   ],
-  "tests/fixtures/clean_circuits/gen_random_clifford_22.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        23
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[1]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_random_clifford_22.qasm": [],
   "tests/fixtures/clean_circuits/gen_random_clifford_23.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        32
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        32
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        34
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    },
     {
       "confidence": 0.6,
       "details": {
@@ -6052,24 +4070,6 @@
     {
       "confidence": 0.6,
       "details": {
-        "gate": "x",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        30
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[3]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
         "frobenius_distance_to_identity": 0.0,
         "gate_indices": [
           17,
@@ -6113,96 +4113,6 @@
     }
   ],
   "tests/fixtures/clean_circuits/gen_random_clifford_3.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 6
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        27
-      ],
-      "qubit_indices": [
-        6
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        26
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[2]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        30
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[3]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 4
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        23
-      ],
-      "qubit_indices": [
-        4
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[4]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 6
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        27
-      ],
-      "qubit_indices": [
-        6
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[6]"
-    },
     {
       "confidence": 0.6,
       "details": {
@@ -6296,24 +4206,6 @@
     {
       "confidence": 0.6,
       "details": {
-        "gate": "x",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        39
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[2]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
         "frobenius_distance_to_identity": 0.0,
         "gate_indices": [
           2,
@@ -6357,42 +4249,6 @@
     }
   ],
   "tests/fixtures/clean_circuits/gen_random_clifford_5.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        12
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 3
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        15
-      ],
-      "qubit_indices": [
-        3
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[3]"
-    },
     {
       "confidence": 0.6,
       "details": {
@@ -6486,42 +4342,6 @@
   ],
   "tests/fixtures/clean_circuits/gen_random_clifford_6.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        22
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        22
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    },
-    {
       "confidence": 0.6,
       "details": {
         "frobenius_distance_to_identity": 0.0,
@@ -6612,117 +4432,8 @@
       "title": "Hidden Identity Gate Pair: z(#15) x z(#16)"
     }
   ],
-  "tests/fixtures/clean_circuits/gen_random_clifford_7.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        18
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        18
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 5
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        22
-      ],
-      "qubit_indices": [
-        5
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[5]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_random_clifford_7.qasm": [],
   "tests/fixtures/clean_circuits/gen_random_clifford_8.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 4
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        30
-      ],
-      "qubit_indices": [
-        4
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 4
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        30
-      ],
-      "qubit_indices": [
-        4
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[4]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 6
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        32
-      ],
-      "qubit_indices": [
-        6
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[6]"
-    },
     {
       "confidence": 0.6,
       "details": {
@@ -6812,62 +4523,7 @@
       "title": "Hidden Identity Gate Pair: z(#11) x z(#13)"
     }
   ],
-  "tests/fixtures/clean_circuits/gen_random_clifford_9.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        38
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        38
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 7
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        42
-      ],
-      "qubit_indices": [
-        7
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[7]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/gen_random_clifford_9.qasm": [],
   "tests/fixtures/clean_circuits/gen_repetition_0.qasm": [],
   "tests/fixtures/clean_circuits/gen_repetition_1.qasm": [],
   "tests/fixtures/clean_circuits/gen_repetition_2.qasm": [],
@@ -6881,116 +4537,7 @@
   "tests/fixtures/clean_circuits/ghz_3qubit.qasm": [],
   "tests/fixtures/clean_circuits/ghz_4qubit.qasm": [],
   "tests/fixtures/clean_circuits/ghz_5qubit.qasm": [],
-  "tests/fixtures/clean_circuits/grover_3qubit.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        21
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        22
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        23
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        21
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        22
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        23
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/grover_3qubit.qasm": [],
   "tests/fixtures/clean_circuits/ising_evolution.qasm": [],
   "tests/fixtures/clean_circuits/magic_state_prep.qasm": [],
   "tests/fixtures/clean_circuits/phase_kickback.qasm": [],
@@ -7170,83 +4717,9 @@
       "title": "Suspiciously high-precision rotation angle"
     }
   ],
-  "tests/fixtures/clean_circuits/superdense.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/superdense.qasm": [],
   "tests/fixtures/clean_circuits/swap_network.qasm": [],
-  "tests/fixtures/clean_circuits/teleportation.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    }
-  ],
+  "tests/fixtures/clean_circuits/teleportation.qasm": [],
   "tests/fixtures/clean_circuits/vqe_h2.qasm": [],
   "tests/fixtures/malicious_circuits/ancilla_leakage.qasm": [
     {
@@ -7268,24 +4741,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/cx_cx_separated.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -7433,435 +4888,23 @@
     }
   ],
   "tests/fixtures/malicious_circuits/fanout_shadow_channel.qasm": [],
-  "tests/fixtures/malicious_circuits/gen_basis2_0_h.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/gen_basis2_1_y.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[1]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/gen_basis2_2_s.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[0]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/gen_basis2_3_sdg.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "sdg",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: sdg before measuring q[1]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/gen_basis2_4_t.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "t",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: t before measuring q[0]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/gen_basis2_5_tdg.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "tdg",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: tdg before measuring q[1]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/gen_basis2_6_h.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/gen_basis2_7_y.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[1]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/gen_basis2_8_s.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[0]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/gen_basis2_9_sdg.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "sdg",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: sdg before measuring q[1]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/gen_basis_0_h.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/gen_basis_1_x.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[1]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/gen_basis_2_s.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[0]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/gen_basis_3_sdg.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "sdg",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: sdg before measuring q[1]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/gen_basis_4_t.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "t",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: t before measuring q[0]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/gen_basis_5_y.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[1]"
-    }
-  ],
+  "tests/fixtures/malicious_circuits/gen_basis2_0_h.qasm": [],
+  "tests/fixtures/malicious_circuits/gen_basis2_1_y.qasm": [],
+  "tests/fixtures/malicious_circuits/gen_basis2_2_s.qasm": [],
+  "tests/fixtures/malicious_circuits/gen_basis2_3_sdg.qasm": [],
+  "tests/fixtures/malicious_circuits/gen_basis2_4_t.qasm": [],
+  "tests/fixtures/malicious_circuits/gen_basis2_5_tdg.qasm": [],
+  "tests/fixtures/malicious_circuits/gen_basis2_6_h.qasm": [],
+  "tests/fixtures/malicious_circuits/gen_basis2_7_y.qasm": [],
+  "tests/fixtures/malicious_circuits/gen_basis2_8_s.qasm": [],
+  "tests/fixtures/malicious_circuits/gen_basis2_9_sdg.qasm": [],
+  "tests/fixtures/malicious_circuits/gen_basis_0_h.qasm": [],
+  "tests/fixtures/malicious_circuits/gen_basis_1_x.qasm": [],
+  "tests/fixtures/malicious_circuits/gen_basis_2_s.qasm": [],
+  "tests/fixtures/malicious_circuits/gen_basis_3_sdg.qasm": [],
+  "tests/fixtures/malicious_circuits/gen_basis_4_t.qasm": [],
+  "tests/fixtures/malicious_circuits/gen_basis_5_y.qasm": [],
   "tests/fixtures/malicious_circuits/gen_cancel3_0.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -7926,60 +4969,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel3_1.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -8042,60 +5031,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel3_2.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -8160,60 +5095,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel3_3.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -8276,60 +5157,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel3_4.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -8394,60 +5221,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel3_5.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -8510,60 +5283,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel3_6.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -8628,60 +5347,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel3_7.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -8744,60 +5409,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel3_8.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -8862,60 +5473,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel3_9.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -8978,42 +5535,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel4_0.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -9095,42 +5616,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel4_1.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "gate": "t",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: t before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -9210,42 +5695,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel4_10.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -9327,42 +5776,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel4_11.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "gate": "t",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: t before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -9442,42 +5855,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel4_12.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -9559,42 +5936,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel4_13.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -9674,24 +6015,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel4_14.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -9775,42 +6098,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel4_2.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -9891,42 +6178,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel4_3.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -10006,24 +6257,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel4_4.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -10107,42 +6340,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel4_5.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -10222,42 +6419,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel4_6.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "t",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: t before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -10339,42 +6500,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel4_7.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -10455,42 +6580,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel4_8.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -10570,24 +6659,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel4_9.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -10671,60 +6742,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel5_0.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -10787,60 +6804,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel5_1.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "sdg",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: sdg before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -10905,60 +6868,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel5_10.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "sdg",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: sdg before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -11021,60 +6930,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel5_11.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -11139,60 +6994,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel5_12.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -11255,60 +7056,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel5_13.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "sdg",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: sdg before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -11373,60 +7120,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel5_14.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -11489,60 +7182,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel5_2.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -11607,60 +7246,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel5_3.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -11723,60 +7308,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel5_4.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "sdg",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: sdg before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -11841,60 +7372,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel5_5.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -11957,60 +7434,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel5_6.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -12075,60 +7498,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel5_7.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "sdg",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: sdg before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -12191,60 +7560,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel5_8.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -12309,60 +7624,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel5_9.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[1]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -12426,42 +7687,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel_0.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -12524,24 +7749,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel_1.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "s",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: s before measuring q[2]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -12688,24 +7895,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel_3.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[0]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -12769,24 +7958,6 @@
   ],
   "tests/fixtures/malicious_circuits/gen_cancel_4.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "gate": "sdg",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: sdg before measuring q[0]"
-    },
-    {
       "confidence": 0.7,
       "details": {
         "gate_count": 0,
@@ -12849,24 +8020,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/gen_cancel_5.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "tdg",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: tdg before measuring q[0]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -25981,42 +21134,6 @@
   ],
   "tests/fixtures/malicious_circuits/h_cancellation_adjacent.qasm": [
     {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    },
-    {
       "confidence": 0.6,
       "details": {
         "frobenius_distance_to_identity": 0.0,
@@ -26062,42 +21179,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/identity_pair_hidden.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -26162,44 +21243,7 @@
       "title": "Hidden Identity Gate Pair: cx(#1) x cx(#2)"
     }
   ],
-  "tests/fixtures/malicious_circuits/leaf_ancilla_measure.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    }
-  ],
+  "tests/fixtures/malicious_circuits/leaf_ancilla_measure.qasm": [],
   "tests/fixtures/malicious_circuits/leaf_ancilla_swap.qasm": [
     {
       "confidence": 0.85,
@@ -26219,80 +21263,7 @@
       "title": "Ancilla carries information about the computation"
     }
   ],
-  "tests/fixtures/malicious_circuits/measurement_manipulation.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    }
-  ],
+  "tests/fixtures/malicious_circuits/measurement_manipulation.qasm": [],
   "tests/fixtures/malicious_circuits/micro_rotation_dense.qasm": [
     {
       "confidence": 0.6,
@@ -26598,60 +21569,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/s_sdg_separated.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        5
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "sdg",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        6
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: sdg before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        5
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[1]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -27076,121 +21993,10 @@
       "title": "Suspiciously high-precision rotation angle"
     }
   ],
-  "tests/fixtures/malicious_circuits/tdg_before_measure.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "tdg",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: tdg before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[1]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/x_before_measure.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "x",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: x before measuring q[1]"
-    }
-  ],
-  "tests/fixtures/malicious_circuits/y_before_measure.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        2
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[0]"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 1
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        3
-      ],
-      "qubit_indices": [
-        1
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[1]"
-    }
-  ],
+  "tests/fixtures/malicious_circuits/tdg_before_measure.qasm": [],
+  "tests/fixtures/malicious_circuits/x_before_measure.qasm": [],
+  "tests/fixtures/malicious_circuits/y_before_measure.qasm": [],
   "tests/fixtures/malicious_circuits/y_y_pair_separated.qasm": [
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "y",
-        "qubit": 0
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: y before measuring q[0]"
-    },
     {
       "confidence": 0.7,
       "details": {
@@ -27254,42 +22060,6 @@
     }
   ],
   "tests/fixtures/malicious_circuits/z_cancellation_hidden.qasm": [
-    {
-      "confidence": 0.65,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": null,
-      "threat_type": "T2.3",
-      "title": "Basis change (h) immediately before measurement"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate": "h",
-        "qubit": 2
-      },
-      "evidence_type": "structural",
-      "gate_indices": [
-        4
-      ],
-      "qubit_indices": [
-        2
-      ],
-      "severity": "medium",
-      "signature_id": "QSig-2024-0004",
-      "threat_type": "T2.3",
-      "title": "Measurement Basis Manipulation: h before measuring q[2]"
-    },
     {
       "confidence": 0.6,
       "details": {

@@ -93,8 +93,14 @@ def test_parameter_ascii_encoding_detected():
     assert enc[0].severity == "high"
 
 
-def test_basis_change_before_measurement():
-    findings = analyze("""OPENQASM 2.0;
+def test_basis_change_before_measurement_requires_a_baseline():
+    """T2.3 is a differential, not a pattern.
+
+    The same circuit text is a correct Deutsch readout or a tampered one
+    depending only on what was approved, so the static analyzer must stay quiet
+    and defer to the baseline check.
+    """
+    source = """OPENQASM 2.0;
 qreg q[2];
 creg c[2];
 h q[0];
@@ -102,8 +108,9 @@ cx q[0], q[1];
 h q[0];
 h q[1];
 measure q -> c;
-""")
-    assert any(f.threat_type == "T2.3" for f in findings)
+"""
+    findings = analyze(source)
+    assert not [f for f in findings if f.threat_type == "T2.3"]
 
 
 def test_empty_circuit_no_high_findings():

@@ -1,0 +1,5554 @@
+{
+ "archived": true,
+ "archived_note": "Pre-T2.3-redesign results, kept only as the historical baseline for specs/t2-3-before-after.md. NOT current. Current results: benchmark-v1.json.",
+ "contextuality": {
+  "chsh_quantum_limit": 2.828427,
+  "chsh_s_value": 2.828427,
+  "magic_square_classical_bound": 0.888889,
+  "magic_square_win_rate": 1.0,
+  "verdict": "contextual"
+ },
+ "corpus_sha256": "8d1d7e9f4f43e32d8004eea0b429101a4c77272797843992f660bbf411d121df",
+ "corpus_version": "corpus-v1",
+ "false_positives": [
+  {
+   "name": "bernstein_vazirani",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "deutsch",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "deutsch_jozsa",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_bell_ladder_0",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_bell_ladder_1",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_bell_ladder_10",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_bell_ladder_12",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_bell_ladder_13",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_bell_ladder_15",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_bell_ladder_16",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_bell_ladder_18",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_bell_ladder_19",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_bell_ladder_3",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_bell_ladder_4",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_bell_ladder_6",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_bell_ladder_7",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_bell_ladder_9",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_0",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_1",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_10",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_11",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_12",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_13",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_14",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_15",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_16",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_17",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_18",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_19",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_2",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_20",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_21",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_22",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_23",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_24",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_3",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_4",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_5",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_6",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_7",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_8",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_dense_clifford_9",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_0",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_1",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_10",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_11",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_13",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_14",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_15",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_17",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_18",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_19",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_2",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_20",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_21",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_22",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_23",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_24",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_3",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_4",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_5",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_6",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_7",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_8",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "name": "gen_random_clifford_9",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "grover_3qubit",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "superdense",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "name": "teleportation",
+   "threat_types": [
+    "T2.3"
+   ]
+  }
+ ],
+ "metrics": {
+  "by_family": {
+   "T1.1": {
+    "circuits": 65,
+    "description": "Gate-level tampering: injected rotations or substituted gates that alter behavior.",
+    "detected": 65,
+    "recall": 1.0
+   },
+   "T1.3": {
+    "circuits": 52,
+    "description": "Concealed identity structure: cancellation and separation patterns used to hide payloads.",
+    "detected": 51,
+    "recall": 0.9808
+   },
+   "T2.1": {
+    "circuits": 34,
+    "description": "Ancilla information leakage: auxiliary qubits that carry data-dependent state.",
+    "detected": 16,
+    "recall": 0.4706
+   },
+   "T2.2": {
+    "circuits": 44,
+    "description": "Encoded payloads: parameter grids and steganographic instruction encoding.",
+    "detected": 44,
+    "recall": 1.0
+   },
+   "T2.3": {
+    "circuits": 20,
+    "description": "Measurement manipulation: basis or pre-measurement gates that corrupt results.",
+    "detected": 20,
+    "recall": 1.0
+   }
+  },
+  "counts": {
+   "clean": 202,
+   "false_negatives": 19,
+   "false_positives": 68,
+   "label_matches": 198,
+   "malicious": 215,
+   "true_negatives": 134,
+   "true_positives": 196
+  },
+  "fpr": 0.3366,
+  "precision": 0.7424,
+  "recall": 0.9209,
+  "threshold": "medium",
+  "tpr": 0.9116
+ },
+ "misses": [
+  {
+   "expected": "T2.1",
+   "name": "fanout_shadow_channel",
+   "threat_types": []
+  },
+  {
+   "expected": "T1.3",
+   "name": "gen_cancel_2",
+   "threat_types": [
+    "T1.3",
+    "T2.1"
+   ]
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_fanout_0",
+   "threat_types": []
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_fanout_1",
+   "threat_types": []
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_fanout_10",
+   "threat_types": []
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_fanout_11",
+   "threat_types": []
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_fanout_12",
+   "threat_types": []
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_fanout_13",
+   "threat_types": []
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_fanout_14",
+   "threat_types": []
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_fanout_2",
+   "threat_types": []
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_fanout_3",
+   "threat_types": []
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_fanout_4",
+   "threat_types": []
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_fanout_5",
+   "threat_types": []
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_fanout_6",
+   "threat_types": []
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_fanout_7",
+   "threat_types": []
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_fanout_8",
+   "threat_types": []
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_fanout_9",
+   "threat_types": []
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_leaf_0_cx3",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected": "T2.1",
+   "name": "gen_leaf_2_cx4",
+   "threat_types": [
+    "T2.1"
+   ]
+  }
+ ],
+ "per_circuit": [
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "bell_state",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 9,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "bernstein_vazirani",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "cascade_chain",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "clifford_basic",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 2,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "deutsch",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 4,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "deutsch_jozsa",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_bell_ladder_0",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_bell_ladder_1",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_bell_ladder_10",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_bell_ladder_11",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_bell_ladder_12",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_bell_ladder_13",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_bell_ladder_14",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_bell_ladder_15",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_bell_ladder_16",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_bell_ladder_17",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_bell_ladder_18",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_bell_ladder_19",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_bell_ladder_2",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_bell_ladder_3",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_bell_ladder_4",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_bell_ladder_5",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_bell_ladder_6",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_bell_ladder_7",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_bell_ladder_8",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_bell_ladder_9",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_cascade_4qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_cascade_5qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_cascade_6qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_cascade_7qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_cascade_8qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_cascade_9qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 5,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_0",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_1",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_10",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_11",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 5,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_12",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_13",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_14",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_15",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_16",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 5,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_17",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_18",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_19",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_2",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_20",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 7,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_21",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_22",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_23",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_24",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_3",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_4",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 5,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_5",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_6",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 5,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_7",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 5,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_8",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_dense_clifford_9",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_10qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_12qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_16qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_20qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_3qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_4qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_5qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_6qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_7qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_8qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_0",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_1",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_10",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_11",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_12",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_13",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_14",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_15",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_16",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_17",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_18",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_19",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_2",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_3",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_4",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_5",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_6",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_7",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_8",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_cz_9",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_rev_10qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_rev_12qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_rev_14qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_rev_18qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_rev_24qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_rev_4qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_rev_6qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ghz_rev_8qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ising_3qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ising_4qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ising_5qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ising_6qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ising_7qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_ising_8qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_phase_estimation_2qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_phase_estimation_3qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_phase_estimation_4qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_phase_estimation_5qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_phase_estimation_6qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_0",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_1",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_10",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_11",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_12",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_13",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_14",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_15",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_2",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_3",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_4",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_5",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_6",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_7",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_8",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_9",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_hi_0",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_hi_1",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_hi_10",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_hi_11",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_hi_12",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_hi_13",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_hi_14",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_hi_2",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_hi_3",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_hi_4",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_hi_5",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_hi_6",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_hi_7",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_hi_8",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_qaoa_hi_9",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_qft_2qubit",
+   "split": "clean",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_qft_3qubit",
+   "split": "clean",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 10,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_qft_5qubit",
+   "split": "clean",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 15,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_qft_6qubit",
+   "split": "clean",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 21,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_qft_7qubit",
+   "split": "clean",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 28,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_qft_8qubit",
+   "split": "clean",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 4,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_qpe_cz_0",
+   "split": "clean",
+   "threat_types": [
+    "T1.1",
+    "T1.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 5,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_qpe_cz_1",
+   "split": "clean",
+   "threat_types": [
+    "T1.1",
+    "T1.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 6,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_qpe_cz_2",
+   "split": "clean",
+   "threat_types": [
+    "T1.1",
+    "T1.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 4,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_qpe_cz_3",
+   "split": "clean",
+   "threat_types": [
+    "T1.1",
+    "T1.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 5,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_qpe_cz_4",
+   "split": "clean",
+   "threat_types": [
+    "T1.1",
+    "T1.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 6,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_qpe_cz_5",
+   "split": "clean",
+   "threat_types": [
+    "T1.1",
+    "T1.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 4,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_qpe_cz_6",
+   "split": "clean",
+   "threat_types": [
+    "T1.1",
+    "T1.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 5,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_qpe_cz_7",
+   "split": "clean",
+   "threat_types": [
+    "T1.1",
+    "T1.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 6,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_qpe_cz_8",
+   "split": "clean",
+   "threat_types": [
+    "T1.1",
+    "T1.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 4,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_qpe_cz_9",
+   "split": "clean",
+   "threat_types": [
+    "T1.1",
+    "T1.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 2,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_0",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 4,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_1",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 5,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_10",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 2,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_11",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 4,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_random_clifford_12",
+   "split": "clean",
+   "threat_types": [
+    "T1.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 6,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_13",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_14",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_15",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 2,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "gen_random_clifford_16",
+   "split": "clean",
+   "threat_types": [
+    "T1.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 2,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_17",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 10,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_18",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 6,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_19",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 5,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_2",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 4,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_20",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 5,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_21",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 1,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_22",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 5,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_23",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_24",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 9,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_3",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_4",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 6,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_5",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 6,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_6",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_7",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 7,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_8",
+   "split": "clean",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "gen_random_clifford_9",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_repetition_0",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_repetition_1",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_repetition_2",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_repetition_3",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_repetition_4",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_repetition_5",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_repetition_6",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_repetition_7",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_repetition_8",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "gen_repetition_9",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "ghz_3qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "ghz_4qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "ghz_5qubit",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 6,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "grover_3qubit",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "ising_evolution",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "magic_state_prep",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "phase_kickback",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "qaoa_maxcut",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 3,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "qft_3qubit",
+   "split": "clean",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 6,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": "low",
+   "name": "qft_4qubit",
+   "split": "clean",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 2,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "superdense",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "swap_network",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": null,
+   "findings": 2,
+   "flagged": true,
+   "label_matched": null,
+   "max_severity": "medium",
+   "name": "teleportation",
+   "split": "clean",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": null,
+   "findings": 0,
+   "flagged": false,
+   "label_matched": null,
+   "max_severity": null,
+   "name": "vqe_h2",
+   "split": "clean",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "ancilla_leakage",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 5,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "cx_cx_separated",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "distributed_backdoor",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 0,
+   "flagged": false,
+   "label_matched": false,
+   "max_severity": null,
+   "name": "fanout_shadow_channel",
+   "split": "malicious",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_basis2_0_h",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_basis2_1_y",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_basis2_2_s",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_basis2_3_sdg",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_basis2_4_t",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_basis2_5_tdg",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_basis2_6_h",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_basis2_7_y",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_basis2_8_s",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_basis2_9_sdg",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_basis_0_h",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_basis_1_x",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_basis_2_s",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_basis_3_sdg",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_basis_4_t",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_basis_5_y",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel3_0",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel3_1",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel3_2",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel3_3",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel3_4",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel3_5",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel3_6",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel3_7",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel3_8",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel3_9",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel4_0",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel4_1",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel4_10",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel4_11",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel4_12",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel4_13",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 5,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel4_14",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel4_2",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel4_3",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 5,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel4_4",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel4_5",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel4_6",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel4_7",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel4_8",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 5,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel4_9",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel5_0",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel5_1",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel5_10",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel5_11",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel5_12",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel5_13",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel5_14",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel5_2",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel5_3",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel5_4",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel5_5",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel5_6",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel5_7",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel5_8",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel5_9",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 5,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel_0",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 5,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel_1",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 3,
+   "flagged": false,
+   "label_matched": true,
+   "max_severity": "low",
+   "name": "gen_cancel_2",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 4,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel_3",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 4,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel_4",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 4,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_cancel_5",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_fanout2_0",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_fanout2_1",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_fanout2_2",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_fanout2_3",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_fanout2_4",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_fanout2_5",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_fanout2_6",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_fanout2_7",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_fanout2_8",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_fanout2_9",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 0,
+   "flagged": false,
+   "label_matched": false,
+   "max_severity": null,
+   "name": "gen_fanout_0",
+   "split": "malicious",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 0,
+   "flagged": false,
+   "label_matched": false,
+   "max_severity": null,
+   "name": "gen_fanout_1",
+   "split": "malicious",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 0,
+   "flagged": false,
+   "label_matched": false,
+   "max_severity": null,
+   "name": "gen_fanout_10",
+   "split": "malicious",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 0,
+   "flagged": false,
+   "label_matched": false,
+   "max_severity": null,
+   "name": "gen_fanout_11",
+   "split": "malicious",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 0,
+   "flagged": false,
+   "label_matched": false,
+   "max_severity": null,
+   "name": "gen_fanout_12",
+   "split": "malicious",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 0,
+   "flagged": false,
+   "label_matched": false,
+   "max_severity": null,
+   "name": "gen_fanout_13",
+   "split": "malicious",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 0,
+   "flagged": false,
+   "label_matched": false,
+   "max_severity": null,
+   "name": "gen_fanout_14",
+   "split": "malicious",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 0,
+   "flagged": false,
+   "label_matched": false,
+   "max_severity": null,
+   "name": "gen_fanout_2",
+   "split": "malicious",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 0,
+   "flagged": false,
+   "label_matched": false,
+   "max_severity": null,
+   "name": "gen_fanout_3",
+   "split": "malicious",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 0,
+   "flagged": false,
+   "label_matched": false,
+   "max_severity": null,
+   "name": "gen_fanout_4",
+   "split": "malicious",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 0,
+   "flagged": false,
+   "label_matched": false,
+   "max_severity": null,
+   "name": "gen_fanout_5",
+   "split": "malicious",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 0,
+   "flagged": false,
+   "label_matched": false,
+   "max_severity": null,
+   "name": "gen_fanout_6",
+   "split": "malicious",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 0,
+   "flagged": false,
+   "label_matched": false,
+   "max_severity": null,
+   "name": "gen_fanout_7",
+   "split": "malicious",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 0,
+   "flagged": false,
+   "label_matched": false,
+   "max_severity": null,
+   "name": "gen_fanout_8",
+   "split": "malicious",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 0,
+   "flagged": false,
+   "label_matched": false,
+   "max_severity": null,
+   "name": "gen_fanout_9",
+   "split": "malicious",
+   "threat_types": []
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 1,
+   "flagged": false,
+   "label_matched": true,
+   "max_severity": "low",
+   "name": "gen_leaf_0_cx3",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_leaf_1_swap3",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 1,
+   "flagged": false,
+   "label_matched": true,
+   "max_severity": "low",
+   "name": "gen_leaf_2_cx4",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_leaf_3_swap4",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 3,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_leaf_4_swap5",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_0",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_1",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_10",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_11",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_12",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_13",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_14",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_15",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_16",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_17",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_18",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_19",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_2",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_3",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_4",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_5",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_6",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_7",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_8",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro3_9",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_ent_0",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_ent_1",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_ent_10",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_ent_11",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_ent_12",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_ent_13",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_ent_14",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_ent_2",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_ent_3",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_ent_4",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_ent_5",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_ent_6",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_ent_7",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_ent_8",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_ent_9",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_0",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_1",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_10",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_11",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_12",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_13",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_14",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_15",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_16",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_17",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_18",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_19",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_2",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_3",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_4",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_5",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_6",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_7",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_8",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot2_9",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot_0",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot_1",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot_2",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot_3",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot_4",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot_5",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "gen_micro_rot_6",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_0",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_1",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_10",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_11",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_12",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_13",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_14",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_15",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_16",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_17",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_18",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_19",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_2",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_3",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_4",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_5",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_6",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_7",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_8",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 14,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego2_9",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 8,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego3_0",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 8,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego3_1",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 9,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego3_10",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 10,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego3_11",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 9,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego3_12",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 9,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego3_13",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 9,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego3_14",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 8,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego3_2",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 9,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego3_3",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 8,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego3_4",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 8,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego3_5",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 8,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego3_6",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 9,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego3_7",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 9,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego3_8",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 8,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego3_9",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 8,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego_4556314c2121",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 12,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego_455846494c5452415445",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 8,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego_4b33524e334c",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 11,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego_4d414c4943494f5553",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 8,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego_535550504c59",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 10,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "gen_stego_54524f4a414e3132",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 4,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "h_cancellation_adjacent",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 5,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "identity_pair_hidden",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": false,
+   "max_severity": "medium",
+   "name": "leaf_ancilla_measure",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.1",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "leaf_ancilla_swap",
+   "split": "malicious",
+   "threat_types": [
+    "T2.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 4,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "measurement_manipulation",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "micro_rotation_dense",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T1.1",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "micro_rotation_hidden",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 10,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "parameter_encoded",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 6,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "s_sdg_separated",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 10,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "stego_ascii_backdoor",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.2",
+   "findings": 9,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "high",
+   "name": "stego_ascii_qshield",
+   "split": "malicious",
+   "threat_types": [
+    "T1.1",
+    "T2.2"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "tdg_before_measure",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 1,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "x_before_measure",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T2.3",
+   "findings": 2,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "y_before_measure",
+   "split": "malicious",
+   "threat_types": [
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 4,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "y_y_pair_separated",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.1",
+    "T2.3"
+   ]
+  },
+  {
+   "expected_threat": "T1.3",
+   "findings": 4,
+   "flagged": true,
+   "label_matched": true,
+   "max_severity": "medium",
+   "name": "z_cancellation_hidden",
+   "split": "malicious",
+   "threat_types": [
+    "T1.3",
+    "T2.3"
+   ]
+  }
+ ],
+ "qshield_version": "1.6.0",
+ "spec_version": "qshield-benchmark-v1",
+ "threshold": "medium",
+ "threshold_sweep": [
+  {
+   "fpr": 0.3366,
+   "precision": 0.7424,
+   "recall": 0.9209,
+   "threshold": "medium",
+   "tpr": 0.9116
+  },
+  {
+   "fpr": 0.0,
+   "precision": 1.0,
+   "recall": 0.9209,
+   "threshold": "high",
+   "tpr": 0.2744
+  },
+  {
+   "fpr": 0.0,
+   "precision": 0.0,
+   "recall": 0.9209,
+   "threshold": "critical",
+   "tpr": 0.0
+  }
+ ]
+}

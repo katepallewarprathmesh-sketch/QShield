@@ -179,6 +179,20 @@ class SignatureMatcher:
         return []
 
     def _match_measurement_basis(self, sig, circuit, params) -> list[Finding]:
+        """Deprecated: T2.3 is a baseline-differential check, not a pattern.
+
+        Matching a gate-adjacent-to-measurement pattern flagged correct Deutsch
+        and Bernstein-Vazirani circuits as loudly as tampered ones. The check now
+        lives in :mod:`qshield.integrity.evaluate`, which compares the candidate
+        readout against an approved baseline.
+
+        Returning no findings here is deliberate. Anything else would keep
+        re-injecting the false positives the differential evaluator removes.
+        """
+        return []
+
+    def _legacy_match_measurement_basis(self, sig, circuit, params) -> list[Finding]:
+        """The previous pattern rule, retained for reference only. Not called."""
         watch = set(params.get("gates", ["h", "s", "sdg", "x", "y"]))
         measured = {q for q, _ in circuit.measurements}
         if not measured:

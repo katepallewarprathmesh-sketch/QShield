@@ -40,7 +40,12 @@ cx q[0], q[1];
     assert any(f.signature_id == "QSig-2024-0001" for f in findings)
 
 
-def test_matcher_detects_basis_manipulation():
+def test_basis_manipulation_signature_is_retired_from_the_live_path():
+    """QSig-2024-0004 was a context-free pattern that matched correct circuits.
+
+    It is retained in the signature set for auditability but no longer emits.
+    T2.3 is decided by qshield.integrity.evaluate against an approved baseline.
+    """
     circuit = parse_qasm("""OPENQASM 2.0;
 qreg q[1];
 creg c[1];
@@ -48,7 +53,8 @@ h q[0];
 measure q -> c;
 """)
     findings = SignatureMatcher().match(circuit)
-    assert any(f.signature_id == "QSig-2024-0004" for f in findings)
+    assert not [f for f in findings if f.signature_id == "QSig-2024-0004"]
+    assert not [f for f in findings if f.threat_type == "T2.3"]
 
 
 def test_matcher_clean_circuit_quiet():

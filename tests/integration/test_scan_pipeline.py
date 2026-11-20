@@ -22,8 +22,59 @@ def test_scan_malicious_parameter_encoded(malicious_dir):
     assert any(f.threat_type == "T2.2" for f in results.findings)
 
 
-def test_scan_malicious_measurement_manipulation(malicious_dir):
-    results = scan(str(malicious_dir / "measurement_manipulation.qasm"))
+def test_scan_malicious_measurement_manipulation_reports_indeterminate(malicious_dir):
+    """Without an approved baseline, T2.3 cannot decide and must say so.
+
+    The fixture is genuinely tampered, but the scanner has no reference to
+    compare it against, so the honest outcome is INDETERMINATE rather than a
+    pattern match dressed up as a detection.
+    """
+    scanner = Scanner()
+    scanner.add_circuit(str(malicious_dir / "measurement_manipulation.qasm"))
+    results = scanner.run()
+    assert not [f for f in results.findings if f.threat_type == "T2.3"]
+    checks = results.coverage["circuits"][0]["analyses"]["static"]["checks"]
+    t23 = next(c for c in checks if c["id"] == "t2_3_readout_differential")
+    assert t23["status"] == "inconclusive"
+    assert t23["outcome"] == "indeterminate"
+
+
+def test_scan_malicious_measurement_manipulation_with_a_baseline(malicious_dir):
+    """Given a genuine approved reference, the same fixture is detected."""
+    from cryptography.hazmat.primitives import serialization
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+    from t23_reference import approved_reference_for
+
+    from qshield.core.parsers import parse_file
+    from qshield.integrity.baseline import BaselineRegistry, create_baseline, sign_baseline
+
+    key = Ed25519PrivateKey.generate()
+    private = key.private_bytes(
+        serialization.Encoding.PEM,
+        serialization.PrivateFormat.PKCS8,
+        serialization.NoEncryption(),
+    )
+    public = key.public_key().public_bytes(
+        serialization.Encoding.PEM, serialization.PublicFormat.SubjectPublicKeyInfo
+    )
+    target = malicious_dir / "measurement_manipulation.qasm"
+    registry = BaselineRegistry()
+    registry.register(
+        sign_baseline(
+            create_baseline(
+                approved_reference_for(target, parse_file(target)),
+                workload_id=target.stem,
+                approved_by="test",
+            ),
+            private,
+        ),
+        public_key_pem=public,
+    )
+
+    scanner = Scanner()
+    scanner.add_circuit(str(target))
+    scanner.set_baselines(registry, public_key_pem=public)
+    results = scanner.run()
     assert any(f.threat_type == "T2.3" for f in results.findings)
 
 
