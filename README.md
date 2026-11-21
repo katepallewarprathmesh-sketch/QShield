@@ -120,16 +120,7 @@ pip install -e '.[dev]'
 
 `./scripts/verify.sh --fast` skips the benchmark for a quicker loop.
 
-## Security architecture
-
-![QSHIELD architecture](assets/architecture.svg)
-
-The diagram above is the whole picture: local analysis, five checks, reports, and an optional runtime proxy.
-
-For the threat model, what each check covers, and deployment guidance, see the [public security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/security-architecture.html).
-
 ## More
 
-- [CHANGELOG.md](CHANGELOG.md) — what changed, and when
 - [SECURITY.md](SECURITY.md) — how to report a vulnerability
 - [LICENSE](LICENSE) — Apache 2.0
