@@ -112,6 +112,23 @@ T2.3 is a **differential** check, not a gate pattern. A basis rotation before me
 
 The check now compares a candidate readout against an approved, signed reference and reports one of four states — `PASS`, `FINDING`, `INDETERMINATE`, `ERROR`. With no baseline it returns `INDETERMINATE`; it never guesses. T2.3 findings therefore require a baseline:
 
+```bash
+# 1. Approve a reference artifact and sign it (reuses the provenance Ed25519 keys)
+#    --no-passphrase keeps this non-interactive; omit it to be prompted (recommended)
+qshield provenance keygen --private-key priv.pem --public-key pub.pem --no-passphrase
+qshield baseline create approved.qasm --workload bell-routing --approved-by security@example.com -o bl.json
+qshield baseline sign bl.json --private-key priv.pem
+
+# 2. Check that a circuit really is the approved artifact
+qshield baseline verify bl.json --public-key pub.pem --circuit approved.qasm
+
+# 3. Scan a candidate against it: exit 1 if the readout differs
+qshield baseline scan candidate.qasm -b bl.json -c approved.qasm \
+    --public-key pub.pem --workload bell-routing --fail-on medium
+```
+
+The same thing from Python:
+
 ```python
 from qshield import Scanner
 from qshield.integrity.baseline import BaselineRegistry, load_baseline_file
@@ -121,6 +138,8 @@ scanner.add_circuit("candidate.qasm")
 scanner.set_baselines(BaselineRegistry(), public_key_pem=pem_bytes, workload_id="my-workload")
 results = scanner.run()
 ```
+
+`INDETERMINATE` and `PASS` are never conflated in the output: a reference that does not match the signed digest is reported as indeterminate, not clean.
 
 Design, baseline format, and measured before/after figures: [specs/t2-3-differential-design.md](specs/t2-3-differential-design.md), [specs/t2-3-baseline-format.md](specs/t2-3-baseline-format.md), [specs/t2-3-before-after.md](specs/t2-3-before-after.md).
 

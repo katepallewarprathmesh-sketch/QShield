@@ -474,6 +474,10 @@ app.add_typer(runtime_app, name="runtime")
 provenance_app = typer.Typer(help="Create and verify offline circuit provenance manifests")
 app.add_typer(provenance_app, name="provenance")
 
+from qshield.cli.baseline_cli import baseline_app  # noqa: E402 - registered after app exists
+
+app.add_typer(baseline_app, name="baseline")
+
 
 @provenance_app.command("keygen")
 def provenance_keygen(
