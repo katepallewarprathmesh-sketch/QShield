@@ -36,8 +36,8 @@
     },
     {
       "path": "vendor/fixtures.zip",
-      "sha256": "5e7ff5f0b13035479df2d33195aa8bcb54d682529dc303d1e01b9568b657a726",
-      "bytes": 118382
+      "sha256": "ab0034cf34856621c2992da68beac224255a762c5b3fc3234735b4d94e32db54",
+      "bytes": 118373
     },
     {
       "path": "vendor/pyodide/Jinja2-3.1.3-py3-none-any.whl",
@@ -86,8 +86,8 @@
     },
     {
       "path": "vendor/qshield.whl",
-      "sha256": "11b4d6c4fe5d67c4c68efdf27748243696b12f382482159c187d514701194fad",
-      "bytes": 397951
+      "sha256": "4841644c5323cf2bc9f7c67f09bf532d414debb2dd1df0c3c58a4807b8ecd237",
+      "bytes": 396017
     },
     {
       "path": "workbench.html",
