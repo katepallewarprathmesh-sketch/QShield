@@ -86,8 +86,8 @@
     },
     {
       "path": "vendor/qshield.whl",
-      "sha256": "4f63e0cbae76c9d7e23e4363d611d81e13ac47d7a0326fe8557977ca84ca3cd1",
-      "bytes": 393192
+      "sha256": "11b4d6c4fe5d67c4c68efdf27748243696b12f382482159c187d514701194fad",
+      "bytes": 397951
     },
     {
       "path": "workbench.html",
