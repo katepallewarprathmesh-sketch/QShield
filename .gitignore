@@ -25,3 +25,6 @@ dist-site/
 
 # Node build dependencies (frontend/package-lock.json stays tracked)
 node_modules/
+
+# Hypothesis example database (generated during test runs)
+.hypothesis/
