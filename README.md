@@ -81,39 +81,6 @@ qshield baseline scan new.qasm -b bl.json -c approved.qasm \
 
 Without the `--no-passphrase` flag, step 1 asks you to choose a passphrase. Add `--no-passphrase` for scripts and CI.
 
-## Reports
-
-One scan can produce five formats, depending on who needs to read it:
-
-| Format | Use it for |
-|---|---|
-| text | reading in a terminal |
-| JSON | your own tooling |
-| SARIF | GitHub code scanning |
-| HTML | sharing with a team |
-| PDF | attaching to a review |
-
-`--fail-on high` makes the command exit non-zero, so CI blocks the build.
-
-## Benchmark
-
-The test corpus is public, so you don't have to take our word for the numbers:
-
-```bash
-qshield benchmark
-```
-
-It scores 417 bundled circuits — 202 clean, 215 with a deliberately planted flaw — and prints detection rates. Run it yourself and compare.
-
-Benchmark figures describe this corpus. They are not a promise about your circuits.
-
-## What it does not do
-
-- It does not secure quantum hardware.
-- It does not guarantee it finds every tampered circuit.
-- It does not prove your algorithm is correct.
-- A clean result means these checks found nothing. It does not mean nothing is there.
-
 ## Workbench
 
 `qshield ui` opens a local web page. Pick a circuit file, click **Scan**, read the results. Nothing is uploaded.
