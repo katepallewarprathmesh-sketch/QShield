@@ -187,6 +187,37 @@ def check_fixture_copies_match() -> None:
         )
 
 
+def check_leaderboard_matches_results() -> None:
+    """The leaderboard must score the same corpus and the same numbers.
+
+    It has no generator: it is edited by hand. It went stale silently once
+    (kept publishing tpr 0.9116 / fpr 0.3366 after the detectors changed),
+    and CI only noticed when an unrelated corpus edit broke the sha link.
+    """
+    results_path = ROOT / "benchmarks" / "results" / "benchmark-v1.json"
+    board_path = ROOT / "benchmarks" / "results" / "leaderboard-v1.json"
+    if not board_path.exists():
+        return
+    results = json.loads(results_path.read_text())
+    board = json.loads(board_path.read_text())
+    problems = []
+    if board.get("corpus_sha256") != results.get("corpus_sha256"):
+        problems.append("corpus_sha256 differs from the results file")
+    rows = board.get("rows") or []
+    self_rows = [r for r in rows if r.get("name") == "QSHIELD"]
+    if not self_rows:
+        problems.append("no QSHIELD row")
+    else:
+        row = self_rows[0]
+        for key in ("tpr", "fpr", "precision", "recall"):
+            if abs(float(row.get(key, -1)) - float(results["metrics"][key])) > 1e-9:
+                problems.append(
+                    f"row {key}={row.get(key)} but results say {results['metrics'][key]}"
+                )
+    if problems:
+        raise Violation("leaderboard is out of date: " + "; ".join(problems))
+
+
 CHECKS = (
     check_no_docs_directory,
     check_t23_has_one_producer,
@@ -194,6 +225,7 @@ CHECKS = (
     check_archived_results_are_marked,
     check_no_new_markdown,
     check_fixture_copies_match,
+    check_leaderboard_matches_results,
 )
 
 
