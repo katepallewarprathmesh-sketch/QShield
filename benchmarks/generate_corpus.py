@@ -166,10 +166,14 @@ def gen_clean() -> dict[str, str]:
         lines.append("measure q -> c;")
         out[f"gen_ghz_cz_{k}.qasm"] = qasm("\n".join(lines) + "\n")
 
-    # phase estimation with y-before-cz structure
+    # phase estimation: every qubit enters a uniform superposition once.
+    # Previously an extra "h q[0];" was prepended on top of the range(n) loop,
+    # so q[0] received H twice and collapsed to |0>. That made these fixtures
+    # incorrect phase estimation and planted a dead identity pair in a
+    # circuit labelled clean.
     for k in range(10):
         n = 3 + (k % 3)
-        body = "h q[0];\n" + "".join(f"h q[{i}];\n" for i in range(n))
+        body = "".join(f"h q[{i}];\n" for i in range(n))
         for i in range(n - 1):
             body += f"crz({PI / (2 ** (i + 1)):.16f}) q[{n - 1}], q[{i}];\n"
         lines = [f"qreg q[{n}];", f"creg c[{n}];", body + "measure q -> c;"]

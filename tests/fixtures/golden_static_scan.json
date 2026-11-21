@@ -2230,50 +2230,6 @@
   ],
   "tests/fixtures/clean_circuits/gen_qpe_cz_0.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "frobenius_distance_to_identity": 0.0,
-        "gate_indices": [
-          0,
-          1
-        ]
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": null,
-      "threat_type": "T1.3",
-      "title": "Gate cancellation pair"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate_indices": [
-          0,
-          1
-        ],
-        "tolerance": 1e-06
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": "QSig-2024-0001",
-      "threat_type": "T1.3",
-      "title": "Hidden Identity Gate Pair: h(#0) x h(#1)"
-    },
-    {
       "confidence": 0.5,
       "details": {
         "angle": 1.570796,
@@ -2281,7 +2237,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        4
+        3
       ],
       "qubit_indices": [
         2,
@@ -2300,7 +2256,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        5
+        4
       ],
       "qubit_indices": [
         2,
@@ -2314,50 +2270,6 @@
   ],
   "tests/fixtures/clean_circuits/gen_qpe_cz_1.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "frobenius_distance_to_identity": 0.0,
-        "gate_indices": [
-          0,
-          1
-        ]
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": null,
-      "threat_type": "T1.3",
-      "title": "Gate cancellation pair"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate_indices": [
-          0,
-          1
-        ],
-        "tolerance": 1e-06
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": "QSig-2024-0001",
-      "threat_type": "T1.3",
-      "title": "Hidden Identity Gate Pair: h(#0) x h(#1)"
-    },
-    {
       "confidence": 0.5,
       "details": {
         "angle": 1.570796,
@@ -2365,7 +2277,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        5
+        4
       ],
       "qubit_indices": [
         3,
@@ -2384,7 +2296,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        6
+        5
       ],
       "qubit_indices": [
         3,
@@ -2403,7 +2315,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        7
+        6
       ],
       "qubit_indices": [
         3,
@@ -2417,50 +2329,6 @@
   ],
   "tests/fixtures/clean_circuits/gen_qpe_cz_2.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "frobenius_distance_to_identity": 0.0,
-        "gate_indices": [
-          0,
-          1
-        ]
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": null,
-      "threat_type": "T1.3",
-      "title": "Gate cancellation pair"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate_indices": [
-          0,
-          1
-        ],
-        "tolerance": 1e-06
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": "QSig-2024-0001",
-      "threat_type": "T1.3",
-      "title": "Hidden Identity Gate Pair: h(#0) x h(#1)"
-    },
-    {
       "confidence": 0.5,
       "details": {
         "angle": 1.570796,
@@ -2468,7 +2336,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        6
+        5
       ],
       "qubit_indices": [
         4,
@@ -2487,7 +2355,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        7
+        6
       ],
       "qubit_indices": [
         4,
@@ -2506,7 +2374,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        8
+        7
       ],
       "qubit_indices": [
         4,
@@ -2525,7 +2393,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        9
+        8
       ],
       "qubit_indices": [
         4,
@@ -2539,50 +2407,6 @@
   ],
   "tests/fixtures/clean_circuits/gen_qpe_cz_3.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "frobenius_distance_to_identity": 0.0,
-        "gate_indices": [
-          0,
-          1
-        ]
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": null,
-      "threat_type": "T1.3",
-      "title": "Gate cancellation pair"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate_indices": [
-          0,
-          1
-        ],
-        "tolerance": 1e-06
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": "QSig-2024-0001",
-      "threat_type": "T1.3",
-      "title": "Hidden Identity Gate Pair: h(#0) x h(#1)"
-    },
-    {
       "confidence": 0.5,
       "details": {
         "angle": 1.570796,
@@ -2590,7 +2414,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        4
+        3
       ],
       "qubit_indices": [
         2,
@@ -2609,7 +2433,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        5
+        4
       ],
       "qubit_indices": [
         2,
@@ -2623,50 +2447,6 @@
   ],
   "tests/fixtures/clean_circuits/gen_qpe_cz_4.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "frobenius_distance_to_identity": 0.0,
-        "gate_indices": [
-          0,
-          1
-        ]
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": null,
-      "threat_type": "T1.3",
-      "title": "Gate cancellation pair"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate_indices": [
-          0,
-          1
-        ],
-        "tolerance": 1e-06
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": "QSig-2024-0001",
-      "threat_type": "T1.3",
-      "title": "Hidden Identity Gate Pair: h(#0) x h(#1)"
-    },
-    {
       "confidence": 0.5,
       "details": {
         "angle": 1.570796,
@@ -2674,7 +2454,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        5
+        4
       ],
       "qubit_indices": [
         3,
@@ -2693,7 +2473,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        6
+        5
       ],
       "qubit_indices": [
         3,
@@ -2712,7 +2492,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        7
+        6
       ],
       "qubit_indices": [
         3,
@@ -2726,50 +2506,6 @@
   ],
   "tests/fixtures/clean_circuits/gen_qpe_cz_5.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "frobenius_distance_to_identity": 0.0,
-        "gate_indices": [
-          0,
-          1
-        ]
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": null,
-      "threat_type": "T1.3",
-      "title": "Gate cancellation pair"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate_indices": [
-          0,
-          1
-        ],
-        "tolerance": 1e-06
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": "QSig-2024-0001",
-      "threat_type": "T1.3",
-      "title": "Hidden Identity Gate Pair: h(#0) x h(#1)"
-    },
-    {
       "confidence": 0.5,
       "details": {
         "angle": 1.570796,
@@ -2777,7 +2513,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        6
+        5
       ],
       "qubit_indices": [
         4,
@@ -2796,7 +2532,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        7
+        6
       ],
       "qubit_indices": [
         4,
@@ -2815,7 +2551,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        8
+        7
       ],
       "qubit_indices": [
         4,
@@ -2834,7 +2570,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        9
+        8
       ],
       "qubit_indices": [
         4,
@@ -2848,50 +2584,6 @@
   ],
   "tests/fixtures/clean_circuits/gen_qpe_cz_6.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "frobenius_distance_to_identity": 0.0,
-        "gate_indices": [
-          0,
-          1
-        ]
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": null,
-      "threat_type": "T1.3",
-      "title": "Gate cancellation pair"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate_indices": [
-          0,
-          1
-        ],
-        "tolerance": 1e-06
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": "QSig-2024-0001",
-      "threat_type": "T1.3",
-      "title": "Hidden Identity Gate Pair: h(#0) x h(#1)"
-    },
-    {
       "confidence": 0.5,
       "details": {
         "angle": 1.570796,
@@ -2899,7 +2591,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        4
+        3
       ],
       "qubit_indices": [
         2,
@@ -2918,7 +2610,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        5
+        4
       ],
       "qubit_indices": [
         2,
@@ -2932,50 +2624,6 @@
   ],
   "tests/fixtures/clean_circuits/gen_qpe_cz_7.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "frobenius_distance_to_identity": 0.0,
-        "gate_indices": [
-          0,
-          1
-        ]
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": null,
-      "threat_type": "T1.3",
-      "title": "Gate cancellation pair"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate_indices": [
-          0,
-          1
-        ],
-        "tolerance": 1e-06
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": "QSig-2024-0001",
-      "threat_type": "T1.3",
-      "title": "Hidden Identity Gate Pair: h(#0) x h(#1)"
-    },
-    {
       "confidence": 0.5,
       "details": {
         "angle": 1.570796,
@@ -2983,7 +2631,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        5
+        4
       ],
       "qubit_indices": [
         3,
@@ -3002,7 +2650,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        6
+        5
       ],
       "qubit_indices": [
         3,
@@ -3021,7 +2669,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        7
+        6
       ],
       "qubit_indices": [
         3,
@@ -3035,50 +2683,6 @@
   ],
   "tests/fixtures/clean_circuits/gen_qpe_cz_8.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "frobenius_distance_to_identity": 0.0,
-        "gate_indices": [
-          0,
-          1
-        ]
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": null,
-      "threat_type": "T1.3",
-      "title": "Gate cancellation pair"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate_indices": [
-          0,
-          1
-        ],
-        "tolerance": 1e-06
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": "QSig-2024-0001",
-      "threat_type": "T1.3",
-      "title": "Hidden Identity Gate Pair: h(#0) x h(#1)"
-    },
-    {
       "confidence": 0.5,
       "details": {
         "angle": 1.570796,
@@ -3086,7 +2690,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        6
+        5
       ],
       "qubit_indices": [
         4,
@@ -3105,7 +2709,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        7
+        6
       ],
       "qubit_indices": [
         4,
@@ -3124,7 +2728,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        8
+        7
       ],
       "qubit_indices": [
         4,
@@ -3143,7 +2747,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        9
+        8
       ],
       "qubit_indices": [
         4,
@@ -3157,50 +2761,6 @@
   ],
   "tests/fixtures/clean_circuits/gen_qpe_cz_9.qasm": [
     {
-      "confidence": 0.6,
-      "details": {
-        "frobenius_distance_to_identity": 0.0,
-        "gate_indices": [
-          0,
-          1
-        ]
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": null,
-      "threat_type": "T1.3",
-      "title": "Gate cancellation pair"
-    },
-    {
-      "confidence": 0.6,
-      "details": {
-        "gate_indices": [
-          0,
-          1
-        ],
-        "tolerance": 1e-06
-      },
-      "evidence_type": "unitary_mismatch",
-      "gate_indices": [
-        0,
-        1
-      ],
-      "qubit_indices": [
-        0
-      ],
-      "severity": "low",
-      "signature_id": "QSig-2024-0001",
-      "threat_type": "T1.3",
-      "title": "Hidden Identity Gate Pair: h(#0) x h(#1)"
-    },
-    {
       "confidence": 0.5,
       "details": {
         "angle": 1.570796,
@@ -3208,7 +2768,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        4
+        3
       ],
       "qubit_indices": [
         2,
@@ -3227,7 +2787,7 @@
       },
       "evidence_type": "structural",
       "gate_indices": [
-        5
+        4
       ],
       "qubit_indices": [
         2,

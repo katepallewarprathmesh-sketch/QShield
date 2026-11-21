@@ -159,12 +159,41 @@ def check_no_new_markdown() -> None:
         )
 
 
+def check_fixture_copies_match() -> None:
+    """The packaged fixtures must be byte-identical to the test fixtures.
+
+    They are duplicated: tests/fixtures/ for the benchmark, src/qshield/fixtures/
+    for the installed package. Nothing regenerates both, so an edit to one
+    silently leaves the other stale and the UI serves circuits that no longer
+    match the corpus.
+    """
+    pairs = []
+    for split in ("clean_circuits", "malicious_circuits"):
+        pairs.append((ROOT / "tests" / "fixtures" / split, ROOT / "src" / "qshield" / "fixtures" / split))
+    drift = []
+    for source, copy in pairs:
+        if not source.is_dir() or not copy.is_dir():
+            continue
+        for path in sorted(source.glob("*.qasm")):
+            twin = copy / path.name
+            if not twin.exists() or twin.read_bytes() != path.read_bytes():
+                drift.append(path.name)
+    if drift:
+        names = sorted(drift)
+        raise Violation(
+            f"{len(names)} fixture(s) out of sync between tests/fixtures and "
+            f"src/qshield/fixtures: {names[:5]}. Copy them across (and fix the "
+            "generator if the difference came from regenerating the corpus)."
+        )
+
+
 CHECKS = (
     check_no_docs_directory,
     check_t23_has_one_producer,
     check_benchmark_results_are_not_hand_edited,
     check_archived_results_are_marked,
     check_no_new_markdown,
+    check_fixture_copies_match,
 )
 
 
