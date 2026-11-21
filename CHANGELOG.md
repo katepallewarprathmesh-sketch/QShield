@@ -8,7 +8,7 @@ All notable changes to QSHIELD. Historical spec annotations live in
 ### Added
 - **QUBO/Ising model audit** — `qshield audit-qubo` inspects the quadratic binary model that annealing workflows submit to a solver, the artifact published supply-chain routing work actually hands to the annealer. Reports malformed terms, couplings below the control-error floor, extreme dynamic range, unconstrained variables, and a starting chain strength from uniform torque compensation.
 - **Model digest commitment** — SHA-256 over coefficients at full IEEE-754 precision, so a model approved at review can be confirmed unchanged before submission and an edit far below solver resolution is still detected.
-- **Model files in `qshield scan`** — `.qubo` files are discovered alongside circuits and model findings flow into JSON, SARIF, HTML, and PDF output under the same severity gates. Format and checks are specified in `specs/qubo-model-audit-v1.md`.
+- **Model files in `qshield scan`** — `.qubo` files are discovered alongside circuits and model findings flow into JSON, SARIF, HTML, and PDF output under the same severity gates.
 
 ## [Unreleased] — Open benchmark
 

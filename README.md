@@ -2,84 +2,125 @@
 
 # QSHIELD
 
-### Security analysis for quantum circuits and the software that ships them.
+### Security checks for quantum circuits and the software that ships them.
 
 [![PyPI version](https://img.shields.io/pypi/v/qshield?color=77e3bd&label=PyPI)](https://pypi.org/project/qshield/)
 [![Python versions](https://img.shields.io/pypi/pyversions/qshield)](https://pypi.org/project/qshield/)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-77e3bd)](LICENSE)
 
-[Workbench](https://katepallewarprathmesh-sketch.github.io/QShield/workbench.html) · [Security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/security-architecture.html) · [Changelog](CHANGELOG.md)
+[Workbench](https://katepallewarprathmesh-sketch.github.io/QShield/workbench.html) · [Changelog](CHANGELOG.md)
 
 </div>
 
-> **Purpose-built for quantum software.** Scan circuits, verify equivalence, audit dependencies, and enforce runtime policy from one open-source toolkit.
+## What it does
 
-## Features
+You write a quantum program. Something changes before it runs — a gate is swapped, a measurement is flipped, a dependency is tampered with. QSHIELD looks for that, and tells you where.
 
-- Scan OpenQASM circuits and emit text, JSON, SARIF, HTML, or PDF reports.
-- Compare circuits using exact or randomized methods; verify unitaries up to 12 qubits.
-- Audit quantum-package dependencies for issues such as typosquatting and vulnerable pins.
-- Use the browser Workbench or Python APIs for Qiskit, Cirq, PennyLane, Amazon Braket, and pytket.
-- Add sandboxed detector plugins using WASI.
-- Verify quantum contextuality with the Mermin–Peres magic square and CHSH.
-
-Score the bundled corpus yourself and check the published numbers: `qshield benchmark`.
+It reads a circuit, checks it, and gives you a report you can act on. It runs on your own machine.
 
 ## Install
 
 ```bash
 pip install qshield
-pip install 'qshield[qiskit,cirq]'  # optional parsers
-pip install 'qshield[braket]'       # Amazon Braket
-pip install 'qshield[pytket]'       # pytket
-pip install 'qshield[formal]'       # PyZX and Z3 verification
-pip install 'qshield[plugins]'      # optional WASI plugins
 ```
 
-Requires Python 3.10 or later. To run the v1.6.0 container with the Workbench on host loopback:
+Optional extras, only if you need them:
+
+| Extra | Adds |
+|---|---|
+| `qshield[qiskit,cirq]` | Parsers for Qiskit and Cirq |
+| `qshield[braket]` | Amazon Braket circuits |
+| `qshield[pytket]` | pytket circuits |
+| `qshield[formal]` | PyZX and Z3 verification |
+| `qshield[plugins]` | Sandboxed detector plugins |
+
+Python 3.10 or later.
+
+## Try it
 
 ```bash
-docker run --rm -p 127.0.0.1:8765:8765 ghcr.io/katepallewarprathmesh-sketch/qshield:1.6.0
+qshield scan circuit.qasm                  # check one file
+qshield scan . --recursive --format sarif  # check a whole project
+qshield compare original.qasm candidate.qasm   # are these two the same circuit?
+qshield ui                                 # open the browser Workbench
 ```
 
-For released wheels and source archives, verify GitHub build provenance before installing:
-
-```bash
-gh attestation verify "$WHEEL_OR_SDIST" --repo katepallewarprathmesh-sketch/QShield
-```
-
-## Quickstart
-
-```bash
-qshield scan circuit.qasm --fail-on high
-qshield scan . --recursive --format sarif -o results.sarif
-qshield compare original.qasm candidate.qasm --formal
-qshield audit-deps --requirements requirements.txt
-qshield benchmark
-qshield contextuality
-qshield ui
-```
-
-Python API:
+In Python:
 
 ```python
 import qshield
 
 results = qshield.scan("circuit.qasm")
-print(results.is_clean, results.summary.total)
+print(results.is_clean)
 ```
+
+## How it works
+
+![QSHIELD architecture](assets/architecture.svg)
+
+You give it a circuit, a model, or a list of dependencies. It runs five checks. You get findings you can put in a ticket, wire into CI, or read yourself.
+
+## The one check that needs extra setup
+
+Most checks work out of the box. One does not.
+
+**Readout checks need something to compare against.** A gate right before a measurement is normal — Deutsch's algorithm does it, and so does Bernstein–Vazirani. So "there is a gate before the measurement" tells you nothing on its own. You need to know what was approved.
+
+QSHIELD compares your circuit against a reference you signed off earlier. If you haven't set one up, it says *not checked* rather than *fine* — because those are different answers.
+
+```bash
+# 1. Record what you approved, then sign it
+qshield provenance keygen --private-key priv.pem --public-key pub.pem
+qshield baseline create approved.qasm --workload my-circuit --approved-by you@example.com -o bl.json
+qshield baseline sign bl.json --private-key priv.pem
+
+# 2. Check a candidate against it (exit code 1 if the readout changed)
+qshield baseline scan new.qasm -b bl.json -c approved.qasm \
+    --public-key pub.pem --workload my-circuit
+```
+
+Without the `--no-passphrase` flag, step 1 asks you to choose a passphrase. Add `--no-passphrase` for scripts and CI.
+
+## Reports
+
+One scan can produce five formats, depending on who needs to read it:
+
+| Format | Use it for |
+|---|---|
+| text | reading in a terminal |
+| JSON | your own tooling |
+| SARIF | GitHub code scanning |
+| HTML | sharing with a team |
+| PDF | attaching to a review |
+
+`--fail-on high` makes the command exit non-zero, so CI blocks the build.
+
+## Benchmark
+
+The test corpus is public, so you don't have to take our word for the numbers:
+
+```bash
+qshield benchmark
+```
+
+It scores 417 bundled circuits — 202 clean, 215 with a deliberately planted flaw — and prints detection rates. Run it yourself and compare.
+
+Benchmark figures describe this corpus. They are not a promise about your circuits.
+
+## What it does not do
+
+- It does not secure quantum hardware.
+- It does not guarantee it finds every tampered circuit.
+- It does not prove your algorithm is correct.
+- A clean result means these checks found nothing. It does not mean nothing is there.
 
 ## Workbench
 
-Run `qshield ui` and open `http://127.0.0.1:8765`. The browser Workbench analyzes local `.qasm`, `.qasm2`, and `.qasm3` files in the browser after you choose **Scan**.
+`qshield ui` opens a local web page. Pick a circuit file, click **Scan**, read the results. Nothing is uploaded.
 
-For deployment configuration and the Workbench's security architecture, see the [security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/security-architecture.html).
+## Run-time protection
 
-## Runtime proxy and audit chain
-
-The runtime proxy adds TLS, bearer-token or mutual-TLS authentication, observe/enforce policies, open/closed failure modes, bounded concurrency, and audit logging. It works with a configured upstream and can be paired with a trusted front proxy. See the [security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/security-architecture.html) for deployment guidance.
-
-For a local hash-chained audit log:
+The runtime proxy sits between your code and a cloud quantum provider. It logs every call to a tamper-evident chain, so you can prove afterwards what was sent and when.
 
 ```bash
 qshield runtime proxy --upstream https://provider.example/api \
@@ -87,101 +128,41 @@ qshield runtime proxy --upstream https://provider.example/api \
 qshield runtime audit-verify /var/log/qshield/audit.jsonl
 ```
 
-Verify records with `qshield runtime audit-verify`; use `--expected-head` to check against an independently retained chain head. See the [security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/security-architecture.html) for audit and credential-handling details.
+## Annealer models
 
-## Integrations
-
-- **WASI plugins:** Extend analysis with sandboxed detector plugins. The plugin API was introduced in v1.4.0; install `qshield[plugins]`.
-- **AI assistance:** Add opt-in triage, translation, and speech tools with `sarvamai` and `SARVAM_API_KEY`.
-
-## Open benchmark
-
-The corpus, labels, scoring rule, and scorer are public, so any number QSHIELD reports can be reproduced or challenged:
+If you submit a QUBO or Ising model to a solver rather than a circuit, `qshield audit-qubo` checks it first:
 
 ```bash
-qshield benchmark                                   # score the bundled corpus
-qshield benchmark --threshold high --format json    # own operating point, machine-readable
-python benchmarks/benchmark.py --check              # verify published results match a fresh run
+qshield audit-qubo model.qubo --expected-digest <hex>
 ```
 
-Corpus v1 holds 417 circuits (202 clean, 215 malicious) across five labelled attack families. Results ship as `benchmarks/results/benchmark-v1.json`, validated against `benchmarks/benchmark-v1.schema.json`, and CI fails if they drift from a fresh run. The protocol is in [benchmarks/benchmark-v1.md](benchmarks/benchmark-v1.md); the published numbers are on the [open benchmark page](https://katepallewarprathmesh-sketch.github.io/QShield/benchmark.html).
+The digest covers every coefficient at full precision. If someone edits the model after you approved it, the digest changes — even for an edit too small for a solver to notice.
 
-### Readout manipulation (T2.3) needs a baseline
+## Contextuality
 
-T2.3 is a **differential** check, not a gate pattern. A basis rotation before measurement is what a correct Deutsch or Bernstein–Vazirani circuit does, so matching the pattern flagged 68 clean circuits while adding no real discrimination.
-
-The check now compares a candidate readout against an approved, signed reference and reports one of four states — `PASS`, `FINDING`, `INDETERMINATE`, `ERROR`. With no baseline it returns `INDETERMINATE`; it never guesses. T2.3 findings therefore require a baseline:
-
-```bash
-# 1. Approve a reference artifact and sign it (reuses the provenance Ed25519 keys)
-#    --no-passphrase keeps this non-interactive; omit it to be prompted (recommended)
-qshield provenance keygen --private-key priv.pem --public-key pub.pem --no-passphrase
-qshield baseline create approved.qasm --workload bell-routing --approved-by security@example.com -o bl.json
-qshield baseline sign bl.json --private-key priv.pem
-
-# 2. Check that a circuit really is the approved artifact
-qshield baseline verify bl.json --public-key pub.pem --circuit approved.qasm
-
-# 3. Scan a candidate against it: exit 1 if the readout differs
-qshield baseline scan candidate.qasm -b bl.json -c approved.qasm \
-    --public-key pub.pem --workload bell-routing --fail-on medium
-```
-
-The same thing from Python:
-
-```python
-from qshield import Scanner
-from qshield.integrity.baseline import BaselineRegistry, load_baseline_file
-
-scanner = Scanner()
-scanner.add_circuit("candidate.qasm")
-scanner.set_baselines(BaselineRegistry(), public_key_pem=pem_bytes, workload_id="my-workload")
-results = scanner.run()
-```
-
-`INDETERMINATE` and `PASS` are never conflated in the output: a reference that does not match the signed digest is reported as indeterminate, not clean.
-
-Design, baseline format, and measured before/after figures: [specs/t2-3-differential-design.md](specs/t2-3-differential-design.md), [specs/t2-3-baseline-format.md](specs/t2-3-baseline-format.md), [specs/t2-3-before-after.md](specs/t2-3-before-after.md).
-
-## Contextuality verification
-
-`qshield contextuality` checks that a modelled circuit realises a genuinely non-classical strategy:
-
-```
-Magic square: 1.0000 (9/9) vs classical ceiling 0.8889
-CHSH:         S = 2.8284 vs classical bound 2.0 (quantum limit 2.8284)
-Verdict:      contextual
-```
-
-The magic square is the Mermin–Peres grid: every row of two-qubit Pauli observables multiplies to `+I`, and the columns multiply to `+I, +I, −I`. Those products are both the product of the same nine values, so they must agree — and they don't. No pre-assigned table can satisfy all nine constraints, which caps every classical strategy at 8/9; entangled qubits win 9/9. CHSH reaches the Tsirelson bound of 2√2 on a Bell state.
-
-This is a verification primitive for circuits, not a device benchmark: it runs on the simulator and confirms the circuit's claimed quantum behaviour.
-
-## Annealer model audit
-
-Annealing workflows submit a QUBO or Ising model to a solver rather than a circuit. `qshield audit-qubo` audits that model before it reaches the solver:
-
-```bash
-qshield audit-qubo model.qubo                                   # structure, coefficients, digest
-qshield audit-qubo model.qubo --hardware-variables 5000         # check the target annealer budget
-qshield audit-qubo model.qubo --expected-digest <hex>           # confirm nothing changed since review
-```
-
-Every model gets a SHA-256 digest over its coefficients at full precision, so you can commit to a model when you approve it and detect any later edit — including a perturbation far smaller than a solver would visibly notice. The audit also reports malformed terms, couplings below the control-error floor, extreme dynamic range, unconstrained variables, and a starting chain strength from uniform torque compensation.
-
-`.qubo` and `.json` model files are discovered by `qshield scan` alongside circuits, and model findings flow into JSON, SARIF, HTML, and PDF output under the same severity gates. The format and check definitions are in [specs/qubo-model-audit-v1.md](specs/qubo-model-audit-v1.md).
-
-## Security architecture
-
-QSHIELD combines local analysis, runtime controls, provenance, and extensible detectors. Read the [public security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/security-architecture.html) for the system's design, evaluation, and deployment details.
+`qshield contextuality` checks whether a circuit really produces a non-classical result. Useful when you need to show it is not secretly doing something classical.
 
 ## Development
 
 ```bash
+git clone https://github.com/katepallewarprathmesh-sketch/QShield
+cd QShield
 pip install -e '.[dev]'
-pytest -q
-ruff check src tests benchmarks
-mypy src
+./scripts/verify.sh          # runs everything CI runs
 ```
 
-See [CHANGELOG.md](CHANGELOG.md) for release history and [LICENSE](LICENSE) for license terms.
+`./scripts/verify.sh --fast` skips the benchmark for a quicker loop.
+
+## Security architecture
+
+![QSHIELD architecture](assets/architecture.svg)
+
+The diagram above is the whole picture: local analysis, five checks, reports, and an optional runtime proxy.
+
+For the threat model, what each check covers, and deployment guidance, see the [public security architecture](https://katepallewarprathmesh-sketch.github.io/QShield/security-architecture.html).
+
+## More
+
+- [CHANGELOG.md](CHANGELOG.md) — what changed, and when
+- [SECURITY.md](SECURITY.md) — how to report a vulnerability
+- [LICENSE](LICENSE) — Apache 2.0

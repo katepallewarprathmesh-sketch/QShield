@@ -28,7 +28,7 @@ def check_no_docs_directory() -> None:
     if (ROOT / "docs").exists():
         raise Violation(
             "docs/ must not exist (see scripts/check_public_docs_boundary.py). "
-            "Design documents belong in specs/."
+            "Design notes do not belong in this repository."
         )
 
 
@@ -118,11 +118,53 @@ def check_archived_results_are_marked() -> None:
         )
 
 
+def check_no_new_markdown() -> None:
+    """No new `.md` files outside the allowlist.
+
+    Internal notes, audits and design write-ups do not belong in a public
+    package: they expose implementation detail and turn the repo into a journal.
+    The allowlist is the set of documents that were already published for
+    released formats; nothing else may be added.
+    """
+    allowed = {
+        "README.md",
+        "CHANGELOG.md",
+        "SECURITY.md",
+        "CONTRIBUTING.md",
+        "AGENTS.md",
+        "benchmarks/benchmark-v1.md",
+        "editors/vscode/qshield/README.md",
+        "examples/plugins/identity-pair/README.md",
+        "src/qshield/signatures/community/CONTRIBUTING.md",
+        "specs/circuit-canonicalization-v1.md",
+        "specs/coverage-v1.md",
+        "specs/provenance-v1.md",
+        "specs/qubo-model-audit-v1.md",
+        "specs/transpilation-report-v1.md",
+    }
+    found = {
+        str(path.relative_to(ROOT))
+        for path in ROOT.rglob("*.md")
+        if not any(
+            part in {".git", "node_modules", "build", "dist", ".venv", ".pytest_cache"}
+            for part in path.relative_to(ROOT).parts
+        )
+    }
+    unexpected = sorted(found - allowed)
+    if unexpected:
+        raise Violation(
+            f"unexpected marketing/notes file(s): {unexpected}. Keep prose in "
+            "README.md, CHANGELOG.md and docstrings. If a released format genuinely "
+            "needs a spec, add it to the allowlist deliberately."
+        )
+
+
 CHECKS = (
     check_no_docs_directory,
     check_t23_has_one_producer,
     check_benchmark_results_are_not_hand_edited,
     check_archived_results_are_marked,
+    check_no_new_markdown,
 )
 
 

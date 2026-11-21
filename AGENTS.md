@@ -32,8 +32,11 @@ change touches version-sensitive APIs, say which versions you actually ran.
 These are enforced by `scripts/check_invariants.py` and, where noted, by CI.
 They exist because each was violated at least once.
 
-1. **No `docs/` directory.** `scripts/check_public_docs_boundary.py` raises if it
-   exists. Design documents go in `specs/`; reading notes stay outside the repo.
+1. **No `docs/` or `specs/` directories, and no stray `.md` files.** Internal
+   notes, audits and design write-ups stay out of this repository: they expose
+   implementation detail that does not belong in a public package. Keep prose in
+   the README, the CHANGELOG, and inline docstrings. `.md` files already present
+   are pre-existing specs for released formats — do not add more.
 
 2. **One producer per threat type.** T2.3 findings may only be constructed in
    `src/qshield/integrity/evaluate.py`. T2.3 previously had two independent
@@ -81,17 +84,6 @@ not cover. Specifically:
 - Signing and verification live in `provenance/manifest.py` and
   `integrity/baseline.py`. Both use real Ed25519; do not stub them in tests that
   claim to test verification.
-
-## When a change removes a detector
-
-Record *why*, not just *that*. The T2.3 redesign is the model:
-
-- `specs/t2-3-differential-design.md` — what was wrong and what replaced it
-- `specs/t2-3-before-after.md` — measured cost, including the 33-point TPR drop
-- `specs/t2-3-engineering-summary.md` — the deviations and open defects
-
-Removing capability without publishing what it cost is how a benchmark stops
-meaning anything.
 
 ## Verifying this file's claims
 

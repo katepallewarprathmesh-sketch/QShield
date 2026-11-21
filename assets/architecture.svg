@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" width="900" height="620" role="img" aria-label="QSHIELD architecture: inputs feed five analysis stages, which produce reports; a runtime proxy and audit chain sit alongside.">
+  <style>
+    .bg   { fill: #0d1117; }
+    .box  { fill: #161b22; stroke: #30363d; stroke-width: 1.5; rx: 8; }
+    .box-hi { fill: #12261f; stroke: #238636; stroke-width: 1.8; rx: 8; }
+    .band { fill: #1c2128; stroke: #30363d; stroke-width: 1; rx: 10; }
+    .t    { fill: #e6edf3; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .title{ fill: #ffffff; font-size: 21px; font-weight: 700; }
+    .sub  { fill: #8b949e; font-size: 12.5px; }
+    .lab  { fill: #e6edf3; font-size: 13px; font-weight: 600; }
+    .dim  { fill: #7d8590; font-size: 11.5px; }
+    .acc  { fill: #3fb950; }
+    .st   { stroke: #58a6ff; stroke-width: 1.8; fill: none; marker-end: url(#ah); }
+    .st2  { stroke: #3fb950; stroke-width: 1.8; fill: none; marker-end: url(#ah2); }
+    .st3  { stroke: #d29922; stroke-width: 1.5; fill: none; stroke-dasharray: 5 4; marker-end: url(#ah3); }
+    .badge{ fill: #21262d; stroke: #30363d; }
+    .bt   { fill: #8b949e; font-size: 10.5px; }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#58a6ff"/>
+    </marker>
+    <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3fb950"/>
+    </marker>
+    <marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#d29922"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="900" height="620"/>
+
+  <text class="t title" x="32" y="44">QSHIELD — how it works</text>
+  <text class="t sub" x="32" y="66">Local-first analysis of quantum circuits and the software that ships them.</text>
+
+  <!-- INPUTS -->
+  <text class="t lab" x="32" y="104">What you give it</text>
+  <g>
+    <rect class="box" x="32" y="116" width="196" height="46"/>
+    <text class="t lab" x="48" y="138" style="font-size:12.5px">Circuit files</text>
+    <text class="t dim" x="48" y="154">OpenQASM 2 / 3</text>
+
+    <rect class="box" x="32" y="172" width="196" height="46"/>
+    <text class="t lab" x="48" y="194" style="font-size:12.5px">Annealer models</text>
+    <text class="t dim" x="48" y="210">QUBO / Ising</text>
+
+    <rect class="box" x="32" y="228" width="196" height="46"/>
+    <text class="t lab" x="48" y="250" style="font-size:12.5px">Dependencies</text>
+    <text class="t dim" x="48" y="266">requirements.txt</text>
+
+    <rect class="box" x="32" y="284" width="196" height="46"/>
+    <text class="t lab" x="48" y="306" style="font-size:12.5px">Approved baseline</text>
+    <text class="t dim" x="48" y="322">signed reference</text>
+  </g>
+
+  <!-- ANALYSIS BAND -->
+  <rect class="band" x="272" y="96" width="356" height="404"/>
+  <text class="t lab" x="292" y="126">What it checks</text>
+
+  <rect class="box-hi" x="292" y="140" width="316" height="62"/>
+  <text class="t lab" x="308" y="163">1 · Structure</text>
+  <text class="t dim" x="308" y="181">Inserted, swapped or padded gates;</text>
+  <text class="t dim" x="308" y="195">hidden identity pairs in the circuit.</text>
+
+  <rect class="box" x="292" y="212" width="316" height="62"/>
+  <text class="t lab" x="308" y="235">2 · Behaviour</text>
+  <text class="t dim" x="308" y="253">Exact or formal comparison against</text>
+  <text class="t dim" x="308" y="267">a known-good circuit.</text>
+
+  <rect class="box" x="292" y="284" width="316" height="62"/>
+  <text class="t lab" x="308" y="307">3 · Readout integrity</text>
+  <text class="t dim" x="308" y="325">Is the measurement still what was</text>
+  <text class="t dim" x="308" y="339">approved? Needs a signed baseline.</text>
+
+  <rect class="box" x="292" y="356" width="316" height="62"/>
+  <text class="t lab" x="308" y="379">4 · Supply chain</text>
+  <text class="t dim" x="308" y="397">Typosquatting, risky pins, known</text>
+  <text class="t dim" x="308" y="411">advisories, package metadata.</text>
+
+  <rect class="box" x="292" y="428" width="316" height="56"/>
+  <text class="t lab" x="308" y="451">5 · Provenance</text>
+  <text class="t dim" x="308" y="469">Ed25519 signatures over circuits and baselines.</text>
+
+  <!-- RUNTIME SIDE CHANNEL -->
+  <rect class="band" x="32" y="356" width="196" height="128"/>
+  <text class="t lab" x="48" y="382" style="font-size:12.5px">At run time</text>
+  <text class="t dim" x="48" y="402">Runtime proxy sits between</text>
+  <text class="t dim" x="48" y="418">your code and the provider.</text>
+  <text class="t dim" x="48" y="442">Hash-chained audit log</text>
+  <text class="t dim" x="48" y="458">records every call.</text>
+
+  <!-- REPORTS -->
+  <text class="t lab" x="672" y="104">What you get</text>
+  <g>
+    <rect class="box" x="672" y="116" width="196" height="52"/>
+    <text class="t lab" x="688" y="138" style="font-size:12.5px">Findings</text>
+    <text class="t dim" x="688" y="155">severity · location · confidence</text>
+
+    <rect class="box" x="672" y="180" width="196" height="52"/>
+    <text class="t lab" x="688" y="202" style="font-size:12.5px">Reports</text>
+    <text class="t dim" x="688" y="219">text · JSON · SARIF · HTML · PDF</text>
+
+    <rect class="box" x="672" y="244" width="196" height="52"/>
+    <text class="t lab" x="688" y="266" style="font-size:12.5px">Exit code</text>
+    <text class="t dim" x="688" y="283">fails the CI build</text>
+
+    <rect class="box" x="672" y="308" width="196" height="52"/>
+    <text class="t lab" x="688" y="330" style="font-size:12.5px">Coverage</text>
+    <text class="t dim" x="688" y="347">what was and wasn't checked</text>
+  </g>
+
+  <!-- LOCAL-FIRST NOTE -->
+  <rect class="badge" x="672" y="384" width="196" height="88"/>
+  <text class="t bt" x="688" y="406" style="font-size:11.5px;fill:#3fb950;font-weight:600">Runs on your machine</text>
+  <text class="t bt" x="688" y="426">No circuit leaves your network.</text>
+  <text class="t bt" x="688" y="442">AI assistance is opt-in and</text>
+  <text class="t bt" x="688" y="458">off by default.</text>
+
+  <!-- ARROWS -->
+  <path class="st" d="M 228 139 H 288"/>
+  <path class="st" d="M 228 195 H 288"/>
+  <path class="st" d="M 228 251 H 288"/>
+  <path class="st2" d="M 228 307 H 288"/>
+  <path class="st3" d="M 228 420 H 288 V 456"/>
+
+  <path class="st" d="M 608 171 H 668"/>
+  <path class="st" d="M 608 243 H 668"/>
+  <path class="st" d="M 608 315 H 668"/>
+
+  <!-- FOOTER -->
+  <line x1="32" y1="530" x2="868" y2="530" stroke="#30363d" stroke-width="1"/>
+  <text class="t sub" x="32" y="556" style="font-size:11.5px">
+    Green = runs on every scan.  Green dashed = the runtime proxy, which you enable.
+  </text>
+  <text class="t sub" x="32" y="578" style="font-size:11.5px">
+    Findings are engineering evidence — not a guarantee that a circuit is safe, and not a measure of hardware security.
+  </text>
+</svg>
