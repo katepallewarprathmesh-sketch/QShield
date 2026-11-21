@@ -10,7 +10,7 @@ import math
 
 import numpy as np
 
-from qshield.core.circuit_ir import CircuitIR, GateNode
+from qshield.core.circuit_ir import CircuitIR
 from qshield.reporting.finding import CircuitLocation, Evidence, Finding
 from qshield.signatures.loader import Signature, builtin_signatures, load_directory
 
@@ -190,40 +190,6 @@ class SignatureMatcher:
         re-injecting the false positives the differential evaluator removes.
         """
         return []
-
-    def _legacy_match_measurement_basis(self, sig, circuit, params) -> list[Finding]:
-        """The previous pattern rule, retained for reference only. Not called."""
-        watch = set(params.get("gates", ["h", "s", "sdg", "x", "y"]))
-        measured = {q for q, _ in circuit.measurements}
-        if not measured:
-            return []
-        last_gate: dict[int, tuple[int, GateNode]] = {}
-        for idx, gate in enumerate(circuit.gates):
-            for q in gate.qubits:
-                last_gate[q] = (idx, gate)
-        out: list[Finding] = []
-        for q in sorted(measured):
-            entry = last_gate.get(q)
-            if not entry:
-                continue
-            idx, gate = entry
-            if gate.gate_name in watch:
-                out.append(self._finding(
-                    sig, circuit,
-                    title=f"{sig.name}: {gate.gate_name} before measuring q[{q}]",
-                    description=(
-                        f"Signature {sig.id}: {gate.gate_name} (index {idx}) is the last gate before "
-                        f"measurement of q[{q}]; the effective measurement basis is rotated."
-                    ),
-                    location=CircuitLocation(
-                        gate_ids=[gate.gate_id],
-                        qubit_indices=[q], gate_indices=[idx],
-                    ),
-                    evidence=Evidence(evidence_type="structural",
-                                      details={"gate": gate.gate_name, "qubit": q}),
-                    confidence=0.6,
-                ))
-        return out
 
     def _match_micro_rotations(self, sig, circuit, params) -> list[Finding]:
         max_angle = float(params.get("max_angle", 0.01))

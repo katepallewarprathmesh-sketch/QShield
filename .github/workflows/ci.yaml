@@ -25,6 +25,8 @@ jobs:
           pip install -e '.[qiskit,cirq,pennylane,formal,dev]' "qiskit${{ matrix.qiskit }}"
       - name: Lint
         run: ruff check src tests examples benchmarks
+      - name: Invariants (one T2.3 producer, no hand-edited results)
+        run: python scripts/check_invariants.py
       - name: Type check
         run: mypy src
       - name: Test

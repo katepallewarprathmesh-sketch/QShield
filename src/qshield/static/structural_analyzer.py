@@ -495,49 +495,6 @@ class StructuralAnalyzer:
             circuit.metadata["t23_requires_baseline"] = True
         return findings
 
-    def _legacy_measurement_basis_pattern(self, circuit: CircuitIR) -> list[Finding]:
-        """The previous context-free pattern rule, retained for reference only.
-
-        Not called by :meth:`analyze`. Kept so the historical behaviour can be
-        reproduced when auditing the change that removed it.
-        """
-        findings: list[Finding] = []
-        if not circuit.measurements:
-            return findings
-        measured = {q for q, _ in circuit.measurements}
-        last_gate: dict[int, tuple[int, GateNode]] = {}
-        for idx, gate in enumerate(circuit.gates):
-            for q in gate.qubits:
-                last_gate[q] = (idx, gate)
-        for q in sorted(measured):
-            entry = last_gate.get(q)
-            if not entry:
-                continue
-            idx, gate = entry
-            hit = _BASIS_CHANGE_GATES.get(gate.gate_name)
-            if hit is None:
-                continue
-            severity, confidence = hit
-            findings.append(Finding(
-                severity=severity,
-                threat_type="T2.3",
-                title=f"Basis change ({gate.gate_name}) immediately before measurement",
-                description=(
-                    f"Qubit q[{q}] is measured right after a {gate.gate_name} gate (index {idx}). "
-                    "Measuring in a rotated basis is legitimate in some protocols, but it is also "
-                    "the canonical way to leak information about unmeasured input states."
-                ),
-                circuit_id=circuit.circuit_id,
-                location=CircuitLocation(gate_ids=[gate.gate_id], qubit_indices=[q], gate_indices=[idx]),
-                evidence=Evidence(evidence_type="structural", details={"gate": gate.gate_name, "qubit": q}),
-                confidence=confidence,
-                remediation="Confirm the basis rotation is required by the algorithm; otherwise remove it or measure in the computational basis.",
-                false_positive_probability=0.45,
-                analysis_type="static",
-            ))
-        return findings
-
-
 # ----------------------------------------------------------------------
 def _fractional_digits(value: float) -> int:
     text = repr(abs(float(value)))
