@@ -1,5 +1,5 @@
 {
-  "qshield_version": "1.6.0",
+  "qshield_version": "1.7.0",
   "pyodide_version": "0.27.7",
   "engine": "real (Pyodide CPython, self-hosted)",
   "ai": "precomputed real outputs on the ancilla fixture; live AI runs locally via qshield ui",
@@ -11,7 +11,7 @@
     },
     {
       "path": "benchmark.html",
-      "sha256": "441dd0fd3b8adee5236add188a4773651015f9b22516a19102912dffa068799a",
+      "sha256": "6a20d88328af562d7ebc155095006913770ed2dd30a38d482a60b46d85a52495",
       "bytes": 6906
     },
     {
@@ -21,12 +21,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "a0702748a687f42cfbb8884d916d397be9b3965c13e589524deca368059970ce",
+      "sha256": "aa3fa488aa5fbdf475e9e63d77252472cb6e2b6af10d7c68da0e674e70372093",
       "bytes": 17390
     },
     {
       "path": "security-architecture.html",
-      "sha256": "75387e368c5dc749fd62ad99ec8a5327ca3d60e7b34daa89fa9b8ad21a9713d2",
+      "sha256": "8fdc2ae0b8807a1feab9497557eef0ca67f343cafea81431d7abb5904a6606d3",
       "bytes": 5128
     },
     {
@@ -86,8 +86,8 @@
     },
     {
       "path": "vendor/qshield.whl",
-      "sha256": "4841644c5323cf2bc9f7c67f09bf532d414debb2dd1df0c3c58a4807b8ecd237",
-      "bytes": 396017
+      "sha256": "1bd2a7296c03b7fff287333bb22676f23d141fbc7a613da674e2b92761fc12ce",
+      "bytes": 396015
     },
     {
       "path": "workbench.html",
