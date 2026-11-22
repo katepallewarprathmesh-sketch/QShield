@@ -2,7 +2,7 @@
   "spec_version": "qshield-benchmark-v1",
   "corpus_version": "corpus-v1",
   "corpus_sha256": "4a944f8ad5701bebe15e8d9a3884dfc17c475b3974b3b6b5084734fd477d429e",
-  "qshield_version": "1.6.0",
+  "qshield_version": "1.7.0",
   "threshold": "medium",
   "metrics": {
     "threshold": "medium",

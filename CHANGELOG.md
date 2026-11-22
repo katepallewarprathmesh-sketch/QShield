@@ -3,26 +3,29 @@
 All notable changes to QSHIELD. Historical spec annotations live in
 `docs/spec/QSHIELD.md`; this file records released versions.
 
-## [Unreleased] — Annealer model audit
+## [1.7.0] — Readout integrity, annealer models, installable baselines
 
 ### Added
-- **QUBO/Ising model audit** — `qshield audit-qubo` inspects the quadratic binary model that annealing workflows submit to a solver, the artifact published supply-chain routing work actually hands to the annealer. Reports malformed terms, couplings below the control-error floor, extreme dynamic range, unconstrained variables, and a starting chain strength from uniform torque compensation.
-- **Model digest commitment** — SHA-256 over coefficients at full IEEE-754 precision, so a model approved at review can be confirmed unchanged before submission and an edit far below solver resolution is still detected.
-- **Model files in `qshield scan`** — `.qubo` files are discovered alongside circuits and model findings flow into JSON, SARIF, HTML, and PDF output under the same severity gates.
-
-## [Unreleased] — Open benchmark
-
-### Added
-- **Open benchmark corpus v1** — 417 labelled circuits (202 clean, 215 malicious) across five attack families, with the generator, labels, and a published corpus digest.
-- **`qshield benchmark`** — score the bundled corpus from the CLI; `--threshold` and `--format json` for your own operating point.
-- **Published results and schema** — `benchmarks/results/benchmark-v1.json` validated against `benchmarks/benchmark-v1.schema.json`, plus a `--check` mode that CI runs so published numbers cannot drift from the code.
-- **Public benchmark page and leaderboard** — protocol, threshold sweep, per-family results, and submission rules for the adversarial challenge.
-
-### Fixed
-- **`qshield.__version__` could disagree with the released package version.** The value is now read from installed distribution metadata, with a checked-in fallback asserted against `pyproject.toml` in CI.
+- **QUBO/Ising model audit** — `qshield audit-qubo` inspects the quadratic binary model annealing workflows submit to a solver. Reports malformed terms, couplings below the control-error floor, extreme dynamic range, unconstrained variables, and a starting chain strength from uniform torque compensation, plus a SHA-256 digest over coefficients at full precision so an approved model can be confirmed unchanged before submission.
+- **`qshield baseline`** — create, sign, verify, inspect and scan against signed readout baselines. Reuses the provenance Ed25519 key format. `baseline scan` exits 1 when a readout differs from the approved reference, so it gates CI.
+- **Quantum contextuality verification** — `qshield contextuality` checks the Mermin–Peres magic square and CHSH, confirming a circuit realises a non-classical strategy rather than a classical one.
+- **Open benchmark corpus v1** — 417 labelled circuits (202 clean, 215 malicious) across five attack families, with generator, labels, and a published corpus digest.
+- **`qshield benchmark`** — score the bundled corpus from the CLI; `--threshold` and `--format json` for your own operating point, plus `--check` so CI fails if published numbers drift from the code.
 
 ### Changed
-- Package version source of truth moved from a hand-maintained literal to `pyproject.toml` metadata.
+- **T2.3 is now a baseline differential, not a gate pattern.** A basis rotation before measurement is what correct Deutsch and Bernstein–Vazirani circuits do, so matching the pattern flagged 68 of 202 clean circuits without adding discrimination. The check now compares a candidate readout against a signed approved reference and reports `PASS`, `FINDING`, `INDETERMINATE` or `ERROR`. With no baseline it reports `INDETERMINATE` and never guesses; it cannot detect readout tampering for a workload that has no approved reference, and that limitation is reported rather than hidden.
+- **Measured effect:** clean fixtures producing a T2.3 finding fell 68 → 0; T2.3 detection is 20/20 with a trusted baseline and 0/20 (indeterminate) without one. Overall TPR moved 0.9116 → 0.5767, FPR 0.3366 → 0.0000, precision 0.7424 → 1.0000. The lower TPR is the honest cost of removing a rule that fired on clean circuits.
+- **Disclosure:** removing T2.3 also showed that 51 of 52 previously reported T1.3 detections had been T2.3-assisted. T1.3 reaches one detection on its own. Its published recall depended on the detector being removed here.
+
+### Fixed
+- **`gen_qpe_cz` generator emitted a duplicate `h q[0]`.** The extra H is its own inverse, so q[0] returned to |0> before the controlled rotations: these fixtures were labelled clean but were not phase estimation. Regenerated; every qubit now enters |+| once.
+- **Leaderboard and benchmark page published superseded metrics** (tpr 0.9116 / fpr 0.3366) for several releases after the detectors changed. Both now track the results file, enforced by CI.
+- **`src/qshield/fixtures` had drifted from `tests/fixtures`.** The packaged copy is what the Workbench serves, so a corpus edit left the UI showing different circuits.
+- **Python 3.10 compatibility** — `datetime.UTC` is 3.11+; the 3.10 jobs failed at collection.
+
+### Added (engineering)
+- `scripts/verify.sh` reproduces the CI gate locally, with a warning when the local interpreter is newer than CI's 3.10 floor.
+- `scripts/check_invariants.py` enforces eight rules learned the hard way: no `docs/`, one T2.3 producer, no hand-edited results, archived results marked, no new `.md` files, fixture copies in sync, leaderboard current, site metrics current.
 
 ## [1.6.0] — Audit integrity & reproducible releases
 

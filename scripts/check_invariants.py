@@ -218,6 +218,35 @@ def check_leaderboard_matches_results() -> None:
         raise Violation("leaderboard is out of date: " + "; ".join(problems))
 
 
+def check_site_metrics_match_results() -> None:
+    """The public benchmark page must quote the published numbers.
+
+    Fifth instance of the same bug class: a file that mirrors measured output
+    with nothing tying it to the measurement. The page advertised
+    tpr 0.9116 / fpr 0.3366 for several releases after the detectors changed.
+    """
+    page = ROOT / "scripts" / "site" / "benchmark.html"
+    results_path = ROOT / "benchmarks" / "results" / "benchmark-v1.json"
+    if not page.exists() or not results_path.exists():
+        return
+    html = page.read_text(encoding="utf-8")
+    metrics = json.loads(results_path.read_text())["metrics"]
+    missing = []
+    for key in ("tpr", "fpr", "precision", "recall"):
+        value = f"{float(metrics[key]):.4f}"
+        if value not in html:
+            missing.append(f"{key}={value}")
+    # Anything that looks like a rate but is not a current value is suspect.
+    stale = [n for n in ("0.9116", "0.3366", "0.7424", "0.9209") if n in html]
+    problems = []
+    if missing:
+        problems.append(f"page does not show current {', '.join(missing)}")
+    if stale:
+        problems.append(f"page still shows superseded values {stale}")
+    if problems:
+        raise Violation("benchmark page is out of date: " + "; ".join(problems))
+
+
 CHECKS = (
     check_no_docs_directory,
     check_t23_has_one_producer,
@@ -226,6 +255,7 @@ CHECKS = (
     check_no_new_markdown,
     check_fixture_copies_match,
     check_leaderboard_matches_results,
+    check_site_metrics_match_results,
 )
 
 
@@ -238,7 +268,7 @@ def main() -> int:
         except Violation as exc:
             print(f"FAIL  {name}\n      {exc}")
             failed += 1
-        except Exception as exc:  # noqa: BLE001 - a broken check must be visible
+        except Exception as exc:
             print(f"ERROR {name}: {type(exc).__name__}: {exc}")
             failed += 1
         else:

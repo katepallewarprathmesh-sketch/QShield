@@ -11,7 +11,7 @@ from __future__ import annotations
 # from pyproject.toml. A checked-in fallback keeps source-tree imports working
 # and is asserted against pyproject.toml by tests/unit/test_version_consistency.py
 # so the two can never drift apart again.
-__version__ = "1.6.0"
+__version__ = "1.7.0"
 
 try:  # pragma: no cover - exercised on installed distributions
     from importlib.metadata import PackageNotFoundError

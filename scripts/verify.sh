@@ -42,7 +42,7 @@ echo
 
 # ---------------------------------------------------------------- static gates
 echo "== static =="
-step "ruff check"            ruff check src tests examples benchmarks
+step "ruff check"            ruff check src tests examples benchmarks scripts
 step "mypy src"              mypy src
 step "docs boundary"         python scripts/check_public_docs_boundary.py
 step "invariants"            python scripts/check_invariants.py
