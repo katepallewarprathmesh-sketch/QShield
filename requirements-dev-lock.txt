@@ -14,7 +14,7 @@ ast_serialize==0.13.1
 coverage==7.17.3
 hypothesis==6.170.15
 iniconfig==2.3.1
-librt==0.16.0
+librt==0.17.0
 markdown-it-py==4.3.0
 mdurl==0.1.2
 mypy==2.4.1
