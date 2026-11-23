@@ -28,7 +28,7 @@ pydantic_core==2.50.4
 pytest-cov==7.1.0
 pytest==9.2.0
 rich==15.0.0
-ruff==0.17.5
+ruff==0.17.6
 scipy==1.18.1
 shellingham==1.5.4
 sortedcontainers==2.4.0
